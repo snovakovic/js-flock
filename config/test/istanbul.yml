@@ -1,0 +1,8 @@
+verbose: false
+instrumentation:
+    root: './src'
+reporting:
+    print: summary
+    reports:
+        - lcov
+    dir: ./coverage/src
