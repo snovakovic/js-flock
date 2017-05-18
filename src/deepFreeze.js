@@ -1,7 +1,9 @@
 /**
-* Recursively apply Object.freez on object and his child's.
-* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze
-**/
+ * Recursively apply Object.freez on object and his child's.
+ *
+ * @param {Object} obj - object that will be frozen
+ * @returns {Object}
+ */
 module.exports = function deepFreeze(obj) {
   Object.freeze(obj);
 

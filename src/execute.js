@@ -4,7 +4,7 @@ module.exports = function(executeFn) {
       const limit = new Date(Date.now() + ttl || 5000);
       (function executer() {
         if (Date.now() > limit) {
-          
+
         }
 
         return conditionFn() ?

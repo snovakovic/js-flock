@@ -1,7 +1,9 @@
 /**
-* Recursively apply Object.seal on object and his child's.
-* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal
-**/
+ * Recursively apply Object.seal on object and his child's.
+ *
+ * @param {Object} obj - object that will be sealed
+ * @returns {Object}
+ */
 module.exports = function deepSeal(obj) {
   Object.seal(obj);
 
