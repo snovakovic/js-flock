@@ -2,7 +2,7 @@
 * Recursively apply Object.freez on object and his child's.
 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze
 **/
-module.exports = function deepSeal(obj) {
+module.exports = function deepFreeze(obj) {
   Object.freeze(obj);
 
   Object.keys(obj).forEach((key) => {
@@ -10,7 +10,7 @@ module.exports = function deepSeal(obj) {
     if (prop !== null &&
       (typeof prop === 'object' || typeof prop === 'function') &&
       !Object.isFrozen(prop)) {
-      deepSeal(prop);
+      deepFreeze(prop);
     }
   });
 

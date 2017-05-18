@@ -1,10 +1,6 @@
-// Load modules
-
 const expect = require('chai').expect;
-
 const toEnum = require('../src/toEnum');
 
-// Describe test cases
 
 describe('toEnum', () => {
   let enumArray;

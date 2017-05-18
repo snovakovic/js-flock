@@ -4,9 +4,13 @@
 module.exports = function(fn) {
   return function(...args) {
     return new Promise((resolve, reject) => {
-      fn.apply(this, args.concat((err, response) => (
-        err ? reject(err) : resolve(response)
-      )));
+      try {
+        fn.apply(this, args.concat((err, response) => (
+          err ? reject(err) : resolve(response)
+        )));
+      } catch (err) {
+        reject(err);
+      }
     });
   };
 };
