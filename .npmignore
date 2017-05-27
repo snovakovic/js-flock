@@ -1,5 +1,5 @@
 node_modules/
-.vs_code/
+.vscode/
 coverage/
 config/
 test/
