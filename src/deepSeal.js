@@ -1,7 +1,7 @@
 /**
- * Recursively apply Object.seal on object and his child's.
+ * Recursively apply Object.seal.
  *
- * @param {Object} obj - object that will be sealed
+ * @param {Object} obj - object that will be sealed including all child object/functions
  * @returns {Object}
  */
 module.exports = function deepSeal(obj) {

@@ -7,7 +7,9 @@
  * @returns {Promise}
  */
 module.exports = function(promise, ttl = 5000) {
-  const restraint = new Promise((resolve, reject) => setTimeout(reject, ttl, 'Promises have timed out'));
+  const restraint = new Promise((resolve, reject) =>
+    setTimeout(reject, ttl, 'Promises have timed out'));
+
   return Promise.race([
     restraint,
     promise

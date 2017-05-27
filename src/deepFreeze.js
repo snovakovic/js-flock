@@ -1,7 +1,7 @@
 /**
- * Recursively apply Object.freez on object and his child's.
+ * Recursively apply Object.freez.
  *
- * @param {Object} obj - object that will be frozen
+ * @param {Object} obj - object that will be frozen including all child object/functions
  * @returns {Object}
  */
 module.exports = function deepFreeze(obj) {
