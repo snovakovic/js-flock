@@ -6,11 +6,11 @@ JS utility methods for NODE and Browser. Requires ES6 environment as minimum to 
 
 ### Methods:
 
-- [promisify](###promisify)
-- [collar](###collar)
-- [toEnum](###toEnum)
-- [deepFreeze](###deepFreeze)
-- [deepSeal](###deepSeal)
+- [promisify](#promisify)
+- [collar](#collar)
+- [toEnum](#toEnum)
+- [deepFreeze](#deepFreeze)
+- [deepSeal](#deepSeal)
 
 ### promisify
 
