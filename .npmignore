@@ -1,0 +1,7 @@
+node_modules/
+.vs_code/
+coverage/
+config/
+test/
+.eslintrc.js
+.gitignore
