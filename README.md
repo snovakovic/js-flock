@@ -115,10 +115,7 @@ Convert object or list of strings to enum representation. Enum representation is
 
   gender.haveKey('MAN') // true
   gender.haveKey('CAR') // false
-
-
-
-...
+```
 
 ### deepFreeze
 
