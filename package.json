@@ -1,6 +1,6 @@
 {
   "name": "js-flock",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "JS utility methods for NODE and Browser.",
   "main": "index.js",
   "devDependencies": {
