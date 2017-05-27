@@ -8,9 +8,9 @@ JS utility methods for NODE and Browser. Requires ES6 environment as minimum to 
 
 - [promisify](#promisify)
 - [collar](#collar)
-- [toEnum](#toEnum)
-- [deepFreeze](#deepFreeze)
-- [deepSeal](#deepSeal)
+- [toEnum](#toenum)
+- [deepFreeze](#deepfreeze)
+- [deepSeal](#deepseal)
 
 ### promisify
 
