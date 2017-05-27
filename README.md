@@ -57,9 +57,9 @@ Reject promise if it's not resolved in that time
   collar(
     new Promise((resolve) => setTimeout(resolve, 1000, '1')),
     MAX_WAIT_TIME
-  ).then((data) =>
-    console.log('this is not called as promise is not resolved in max waiting time');
-  ).catch((err) => {
+  ).then((data) => {
+    // This is not called
+  }).catch((err) => {
     console.log('this is called');
     console.log(err); // err = 'Promises have timed out'
   });
@@ -78,14 +78,15 @@ Convert object or list of strings to enum representation. Enum representation is
 
   const vehicleType = toEnum({
     TRUCK: 'TRUCK',
-    CAR: 'CAR'
+    CAR: 'CAR',
     MOTORBIKE: 'MOTORBIKE',
     CAMPER: 'CAMPER'
   });
 
-  // We can also use short notation to define above enum when keys are equal to values. Both will result in same enumeration representation
+  // We can also use short notation to define above enum when keys are equal to values.
+  // Both enum representations are equal
 
-  cont vehicleType = toEnum(['TRUCK', 'CAR', 'MOTORBIKE', 'CAMPER']);
+  const vehicleType = toEnum(['TRUCK', 'CAR', 'MOTORBIKE', 'CAMPER']);
 
   if(vehicle.type === vehicleType.TRUCK) {
     // Special behaviour only for truck vehicles
@@ -94,8 +95,8 @@ Convert object or list of strings to enum representation. Enum representation is
   vehicleType.TRUCK = 'boat';
   vehicleType.BOAT = 'BOAT';
 
-  console.log(vehicleType.TRUCK) // TRUCK - enum is immutable
-  console.log(vehicleType.BOAT) // undefined - enum is immutable
+  console.log(vehicleType.TRUCK); // TRUCK - enum is immutable
+  console.log(vehicleType.BOAT); // undefined - enum is immutable
 
   // Following enum can't be written in short notation as keys are different then values
 
@@ -113,8 +114,8 @@ Convert object or list of strings to enum representation. Enum representation is
   gender.exists('W'); // true
   gender.exists('T'); // false
 
-  gender.haveKey('MAN') // true
-  gender.haveKey('CAR') // false
+  gender.haveKey('MAN'); // true
+  gender.haveKey('CAR'); // false
 ```
 
 ### deepFreeze
@@ -125,8 +126,8 @@ Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/Ja
   const deepFreeze = require('js-flock').deepFreeze;
 
   const person = {
-    fullName: 'test person'
-    dob: new Date()
+    fullName: 'test person',
+    dob: new Date(),
     address: {
       country: 'testiland',
       city: 'this one'
@@ -135,13 +136,13 @@ Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/Ja
 
   Object.freeze(person);
 
-  Object.isFrozen(person) // true
-  Object.isFrozen(person.address) // false UH OH
+  Object.isFrozen(person); // true
+  Object.isFrozen(person.address); // false UH OH
 
   deepFreeze(person);
 
-  Object.isFrozen(person) // true
-  Object.isFrozen(person.address) // true WE HE
+  Object.isFrozen(person); // true
+  Object.isFrozen(person.address); // true WE HE
 ```
 
 ### deepSeal
