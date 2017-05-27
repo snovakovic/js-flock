@@ -5,3 +5,5 @@ config/
 test/
 .eslintrc.js
 .gitignore
+.npmignore
+README.md
