@@ -1,3 +1,10 @@
+/**
+ * Convert object or list of strings to enum representation
+ *
+ * @param {Object, Array} arg Object or array of string from which we will generate enum representation
+ * @returns {Object} enum representation
+ */
+
 const deepFreeze = require('./deepFreeze');
 
 
@@ -14,12 +21,6 @@ const fromArray = function(arr) {
 };
 
 
-/**
- * Convert object or list of strings to enum representation
- *
- * @param {Object, Array} arg Object or array of string from which we will generate enum representation
- * @returns {Object} enum representation
- */
 module.exports = function(arg) {
   const obj = Array.isArray(arg) ? fromArray(arg) : arg;
 
