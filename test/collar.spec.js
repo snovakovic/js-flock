@@ -5,7 +5,7 @@ const collar = require('../src/collar');
 const shouldNotBeCalled = () => { throw Error('This should not be called'); };
 
 
-describe('promisify', () => {
+describe('collar', () => {
   it('One promise should be resolved', (done) => {
     collar(Promise.resolve('test'), 5)
       .then((response) => {
