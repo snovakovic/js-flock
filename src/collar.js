@@ -7,10 +7,10 @@
  * @returns {Promise}
  */
 
-const REJECTION_REASON = {
+const REJECTION_REASON = Object.freeze({
   isStrangled: true,
   message: 'Promises have timed out'
-};
+});
 
 module.exports = function(promise, ttl = 5000) {
   const restraint = new Promise((resolve, reject) =>
