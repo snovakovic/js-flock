@@ -1,6 +1,6 @@
 {
   "name": "js-flock",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "JS utility methods for NODE and Browser.",
   "main": "index.js",
   "devDependencies": {
@@ -22,9 +22,14 @@
   },
   "keywords": [
     "utility",
-    "node",
+    "helpers",
     "es6",
-    "js"
+    "promisify",
+    "promise",
+    "enum",
+    "toEnum",
+    "deepFreeze",
+    "deepSeal"
   ],
   "author": "stefan.novakovich@gmail.com",
   "license": "MIT",
