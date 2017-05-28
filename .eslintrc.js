@@ -24,6 +24,5 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'space-before-function-paren': ['error', 'never'],
     'no-param-reassign': ['error', { props: false }],
-    'linebreak-style': 0
   }
 };
