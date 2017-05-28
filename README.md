@@ -65,8 +65,10 @@ Reject promise if it's not resolved in that time
   ).then((data) => {
     // This is not called
   }).catch((err) => {
-    console.log('this is called');
-    console.log(err); // err = 'Promises have timed out'
+    if(typeof err = 'object' && err.isStrangled) {
+      // collar have rejected promise because it have timed out
+      console.log(err); // err = { isStrangled: true, message: 'Promises have timed out' }
+    }
   });
 
   collar(Http.get('test-url'), MAX_WAIT_TIME)
