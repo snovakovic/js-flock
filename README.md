@@ -1,5 +1,7 @@
 # js-flock
 
+[![Build Status](https://travis-ci.org/snovakovic/js-flock.svg?branch=master)](https://travis-ci.org/snovakovic/js-flock)
+
 npm install js-flock --save
 
 JS utility methods for NODE and Browser. Requires ES6 environment as minimum to run the code.
