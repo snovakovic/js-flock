@@ -40,7 +40,8 @@ describe('collar', () => {
     collar(promise, 5)
       .then(shouldNotBeCalled)
       .catch((err) => {
-        expect(err).to.equal('Promises have timed out');
+        expect(err.isStrangled).to.equal(true);
+        expect(err.message).to.equal('Promises have timed out');
         done();
       });
   });

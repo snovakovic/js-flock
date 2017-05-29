@@ -1,3 +1,9 @@
+const REJECTION_REASON = Object.freeze({
+  isStrangled: true,
+  message: 'Promises have timed out'
+});
+
+
 /**
  * Set maximum waiting time for promise to resolve
  * Reject promise if it's not resolved in that time
@@ -8,7 +14,7 @@
  */
 module.exports = function(promise, ttl = 5000) {
   const restraint = new Promise((resolve, reject) =>
-    setTimeout(reject, ttl, 'Promises have timed out'));
+    setTimeout(reject, ttl, REJECTION_REASON));
 
   return Promise.race([
     restraint,
