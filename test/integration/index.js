@@ -35,7 +35,7 @@ function runTest() {
   });
 }
 
-exec('npm install', (error) => {
+exec('npm uninstall js-flock && npm install js-flock', (error) => {
   if (error) {
     console.error(error);
   }
