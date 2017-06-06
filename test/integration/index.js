@@ -5,14 +5,14 @@ const exec = require('child_process').exec;
 function run() {
   const jsFlock = require('js-flock');
 
-  // Promisify
+  // promisify
   const promisified = jsFlock.promisify((cb) => { cb(undefined, 10); });
   promisified().then((data) => {
     assert.equal(data, 10);
     console.log('Promisify: SUCCESS');
   });
 
-  // Collar
+  // collar
   jsFlock.collar(Promise.resolve('test'), 5)
     .then((response) => {
       assert.equal(response, 'test');
@@ -24,7 +24,7 @@ function run() {
   assert.equal(testEnum.TEST, 'TEST');
   console.log('To Enum: SUCCESS');
 
-  // Deep freeze
+  // deepFreeze
   const frozen = jsFlock.deepFreeze({ a: 1 });
   assert.equal(Object.isFrozen(frozen), true);
   console.log('Deep Freeze: SUCCESS');
