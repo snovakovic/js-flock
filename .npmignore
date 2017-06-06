@@ -1,9 +1,7 @@
-node_modules/
-.vscode/
-coverage/
-config/
-test/
-.eslintrc.js
-.gitignore
-.npmignore
-README.md
+# Ignore everything
+*
+
+# except
+!src/
+!package.json
+!LICENSE
