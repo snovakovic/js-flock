@@ -2,6 +2,6 @@
 *
 
 # except
-!src/
+!src/**
 !package.json
 !LICENSE
