@@ -32,10 +32,13 @@ module.exports = function(arg) {
   const keys = Object.freeze(Object.keys(obj));
   const values = Object.freeze(keys.map((key) => obj[key]));
 
+  const keysSet = new Set(keys);
+  const valuesSet = new Set(values);
+
   obj.values = () => values;
   obj.keys = () => keys;
-  obj.exists = (value) => values.some((v) => v === value);
-  obj.haveKey = (key) => keys.some((v) => v === key);
+  obj.exists = (value) => valuesSet.has(value);
+  obj.haveKey = (key) => keysSet.has(key);
 
   deepFreeze(obj);
 

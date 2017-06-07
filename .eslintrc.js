@@ -23,6 +23,7 @@ module.exports = {
     'func-names': ['error', 'never'],
     'arrow-parens': ['error', 'always'],
     'space-before-function-paren': ['error', 'never'],
-    'no-param-reassign': ['error', { props: false }]
+    'no-param-reassign': ['error', { props: false }],
+    'no-prototype-builtins': 0
   }
 };
