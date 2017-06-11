@@ -155,4 +155,4 @@ Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/Ja
 ### deepSeal
 
 Recursively apply [Object.seal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal).
-For example check [deepFreeze](###deepFreeze)
+For example check [deepFreeze](#deepFreeze)
