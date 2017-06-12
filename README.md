@@ -14,6 +14,7 @@ JS utility methods for NODE and Browser. Requires ES6 environment as minimum to 
 - [promisify](#promisify)
 - [collar](#collar)
 - [toEnum](#toenum)
+- [sort](#sort)
 - [deepFreeze](#deepfreeze)
 - [deepSeal](#deepseal)
 
@@ -78,7 +79,8 @@ Reject promise if it's not resolved in that time
 
 ### toEnum
 
-Convert object or list of strings to enum representation. Enum representation is immutable (frozen)
+Convert object or list of strings to enum representation.
+Enum representation is immutable (frozen)
 
 ```javascript
   const toEnum = require('js-flock').toEnum;
@@ -123,6 +125,43 @@ Convert object or list of strings to enum representation. Enum representation is
 
   gender.haveKey('MAN'); // true
   gender.haveKey('CAR'); // false
+```
+
+### sort
+
+Small wrapper around sort to make sorting more readable and easier to write.
+Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
+
+
+```javascript
+  const sort = require('js-flock').sort;
+
+  sort([1,2,4]).asc(); // sort array in ascending order
+  sort([1,2,4]).desc(); // sort array in descending order
+
+  // Sort persons (array of objects) ascending by lowercase names
+  sort(persons).asc((p) => p.name.toLowerCase());
+
+  // Above statement is equivalent to
+  persons.sort((a, b) => {
+    // == null are true for undefined and null.
+    // We need to check that first in order to move undefined/null values to bottom of list
+    if (a.name == null) return 1;
+    if (b.name == null) return -1;
+
+    // Cast to lowercase if there is value
+    const aName = aName.toLowerCase();
+    const bName = bName.toLowercase();
+
+    if (aName === bName) return 0;
+    if (aName < bName) return -1; // Is this asc or desc sorting?? let's check documentation
+    return 1;
+  });
+
+  // There is no exception if we try to sort values that are not sortable
+  // In that case sort just return input value
+  sort(null).asc(); // return null
+  sort(33).desc(); // return 33
 ```
 
 ### deepFreeze
