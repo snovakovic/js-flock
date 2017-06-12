@@ -1,7 +1,7 @@
-const uniSorter = function(direction, path, a, b) {
-  if (path) { // Get the value from object property
-    a = path(a);
-    b = path(b);
+const sorter = function(direction, sortBy, a, b) {
+  if (sortBy) { // Get the value from object property
+    a = sortBy(a);
+    b = sortBy(b);
   }
 
   if (a == null) return 1;
@@ -11,23 +11,23 @@ const uniSorter = function(direction, path, a, b) {
   return -direction;
 };
 
-const ascSorter = uniSorter.bind(null, -1);
-const descSorter = uniSorter.bind(null, 1);
+const ascSorter = sorter.bind(null, -1);
+const descSorter = sorter.bind(null, 1);
 
-const sort = function(ctx, path, sorter) {
+const sort = function(ctx, sortBy, _sorter) {
   if (Array.isArray(ctx)) {
-    return ctx.sort(sorter.bind(null, path));
+    return ctx.sort(_sorter.bind(null, sortBy));
   }
   return ctx;
 };
 
 module.exports = function(ctx) {
   return {
-    asc(path) {
-      return sort(ctx, path, ascSorter);
+    asc(sortBy) {
+      return sort(ctx, sortBy, ascSorter);
     },
-    desc(path) {
-      return sort(ctx, path, descSorter);
+    desc(sortBy) {
+      return sort(ctx, sortBy, descSorter);
     }
   };
 };
