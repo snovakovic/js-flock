@@ -64,7 +64,7 @@ describe('sort', () => {
     expect(sort('string').asc()).to.equal('string');
     expect(sort(undefined).desc()).to.equal(undefined);
     expect(sort(null).desc()).to.equal(null);
-    expect(sort(33)).to.equal(33);
-    expect(sort({ name: 'test' })).to.equal({ name: 'test' });
+    expect(sort(33).asc()).to.equal(33);
+    expect(sort({ name: 'test' }).desc()).to.eql({ name: 'test' });
   });
 });
