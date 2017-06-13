@@ -52,29 +52,22 @@ Reject promise if it's not resolved in that time
 
   const MAX_WAIT_TIME = 500;
 
-  collar(Promise.all([
-    new Promise((resolve) => setTimeout(resolve, 50, '1')),
-    new Promise((resolve) => setTimeout(resolve, 100, '2'))
-  ]), MAX_WAIT_TIME)
-  .then(([first, second]) => {
-    console.log('this is called as promises are resolved before timeout')
-  }).catch((err) => console.log('this is not called'));
-
-  collar(
-    new Promise((resolve) => setTimeout(resolve, 1000, '1')),
-    MAX_WAIT_TIME
-  ).then((data) => {
-    // This is not called
-  }).catch((err) => {
-    if(typeof err = 'object' && err.isStrangled) {
-      // collar have rejected promise because it have timed out
-      console.log(err); // err = { isStrangled: true, message: 'Promises have timed out' }
-    }
-  });
-
+  // Http request will be rejected if it's not resolved in 0.5 seconds
   collar(Http.get('test-url'), MAX_WAIT_TIME)
     .then((response) => console.log(response))
     .catch((err) => console.log('promise have timed out'));
+
+  // Collar will reject promise chain as one of promises are not resolved in max time
+  collar(Promise.all([
+    new Promise((resolve) => setTimeout(resolve, 50, '1')),
+    new Promise((resolve) => setTimeout(resolve, 1000, '2'))
+  ]), MAX_WAIT_TIME)
+  .then(() => { /* not called as second promise have timed out */  })
+  .catch((err) => { // CollarError = { isStrangled: true, message: 'Promises have timed out' }
+    if (typeof err === 'object' && err.isStrangled) {
+      console.log(err.message); // 'Promises have timed out'
+    }
+  });
 ```
 
 ### toEnum
