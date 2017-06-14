@@ -15,7 +15,6 @@
   },
   "scripts": {
     "test": "istanbul cover --include-all-sources --config ./config/test/istanbul.yml _mocha -- --opts ./config/test/mocha.opts",
-    "test:integration": "node test/integration/index.js"
   },
   "repository": {
     "type": "git",
