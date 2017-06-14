@@ -10,14 +10,17 @@ describe('sort', () => {
     flatArray = [1, 5, 3, 2, 4, 5];
     persons = [{
       name: 'last',
+      dob: new Date(1987, 14, 11),
       address: {
         code: 3
       }
     }, {
       name: 'FIRST',
-      address: { }
+      dob: new Date(1987, 14, 9),
+      address: {}
     }, {
       name: 'In the middle',
+      dob: new Date(1987, 14, 10),
       address: {
         code: 1
       }
@@ -65,6 +68,17 @@ describe('sort', () => {
     expect(sort(undefined).desc()).to.equal(undefined);
     expect(sort(null).desc()).to.equal(null);
     expect(sort(33).asc()).to.equal(33);
-    expect(sort({ name: 'test' }).desc()).to.eql({ name: 'test' });
+    expect(sort({
+      name: 'test'
+    }).desc()).to.eql({
+      name: 'test'
+    });
+  });
+
+  it('should sort dates correctly', () => {
+    sort(persons).asc((p) => p.dob);
+    expect(persons[0].name).to.equal('FIRST');
+    expect(persons[1].name).to.equal('In the middle');
+    expect(persons[2].name).to.equal('last');
   });
 });
