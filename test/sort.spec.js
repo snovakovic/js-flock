@@ -68,11 +68,7 @@ describe('sort', () => {
     expect(sort(undefined).desc()).to.equal(undefined);
     expect(sort(null).desc()).to.equal(null);
     expect(sort(33).asc()).to.equal(33);
-    expect(sort({
-      name: 'test'
-    }).desc()).to.eql({
-      name: 'test'
-    });
+    expect(sort({ name: 'test' }).desc()).to.eql({ name: 'test' });
   });
 
   it('should sort dates correctly', () => {
