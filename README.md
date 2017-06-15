@@ -41,7 +41,18 @@ Promisify error first callback function
     .then((data) => console.log(data))
     .catch((err) => console.log(err));
 ```
+Promise resolve can return single parameter only.
+In order to resolve callbacks that are called with multiple parameters we can pass { multiArgs: true } option to promisify. When multiArgs are provided promise is always resolved with array even if callback is called with no arguments.
 
+```javascript
+  const fun = (cb) => cb(undefined, 'res1', 'res2');
+  const funAsync = promisify(fun, { multiArgs: true });
+
+  funAsync().then(([r1, r2]) => {
+    // r1 - res1
+    // r2 - res2
+  });
+```
 ### collar
 
 Set maximum waiting time for promise to resolve.
