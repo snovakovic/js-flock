@@ -74,7 +74,7 @@ describe('promisify', () => {
     }).catch(shouldNotBeCalled);
   });
 
-  it('Should resolve promisified function with no params and multiArgs args', (done) => {
+  it('Should resolve promisified function with no params and multiArgs', (done) => {
     const fun = (cb) => cb(undefined);
     const funAsync = promisify(fun, { multiArgs: true });
 

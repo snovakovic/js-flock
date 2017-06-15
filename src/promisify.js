@@ -13,7 +13,7 @@ const promisify = function(callbackFn, args, options = {}) {
  * Promisify error first callback function
  *
  * @param {Function} callbackFn - error first callback function we want to promisify
- * @returns {Function} Function that returns promise when called
+ * @returns {Function} Function that returns promise
  */
 module.exports = (callbackFn, options) =>
   (...args) => promisify(callbackFn, args, options);
