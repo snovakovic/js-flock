@@ -1,6 +1,6 @@
 {
   "name": "js-flock",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "JS utility methods for NODE and Browser.",
   "main": "src/index.js",
   "devDependencies": {
@@ -14,7 +14,7 @@
     "sinon-chai": "^2.10.0"
   },
   "scripts": {
-    "test": "istanbul cover --include-all-sources --config ./config/test/istanbul.yml _mocha -- --opts ./config/test/mocha.opts",
+    "test": "istanbul cover --include-all-sources --config ./config/test/istanbul.yml _mocha -- --opts ./config/test/mocha.opts"
   },
   "repository": {
     "type": "git",
