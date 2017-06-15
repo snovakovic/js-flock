@@ -9,13 +9,13 @@ describe('deepSealOrFreeze', () => {
   let circ2;
 
   beforeEach(() => {
-    obj = deepFreeze({
+    obj = {
       first: {
         second: {
           third: { num: 11, fun() {} }
         }
       }
-    });
+    };
 
     circ1 = { first: { test: 1 } };
     circ2 = { second: { test: 2 } };
@@ -27,6 +27,7 @@ describe('deepSealOrFreeze', () => {
 
   describe('deepFreeze', () => {
     it('Should deep freeze nested objects', () => {
+      deepFreeze(obj);
       expect(Object.isFrozen(obj.first.second)).to.equal(true);
       expect(Object.isFrozen(obj.first.second.third)).to.equal(true);
       expect(Object.isFrozen(obj.first.second.third.fun)).to.equal(true);
@@ -42,6 +43,7 @@ describe('deepSealOrFreeze', () => {
 
   describe('deepSeal', () => {
     it('Should deep seal nested objects', () => {
+      deepSeal(obj);
       expect(Object.isSealed(obj.first.second)).to.equal(true);
       expect(Object.isSealed(obj.first.second.third)).to.equal(true);
       expect(Object.isSealed(obj.first.second.third.fun)).to.equal(true);
