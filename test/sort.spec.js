@@ -11,9 +11,7 @@ describe('sort', () => {
     persons = [{
       name: 'last',
       dob: new Date(1987, 14, 11),
-      address: {
-        code: 3
-      }
+      address: { code: 3 }
     }, {
       name: 'FIRST',
       dob: new Date(1987, 14, 9),
@@ -21,9 +19,7 @@ describe('sort', () => {
     }, {
       name: 'In the middle',
       dob: new Date(1987, 14, 10),
-      address: {
-        code: 1
-      }
+      address: { code: 1 }
     }];
   });
 
@@ -37,21 +33,21 @@ describe('sort', () => {
     expect(sort(flatArray).desc()).to.eql([5, 5, 4, 3, 2, 1]);
   });
 
-  it('Should handle asc object sort by lowercasing string', () => {
+  it('Should sort by object property in ascending order', () => {
     sort(persons).asc((p) => p.name.toLowerCase());
     expect(persons[0].name).to.equal('FIRST');
     expect(persons[1].name).to.equal('In the middle');
     expect(persons[2].name).to.equal('last');
   });
 
-  it('Should handle desc object sort by lowercasing string', () => {
+  it('Should sort by object property in ascending order', () => {
     sort(persons).desc((p) => p.name.toLowerCase());
     expect(persons[2].name).to.equal('FIRST');
     expect(persons[1].name).to.equal('In the middle');
     expect(persons[0].name).to.equal('last');
   });
 
-  it('Undefined values should always be at the bottom', () => {
+  it('Should sort undefined values to the bottom', () => {
     sort(persons).asc((p) => p.address.code);
     expect(persons[0].address.code).to.equal(1);
     expect(persons[1].address.code).to.equal(3);
@@ -63,7 +59,7 @@ describe('sort', () => {
     expect(persons[2].address.code).to.equal(undefined);
   });
 
-  it('Unsortable values should not throw error', () => {
+  it('Should ignore values that are not sortable', () => {
     expect(sort('string').asc()).to.equal('string');
     expect(sort(undefined).desc()).to.equal(undefined);
     expect(sort(null).desc()).to.equal(null);
@@ -71,7 +67,7 @@ describe('sort', () => {
     expect(sort({ name: 'test' }).desc()).to.eql({ name: 'test' });
   });
 
-  it('should sort dates correctly', () => {
+  it('Should sort dates correctly', () => {
     sort(persons).asc((p) => p.dob);
     expect(persons[0].name).to.equal('FIRST');
     expect(persons[1].name).to.equal('In the middle');

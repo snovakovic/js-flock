@@ -6,7 +6,7 @@ const shouldNotBeCalled = () => { throw Error('This should not be called'); };
 
 
 describe('collar', () => {
-  it('One promise should be resolved', (done) => {
+  it('Should resolve single promise', (done) => {
     collar(Promise.resolve('test'), 5)
       .then((response) => {
         expect(response).to.equal('test');
@@ -14,7 +14,7 @@ describe('collar', () => {
       }).catch(shouldNotBeCalled);
   });
 
-  it('Multiple promise should be resolved', (done) => {
+  it('Should resolve multiple promises', (done) => {
     collar(Promise.all([
       new Promise((resolve) => setTimeout(resolve, 1, '1')),
       new Promise((resolve) => setTimeout(resolve, 3, '2'))
@@ -26,7 +26,7 @@ describe('collar', () => {
       }).catch(shouldNotBeCalled);
   });
 
-  it('collar without time parameter should be resolved', (done) => {
+  it('Should resolve collar without timeout provided', (done) => {
     const promise = new Promise((resolve) => setTimeout(resolve, 1, '1'));
     collar(promise)
       .then((first) => {
@@ -35,7 +35,7 @@ describe('collar', () => {
       }).catch(shouldNotBeCalled);
   });
 
-  it('Promise should be rejected because of long waiting', (done) => {
+  it('Should strangled promise', (done) => {
     const promise = new Promise((resolve) => setTimeout(resolve, 10, '1'));
     collar(promise, 5)
       .then(shouldNotBeCalled)

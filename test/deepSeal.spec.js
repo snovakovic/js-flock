@@ -7,10 +7,7 @@ describe('deepSeal', () => {
     const obj = deepSeal({
       first: {
         second: {
-          third: {
-            num: 11,
-            fun() {}
-          }
+          third: { num: 11, fun() {} }
         }
       }
     });
@@ -20,7 +17,7 @@ describe('deepSeal', () => {
     expect(Object.isSealed(obj.first.second.third.fun)).to.equal(true);
   });
 
-  it('Circular reference should be handled', () => {
+  it('Should handle circular reference', () => {
     const ob1 = { first: { test: 1 } };
     const ob2 = { second: { test: 2 } };
 

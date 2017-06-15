@@ -40,12 +40,14 @@ describe('toEnum', () => {
   });
 
   it('Should fail for invalid arguments', () => {
+    const notObjectOrArray = 'Provided argument need to be object or array';
+    const onlyStrings = 'Only strings are allowed in array notation';
     expect(() => toEnum(33)).to.throw(TypeError);
-    expect(() => toEnum(null)).to.throw(TypeError, 'Provided argument need to be object or array');
-    expect(() => toEnum(['first', undefined])).to.throw(TypeError, 'Only strings are allowed in array notation');
+    expect(() => toEnum(null)).to.throw(TypeError, notObjectOrArray);
+    expect(() => toEnum(['first', 33])).to.throw(TypeError, onlyStrings);
   });
 
-  it('Values and keys should be immutable', () => {
+  it('Should freeze values and keys', () => {
     const testEnum = toEnum(enumArray);
 
     const values = testEnum.values();

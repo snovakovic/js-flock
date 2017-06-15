@@ -29,19 +29,19 @@ describe('promisify', () => {
   });
 
   it('Should promisify function with multiple inputs', (done) => {
-    const successFun = function(param1, param2, cb) {
-      setTimeout(() => cb(undefined, [`${param1}-response`, `${param2}-response`]), 50);
+    const successFun = function(p1, p2, cb) {
+      setTimeout(() => cb(undefined, [`${p1}-res`, `${p2}-res`]), 50);
     };
     const successFunAsync = promisify(successFun);
 
-    successFunAsync('param1', 'param2').then(([response1, response2]) => {
-      expect(response1).to.equal('param1-response');
-      expect(response2).to.equal('param2-response');
+    successFunAsync('p1', 'p2').then(([response1, response2]) => {
+      expect(response1).to.equal('p1-res');
+      expect(response2).to.equal('p2-res');
       done();
     }).catch(shouldNotBeCalled);
   });
 
-  it('Should resolve promisified function with multiple params with multiArgs', (done) => {
+  it('Should handle multiple params with multiArgs option', (done) => {
     const fun = (cb) => cb(undefined, 'res1', 2, 'res3');
     const funAsync = promisify(fun, { multiArgs: true });
 
@@ -53,7 +53,7 @@ describe('promisify', () => {
     }).catch(shouldNotBeCalled);
   });
 
-  it('Should resolve promisified function with multiple params without multiArgs', (done) => {
+  it('Should return single param if multiArgs is not provided', (done) => {
     const fun = (cb) => cb(undefined, 'res1', 2);
     const funAsync = promisify(fun);
 
@@ -64,7 +64,7 @@ describe('promisify', () => {
     }).catch(shouldNotBeCalled);
   });
 
-  it('Should resolve promisified function with no params', (done) => {
+  it('Should handle function with no params', (done) => {
     const fun = (cb) => cb(undefined);
     const funAsync = promisify(fun);
 
@@ -74,7 +74,7 @@ describe('promisify', () => {
     }).catch(shouldNotBeCalled);
   });
 
-  it('Should resolve promisified function with no params and multiArgs', (done) => {
+  it('Should handle function with no params and multiArgs option', (done) => {
     const fun = (cb) => cb(undefined);
     const funAsync = promisify(fun, { multiArgs: true });
 
