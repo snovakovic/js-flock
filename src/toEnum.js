@@ -40,7 +40,7 @@ module.exports = function(arg) {
     valueSet: undefined
   };
 
-  // Hard bind enum helpers
+  // Hard bind custom enum helpers
   Object.keys(obj)
     .filter((key) => typeof obj[key] === 'function')
     .forEach((key) => (obj[key] = obj[key].bind(obj)));

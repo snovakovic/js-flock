@@ -94,7 +94,7 @@ Enum representation is immutable (frozen)
     TRUCK: 'T',
     AIRPLANE: 'A',
     HELICOPTER: 'H',
-    canFly(type) { // We can define custom enum helpers
+    canFly(type) { // Define custom helper
       return type === this.AIRPLANE || type === this.HELICOPTER;
     }
   });
@@ -105,7 +105,7 @@ Enum representation is immutable (frozen)
     // Special behaviour only for truck vehicles
   }
 
-  if(vehicleType.canFly(vehicle.type)) {
+  if (vehicleType.canFly(vehicle.type)) {
     // Special behaviour for vehicles that can fly
   }
 
