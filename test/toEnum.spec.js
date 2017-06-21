@@ -59,4 +59,37 @@ describe('toEnum', () => {
     expect(testEnum.values()).to.eql(enumArray);
     expect(testEnum.keys()).to.eql(enumArray);
   });
+
+  it('Should not fail for empty array/object', () => {
+    const en1 = toEnum({});
+    const en2 = toEnum({});
+    expect(en1.keys()).to.eql([]);
+    expect(en2.values()).to.eql([]);
+  });
+
+  it('Should handle helper functions', () => {
+    const testEnum = toEnum({
+      CAR: 'CAR',
+      TRUCK: 'TRUCK',
+      AIRPLANE: 'AIRPLANE',
+      HELICOPTER: 'HELICOPTER',
+      canFly(type) {
+        return type === this.AIRPLANE || type === this.HELICOPTER;
+      }
+    });
+
+    const canFly = testEnum.canFly;
+    expect(testEnum.canFly(testEnum.HELICOPTER)).to.equal(true);
+    expect(testEnum.canFly(testEnum.AIRPLANE)).to.equal(true);
+    expect(testEnum.canFly(testEnum.TRUCK)).to.equal(false);
+    expect(testEnum.canFly(null)).to.equal(false);
+    expect(canFly(testEnum.HELICOPTER)).to.equal(true);
+
+    expect(testEnum.haveKey('canFly')).to.equal(false);
+    expect(testEnum.exists('canFly')).to.equal(false);
+
+    const values = ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'];
+    expect(testEnum.values()).to.eql(values);
+    expect(testEnum.keys()).to.eql(values);
+  });
 });

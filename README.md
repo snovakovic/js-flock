@@ -90,45 +90,51 @@ Enum representation is immutable (frozen)
   const toEnum = require('js-flock').toEnum;
 
   const vehicleType = toEnum({
-    TRUCK: 'TRUCK',
-    CAR: 'CAR',
-    MOTORBIKE: 'MOTORBIKE',
-    CAMPER: 'CAMPER'
+    CAR: 'C',
+    TRUCK: 'T',
+    AIRPLANE: 'A',
+    HELICOPTER: 'H',
+    canFly(type) { // Define custom helper
+      return type === this.AIRPLANE || type === this.HELICOPTER;
+    }
   });
 
-  // We can also use short notation to define above enum when keys are equal to values.
-  // Both enum representations are equal
+  const vehicle = getVehicle();
 
-  const vehicleType = toEnum(['TRUCK', 'CAR', 'MOTORBIKE', 'CAMPER']);
-
-  if(vehicle.type === vehicleType.TRUCK) {
+  if (vehicle.type === vehicleType.TRUCK) {
     // Special behaviour only for truck vehicles
   }
 
-  vehicleType.TRUCK = 'boat';
-  vehicleType.BOAT = 'BOAT';
+  if (vehicleType.canFly(vehicle.type)) {
+    // Special behaviour for vehicles that can fly
+  }
 
-  console.log(vehicleType.TRUCK); // TRUCK - enum is immutable
-  console.log(vehicleType.BOAT); // undefined - enum is immutable
+  // enum is immutable
+  vehicleType.TRUCK = 'boat'; // vehicleType.TRUCK === 'T'
 
-  // Following enum can't be written in short notation as keys are different then values
+  // Each enum have standard helpers
+
+  vehicleType.keys(); // ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'] - helper functions are not included in keys
+  vehicleType.values(); // ['C', 'T', 'A', 'H']
+
+  vehicleType.exists('C'); // true
+  vehicleType.exists('something'); // false
+
+  vehicleType.haveKey('CAR'); // true
+  vehicleType.haveKey('something'); // false
+
+
+  // When keys are equal to values we can use short notation to define enum
+
+  const gender = toEnum(['MAN', 'WOMEN', 'OTHER']);
+
+  // The above is same as writing
 
   const gender = toEnum({
-    MAN: 'M',
-    WOMEN: 'W',
-    OTHER: 'O'
+    MAN: 'MAN',
+    WOMEN: 'WOMEN',
+    OTHER: 'OTHER'
   });
-
-  // Enum helpers
-
-  gender.keys(); // return array of keys ['MAN', 'WOMEN', 'OTHER']
-  gender.values(); // return array of values ['M', 'W', 'O']
-
-  gender.exists('W'); // true
-  gender.exists('T'); // false
-
-  gender.haveKey('MAN'); // true
-  gender.haveKey('CAR'); // false
 ```
 
 ### sort
