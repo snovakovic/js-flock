@@ -1,7 +1,7 @@
 const deepFreeze = require('./deepFreeze');
 
 
-function fromArray(arr) {
+const fromArray = function(arr) {
   const obj = {};
   arr.forEach((key) => {
     if (typeof key !== 'string') {
@@ -11,7 +11,12 @@ function fromArray(arr) {
   });
 
   return obj;
-}
+};
+
+const isStringOrNumber = (t) => typeof t === 'string' || typeof t === 'number';
+
+const getEnumKeys = (obj) =>
+  Object.keys(obj).filter((key) => isStringOrNumber(obj[key]));
 
 
 /**
@@ -27,20 +32,21 @@ module.exports = function(arg) {
     throw TypeError('Provided argument need to be object or array');
   }
 
-  // Append enum helpers
-
-  const keys = Object.freeze(Object.keys(obj));
+  const keys = Object.freeze(getEnumKeys(obj));
   const values = Object.freeze(keys.map((key) => obj[key]));
-
   const keysSet = new Set(keys);
   const valuesSet = new Set(values);
 
+  // Hard bind enum helpers
+  Object.keys(obj)
+    .filter((key) => typeof obj[key] === 'function')
+    .forEach((key) => (obj[key] = obj[key].bind(obj)));
+
+  // Append standard enum helpers
   obj.values = () => values;
   obj.keys = () => keys;
   obj.exists = (value) => valuesSet.has(value);
   obj.haveKey = (key) => keysSet.has(key);
 
-  deepFreeze(obj);
-
-  return obj;
+  return deepFreeze(obj);
 };
