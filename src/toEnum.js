@@ -32,10 +32,13 @@ module.exports = function(arg) {
     throw TypeError('Provided argument need to be object or array');
   }
 
-  const keys = Object.freeze(getEnumKeys(obj));
-  const values = Object.freeze(keys.map((key) => obj[key]));
-  const keysSet = new Set(keys);
-  const valuesSet = new Set(values);
+  // Lazy load state from helpers when needed
+  const state = {
+    keys: undefined,
+    values: undefined,
+    keySet: undefined,
+    valueSet: undefined
+  };
 
   // Hard bind enum helpers
   Object.keys(obj)
@@ -43,10 +46,34 @@ module.exports = function(arg) {
     .forEach((key) => (obj[key] = obj[key].bind(obj)));
 
   // Append standard enum helpers
-  obj.values = () => values;
-  obj.keys = () => keys;
-  obj.exists = (value) => valuesSet.has(value);
-  obj.haveKey = (key) => keysSet.has(key);
+
+  obj.keys = function() {
+    if (!state.keys) {
+      state.keys = Object.freeze(getEnumKeys(obj));
+    }
+    return state.keys;
+  };
+
+  obj.values = function() {
+    if (!state.values) {
+      state.values = Object.freeze(obj.keys().map((key) => obj[key]));
+    }
+    return state.values;
+  };
+
+  obj.haveKey = function(key) {
+    if (!state.keySet) {
+      state.keySet = new Set(obj.keys());
+    }
+    return state.keySet.has(key);
+  };
+
+  obj.exists = function(value) {
+    if (!state.valueSet) {
+      state.valueSet = new Set(obj.values());
+    }
+    return state.valueSet.has(value);
+  };
 
   return deepFreeze(obj);
 };
