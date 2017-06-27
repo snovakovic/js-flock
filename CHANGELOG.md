@@ -1,3 +1,7 @@
+## [0.7.0] - 2017-06-27
+### Changed
+- added singular method
+
 ## [0.6.0] - 2017-06-21
 ### Changed
 - handling of helper methods in toEnum
