@@ -1,6 +1,7 @@
 exports.collar = require('./collar');
-exports.deepSeal = require('./deepSeal');
 exports.deepFreeze = require('./deepFreeze');
+exports.deepSeal = require('./deepSeal');
 exports.promisify = require('./promisify');
-exports.toEnum = require('./toEnum');
+exports.singular = require('./singular');
 exports.sort = require('./sort');
+exports.toEnum = require('./toEnum');
