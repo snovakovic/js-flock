@@ -97,9 +97,8 @@ Reject promise if it's not resolved in that time
 ### singular
 
  Creates singular function that after is called can't be called again until it finishes with execution.
- Singular functions injects done function as a first argument of original function.
- When called done indicates that function can be called again.
- All calls to singular function while its in execution mode will be ignored.
+ Singular function injects done function as a first argument of the original function.
+ When called done indicates that function has finished with execution and that it can be called again.
 
  For example we will use Vue.js and click handler.
 
