@@ -5,8 +5,8 @@ module.exports = function(fn) {
   return function(...args) {
     if (!inProgress) {
       inProgress = true;
-      args.push(done);
-      fn(...args);
+      args.unshift(done);
+      fn.apply(this, args);
     }
   };
 };

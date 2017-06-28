@@ -1,11 +1,11 @@
 const expect = require('chai').expect;
-const one = require('../src/singular');
+const singular = require('../src/singular');
 
 
 describe('singular', () => {
   it('Should behave correctly', (done) => {
     let noCalls = 0;
-    const test = one((finished) => {
+    const test = singular((finished) => {
       noCalls += 1;
       setImmediate(finished);
     });
@@ -26,7 +26,7 @@ describe('singular', () => {
 
   it('Should resolve function with arguments', (done) => {
     let total = 0;
-    const test = one((increaseBy, finished) => {
+    const test = singular((finished, increaseBy) => {
       total += increaseBy;
       setImmediate(finished);
     });
@@ -43,5 +43,14 @@ describe('singular', () => {
       expect(total).to.equal(15);
       done();
     }, 1);
+  });
+
+  it('Should preserve this', () => {
+    const obj = { test: 'test' };
+    const test = singular(function() {
+      expect(this).to.equal(obj);
+    });
+
+    test.apply(obj);
   });
 });

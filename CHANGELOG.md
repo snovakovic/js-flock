@@ -1,5 +1,10 @@
 ## [0.7.0] - 2017-06-27
 ### Changed
+- Singular method emits done as first parameter not last
+- Singular method is preserving this
+
+## [0.7.0] - 2017-06-27
+### Added
 - added singular method
 
 ## [0.6.0] - 2017-06-21
