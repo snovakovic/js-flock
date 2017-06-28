@@ -8,7 +8,7 @@
 npm install js-flock --save
 
 JS utility methods for NODE and Browser. Requires **ES6** environment as minimum to run the code.
-For now code is not compiled to ES5 and if used in browser you might need to compile it by yourself
+For now code is not compiled to ES5 and if used in browser you might need to compile it by yourself.
 
 ```javascript
   // Webpack rule to compile js-flock to ES5 version if needed.
