@@ -24,6 +24,7 @@
     "utility",
     "helpers",
     "es6",
+    "es2015",
     "promisify",
     "promise",
     "enum",
