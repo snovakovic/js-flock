@@ -5,10 +5,16 @@ const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
 
 const isStringOrNumber = (t) => typeof t === 'string' || typeof t === 'number';
 
+const uniqueValues = (arr) => new Set(arr).size === arr.length;
+
 const getEnumKeys = (obj) =>
   Object.keys(obj).filter((key) => isStringOrNumber(obj[key]));
 
-const uniqueValues = (arr) => new Set(arr).size === arr.length;
+const fromArray = function(arr) {
+  const obj = {};
+  arr.forEach((key) => (obj[key] = key));
+  return obj;
+};
 
 const assert = (condition, msg) => {
   if (!condition) {
@@ -40,12 +46,6 @@ function assertType(args) {
     assert(allStrings, 'Only strings are allowed in array notation');
   }
 }
-
-const fromArray = function(arr) {
-  const obj = {};
-  arr.forEach((key) => (obj[key] = key));
-  return obj;
-};
 
 /**
  * Convert object or list of strings to enum representation
