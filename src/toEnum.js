@@ -5,7 +5,6 @@ const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
 
 const isStringOrNumber = (t) => typeof t === 'string' || typeof t === 'number';
 
-const uniqueValues = (arr) => new Set(arr).size === arr.length;
 
 const getEnumKeys = (obj) =>
   Object.keys(obj).filter((key) => isStringOrNumber(obj[key]));
@@ -17,21 +16,23 @@ const fromArray = function(arr) {
 };
 
 const assert = (condition, msg) => {
-  if (!condition) {
-    throw new TypeError(`toEnum: ${msg}`);
-  }
+  if (!condition) { throw new TypeError(`toEnum: ${msg}`); }
+};
+
+const assertUnique = (arr, values) => {
+  assert(new Set(arr).size === arr.length, `Duplicate ${values} detected`);
 };
 
 const assertKeys = function(keys) {
   assert(keys.length, 'Empty enums are not allowed');
-  assert(uniqueValues(keys), 'Duplicate keys detected');
+  assertUnique(keys, 'keys');
   const noReserved = keys.every((k) => !reservedWords.has(k.toLowerCase()));
   assert(noReserved, `Reserved word have been used as key.
     [keys, values, haveKye, exists] are not allowed as keys`);
 };
 
 const assertValues = function(values) {
-  assert(uniqueValues(values), 'Duplicate values detected');
+  assertUnique(values, 'values');
   const stringOrNumbers = values.every(isStringOrNumber);
   assert(stringOrNumbers, 'Only strings or numbers are allowed as enum values');
 };
