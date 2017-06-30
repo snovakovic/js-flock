@@ -32,6 +32,7 @@ module.exports = function(arg) {
     throw TypeError('Provided argument need to be object or array');
   }
 
+<<<<<<< HEAD
   // Lazy load state from helpers when needed
   const state = {
     keys: undefined,
@@ -75,5 +76,36 @@ module.exports = function(arg) {
     return state.valueSet.has(value);
   };
 
+=======
+  const enumKeys = Object.freeze(getEnumKeys(obj));
+  const enumValues = Object.freeze(enumKeys.map((key) => obj[key]));
+
+  // Lazy load
+  const state = {
+    keySet: undefined,
+    valueSet: undefined
+  };
+
+  // Hard bind custom enum helpers
+  Object.keys(obj)
+    .filter((key) => typeof obj[key] === 'function')
+    .forEach((key) => (obj[key] = obj[key].bind(obj)));
+
+  // Append standard enum helpers
+
+  obj.keys = () => enumKeys;
+  obj.values = () => enumValues;
+
+  obj.haveKey = (key) => {
+    state.keySet = state.keySet || new Set(enumKeys);
+    return state.keySet.has(key);
+  };
+
+  obj.exists = (value) => {
+    state.valueSet = state.valueSet || new Set(enumValues);
+    return state.valueSet.has(value);
+  };
+
+>>>>>>> 9bc3b47f4936a184b7af060883549d1348b9285a
   return deepFreeze(obj);
 };

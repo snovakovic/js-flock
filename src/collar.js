@@ -1,6 +1,6 @@
 const REJECTION_REASON = Object.freeze({
   isStrangled: true,
-  message: 'Promises have timed out'
+  message: 'Promise have timed out'
 });
 
 

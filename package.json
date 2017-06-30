@@ -1,6 +1,10 @@
 {
   "name": "js-flock",
+<<<<<<< HEAD
   "version": "0.6.0",
+=======
+  "version": "0.8.4",
+>>>>>>> 9bc3b47f4936a184b7af060883549d1348b9285a
   "description": "JS utility methods for NODE and Browser.",
   "main": "src/index.js",
   "devDependencies": {
@@ -24,6 +28,7 @@
     "utility",
     "helpers",
     "es6",
+    "es2015",
     "promisify",
     "promise",
     "enum",

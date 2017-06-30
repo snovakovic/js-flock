@@ -7,12 +7,24 @@
 
 npm install js-flock --save
 
-JS utility methods for NODE and Browser. Requires ES6 environment as minimum to run the code.
+JS utility methods for NODE and Browser. Requires **ES6** environment as minimum to run the code.
+For now code is not compiled to ES5 and if used in browser you might need to compile it by yourself.
+
+```javascript
+  // Webpack rule to compile js-flock to ES5 version if needed.
+  {
+    test: /node_modules\/js-flock/,
+    loader: 'babel-loader',
+    include: '/',
+    query: { presets: [['es2015', { modules: false }]] }
+  }, {
+```
 
 ### Methods:
 
 - [promisify](#promisify)
 - [collar](#collar)
+- [singular](#singular)
 - [toEnum](#toenum)
 - [sort](#sort)
 - [deepFreeze](#deepfreeze)
@@ -53,6 +65,7 @@ In order to resolve callbacks that are called with multiple parameters we can pa
     // r2 - res2
   });
 ```
+
 ### collar
 
 Set maximum waiting time for promise to resolve.
@@ -79,6 +92,45 @@ Reject promise if it's not resolved in that time
       console.log(err.message); // 'Promises have timed out'
     }
   });
+```
+
+### singular
+
+ Creates singular function that after is called can't be called again until it finishes with execution.
+ Singular function injects done function as a first argument of the original function.
+ When called done indicates that function has finished with execution and that it can be called again.
+
+ For example we will use Vue.js and click handler.
+
+```html
+    <span @click="startConversation()" role="button"></span>
+```
+
+```javascript
+  export default {
+    methods: {
+      startConversation: singular(function(done) {
+        // After function is called all other calls will be ignored until done is called
+        if (this.conversation) { // Computed property that return conversation if exists
+          this.$store.dispatch('Chat/conversation/activate', this.conversation.channelId);
+          done(); // In this case done is called immediately
+          return;
+        }
+
+        // If conversation does not exist we need to create it in order to activate it
+        ChatService.conversation.createDirect(this.professor.id)
+          .then((newConversation) => {
+            this.$store.commit('Chat/conversation/add', newConversation);
+            this.$store.dispatch('Chat/conversation/activate', newConversation.channelId);
+          })
+          .catch((err) => {
+            Toast.showErrorToast();
+            this.$log.error(err);
+          })
+          .then(done); // In this case done is called asynchronously.
+      })
+    }
+  };
 ```
 
 ### toEnum
