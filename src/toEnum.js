@@ -5,9 +5,7 @@ const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
 
 const isStringOrNumber = (t) => typeof t === 'string' || typeof t === 'number';
 
-
-const getEnumKeys = (obj) =>
-  Object.keys(obj).filter((key) => isStringOrNumber(obj[key]));
+const getEnumKeys = (obj) => Object.keys(obj).filter((key) => isStringOrNumber(obj[key]));
 
 const fromArray = function(arr) {
   const obj = {};
@@ -26,25 +24,20 @@ const assertUnique = (arr, values) => {
 const assertKeys = function(keys) {
   assert(keys.length, 'Empty enums are not allowed');
   assertUnique(keys, 'keys');
-  const noReserved = keys.every((k) => !reservedWords.has(k.toLowerCase()));
-  assert(noReserved, `Reserved word have been used as key.
-    [keys, values, haveKye, exists] are not allowed as keys`);
+  assert(keys.every((k) => !reservedWords.has(k.toLowerCase())), `Reserved word have been used
+    as key. [keys, values, haveKye, exists] are not allowed as keys`);
 };
 
 const assertValues = function(values) {
   assertUnique(values, 'values');
-  const stringOrNumbers = values.every(isStringOrNumber);
-  assert(stringOrNumbers, 'Only strings or numbers are allowed as enum values');
+  assert(values.every(isStringOrNumber), 'Only strings or numbers are allowed as enum values');
 };
 
 function assertType(args) {
-  const rightType = args && typeof args === 'object';
-  assert(rightType, 'Provided value needs to be object or array');
-
+  assert(args && typeof args === 'object', 'Provided value needs to be object or array');
   if (Array.isArray(args)) {
     assert(args.length, 'Empty array is not allowed');
-    const allStrings = args.every((a) => typeof a === 'string');
-    assert(allStrings, 'Only strings are allowed in array notation');
+    assert(args.every((a) => typeof a === 'string'), 'Only strings are allowed in array notation');
   }
 }
 
