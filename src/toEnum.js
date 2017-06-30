@@ -1,15 +1,45 @@
 const deepFreeze = require('./deepFreeze');
 
 
+const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
+
+const uniqueValues = (arr) => new Set(arr).size === arr.length;
+
+const assert = (condition, msg) => {
+  if (!condition) {
+    throw new TypeError(`toEnum: ${msg}`);
+  }
+};
+
+const assertKeys = function(keys) {
+  assert(keys.length, 'Empty enums are not allowed');
+  assert(uniqueValues(keys), 'Duplicate keys detected');
+  const noReserved = keys.every((k) => !reservedWords.has(k.toLowerCase()));
+  assert(noReserved, `Reserved word have been used as key.
+    [keys, values, haveKye, exists] are not allowed as keys`);
+};
+
+const assertValues = function(values) {
+  assert(uniqueValues(values), 'Duplicate values detected');
+  const stringOrNumbers = values.every((v) =>
+    typeof v === 'string' || typeof v === 'number');
+  assert(stringOrNumbers, 'Only strings or numbers are allowed as enum values');
+};
+
+function assertType(args) {
+  const rightType = args && typeof args === 'object';
+  assert(rightType, 'Provided value needs to be object or array');
+
+  if (Array.isArray(args)) {
+    assert(args.length, 'Empty array is not allowed');
+    const allStrings = args.every((a) => typeof a === 'string');
+    assert(allStrings, 'Only strings are allowed in array notation');
+  }
+}
+
 const fromArray = function(arr) {
   const obj = {};
-  arr.forEach((key) => {
-    if (typeof key !== 'string') {
-      throw TypeError('Only strings are allowed in array notation');
-    }
-    obj[key] = key;
-  });
-
+  arr.forEach((key) => (obj[key] = key));
   return obj;
 };
 
@@ -26,14 +56,13 @@ const getEnumKeys = (obj) =>
  * @returns {Object} enum representation
  */
 module.exports = function(arg) {
-  const obj = Array.isArray(arg) ? fromArray(arg) : arg;
+  assertType(arg);
+  const enumeration = Array.isArray(arg) ? fromArray(arg) : arg;
 
-  if (!obj || typeof obj !== 'object') {
-    throw TypeError('Provided argument need to be object or array');
-  }
-
-  const enumKeys = Object.freeze(getEnumKeys(obj));
-  const enumValues = Object.freeze(enumKeys.map((key) => obj[key]));
+  const enumKeys = Object.freeze(getEnumKeys(enumeration));
+  assertKeys(enumKeys);
+  const enumValues = Object.freeze(enumKeys.map((key) => enumeration[key]));
+  assertValues(enumValues);
 
   // Lazy load
   const state = {
@@ -42,24 +71,24 @@ module.exports = function(arg) {
   };
 
   // Hard bind custom enum helpers
-  Object.keys(obj)
-    .filter((key) => typeof obj[key] === 'function')
-    .forEach((key) => (obj[key] = obj[key].bind(obj)));
+  Object.keys(enumeration)
+    .filter((key) => typeof enumeration[key] === 'function')
+    .forEach((key) => (enumeration[key] = enumeration[key].bind(enumeration)));
 
   // Append standard enum helpers
 
-  obj.keys = () => enumKeys;
-  obj.values = () => enumValues;
+  enumeration.keys = () => enumKeys;
+  enumeration.values = () => enumValues;
 
-  obj.haveKey = (key) => {
+  enumeration.haveKey = (key) => {
     state.keySet = state.keySet || new Set(enumKeys);
     return state.keySet.has(key);
   };
 
-  obj.exists = (value) => {
+  enumeration.exists = (value) => {
     state.valueSet = state.valueSet || new Set(enumValues);
     return state.valueSet.has(value);
   };
 
-  return deepFreeze(obj);
+  return deepFreeze(enumeration);
 };

@@ -39,14 +39,6 @@ describe('toEnum', () => {
     expect(testEnum.haveKey('third')).to.eql(false);
   });
 
-  it('Should fail for invalid arguments', () => {
-    const notObjectOrArray = 'Provided argument need to be object or array';
-    const onlyStrings = 'Only strings are allowed in array notation';
-    expect(() => toEnum(33)).to.throw(TypeError);
-    expect(() => toEnum(null)).to.throw(TypeError, notObjectOrArray);
-    expect(() => toEnum(['first', 33])).to.throw(TypeError, onlyStrings);
-  });
-
   it('Should freeze values and keys', () => {
     const testEnum = toEnum(enumArray);
 
@@ -58,13 +50,6 @@ describe('toEnum', () => {
 
     expect(testEnum.values()).to.eql(enumArray);
     expect(testEnum.keys()).to.eql(enumArray);
-  });
-
-  it('Should not fail for empty array/object', () => {
-    const en1 = toEnum({});
-    const en2 = toEnum({});
-    expect(en1.keys()).to.eql([]);
-    expect(en2.values()).to.eql([]);
   });
 
   it('Should handle helper functions', () => {
