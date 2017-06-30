@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 ## [0.7.0] - 2017-06-27
 ### Changed
 - Singular method emits done as first parameter not last
@@ -9,7 +7,6 @@
 ### Added
 - added singular method
 
->>>>>>> 9bc3b47f4936a184b7af060883549d1348b9285a
 ## [0.6.0] - 2017-06-21
 ### Changed
 - handling of helper methods in toEnum
