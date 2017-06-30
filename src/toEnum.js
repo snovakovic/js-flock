@@ -3,6 +3,11 @@ const deepFreeze = require('./deepFreeze');
 
 const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
 
+const isStringOrNumber = (t) => typeof t === 'string' || typeof t === 'number';
+
+const getEnumKeys = (obj) =>
+  Object.keys(obj).filter((key) => isStringOrNumber(obj[key]));
+
 const uniqueValues = (arr) => new Set(arr).size === arr.length;
 
 const assert = (condition, msg) => {
@@ -21,8 +26,7 @@ const assertKeys = function(keys) {
 
 const assertValues = function(values) {
   assert(uniqueValues(values), 'Duplicate values detected');
-  const stringOrNumbers = values.every((v) =>
-    typeof v === 'string' || typeof v === 'number');
+  const stringOrNumbers = values.every(isStringOrNumber);
   assert(stringOrNumbers, 'Only strings or numbers are allowed as enum values');
 };
 
@@ -42,12 +46,6 @@ const fromArray = function(arr) {
   arr.forEach((key) => (obj[key] = key));
   return obj;
 };
-
-const isStringOrNumber = (t) => typeof t === 'string' || typeof t === 'number';
-
-const getEnumKeys = (obj) =>
-  Object.keys(obj).filter((key) => isStringOrNumber(obj[key]));
-
 
 /**
  * Convert object or list of strings to enum representation
