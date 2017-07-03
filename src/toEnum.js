@@ -1,13 +1,6 @@
 const deepFreeze = require('./deepFreeze');
+const enumUtil = require('./.internals/enumUtil');
 
-
-const isStringOrNumber = (t) => typeof t === 'string' || typeof t === 'number';
-
-const fromArray = function(arr) {
-  const obj = {};
-  arr.forEach((key) => (obj[key] = key));
-  return obj;
-};
 
 /**
  * Convert object or list of strings to enum representation
@@ -16,9 +9,14 @@ const fromArray = function(arr) {
  * @returns {Object} enum representation
  */
 module.exports = function(arg) {
-  const enu = Array.isArray(arg) ? fromArray(arg) : arg;
-  const keys = Object.freeze(Object.keys(enu).filter((key) => isStringOrNumber(enu[key])));
+  enumUtil.assertType(arg);
+  const enu = Array.isArray(arg) ? enumUtil.fromArray(arg) : arg;
+
+  const keys = Object.freeze(Object.keys(enu).filter((key) => typeof enu[key] !== 'function'));
+  enumUtil.assertKeys(keys);
+
   const values = Object.freeze(keys.map((key) => enu[key]));
+  enumUtil.assertValues(values);
 
   // Lazy load
   const state = {
