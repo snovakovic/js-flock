@@ -90,13 +90,13 @@ describe('toEnum', () => {
     const empty = 'toEnum: Empty enums are not allowed';
     expect(() => toEnum({})).to.throw(TypeError, empty);
     expect(() => toEnum({ test: () => {} }).to.throw(TypeError, empty));
-    expect(() => toEnum({
-      CAR: 'car',
-      car: 'car2'
-    })).to.throw(TypeError, 'toEnum: Duplicate keys detected');
-    // expect(toEnum({ keys: 'keys' })).to.throw(TypeError);
-    // expect(toEnum({ keys: 'values' })).to.throw(TypeError);
-    // expect(toEnum({ keys: 'haveKey' })).to.throw(TypeError);
-    // expect(toEnum({ keys: 'exists' })).to.throw(TypeError);
+    // expect(() => toEnum({
+    //   CAR: 'car',
+    //   car: 'car2'
+    // })).to.throw(TypeError, 'toEnum: Duplicate keys detected');
+    expect(() => toEnum({ keys: 'keys' })).to.throw(TypeError);
+    expect(() => toEnum({ keys: 'values' })).to.throw(TypeError);
+    expect(() => toEnum({ keys: 'haveKey' })).to.throw(TypeError);
+    expect(() => toEnum({ keys: 'exists' })).to.throw(TypeError);
   });
 });
