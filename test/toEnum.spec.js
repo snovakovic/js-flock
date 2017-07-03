@@ -39,14 +39,6 @@ describe('toEnum', () => {
     expect(testEnum.haveKey('third')).to.eql(false);
   });
 
-  it('Should fail for invalid arguments', () => {
-    const notObjectOrArray = 'Provided argument need to be object or array';
-    const onlyStrings = 'Only strings are allowed in array notation';
-    expect(() => toEnum(33)).to.throw(TypeError);
-    expect(() => toEnum(null)).to.throw(TypeError, notObjectOrArray);
-    expect(() => toEnum(['first', 33])).to.throw(TypeError, onlyStrings);
-  });
-
   it('Should freeze values and keys', () => {
     const testEnum = toEnum(enumArray);
 
@@ -58,13 +50,6 @@ describe('toEnum', () => {
 
     expect(testEnum.values()).to.eql(enumArray);
     expect(testEnum.keys()).to.eql(enumArray);
-  });
-
-  it('Should not fail for empty array/object', () => {
-    const en1 = toEnum({});
-    const en2 = toEnum({});
-    expect(en1.keys()).to.eql([]);
-    expect(en2.values()).to.eql([]);
   });
 
   it('Should handle helper functions', () => {
@@ -91,5 +76,37 @@ describe('toEnum', () => {
     const values = ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'];
     expect(testEnum.values()).to.eql(values);
     expect(testEnum.keys()).to.eql(values);
+  });
+
+  it('Should throw exception on invalid enum', () => {
+    const notObjectOrArray = 'toEnum: Provided value needs to be object or array';
+    expect(() => toEnum(33)).to.throw(TypeError, notObjectOrArray);
+    expect(() => toEnum(null)).to.throw(TypeError, notObjectOrArray);
+    expect(() => toEnum(['first', 33])).to.throw(TypeError,
+      'toEnum: Only strings are allowed in array notation');
+  });
+
+  it('Should throw exception for invalid keys', () => {
+    const empty = 'toEnum: Empty enums are not allowed';
+    expect(() => toEnum({})).to.throw(TypeError, empty);
+    expect(() => toEnum({ test: () => {} }).to.throw(TypeError, empty));
+    expect(() => toEnum({ keys: 'keys' })).to.throw(TypeError);
+    expect(() => toEnum({ keys: 'values' })).to.throw(TypeError);
+    expect(() => toEnum({ keys: 'haveKey' })).to.throw(TypeError);
+    expect(() => toEnum({ keys: 'exists' })).to.throw(TypeError);
+  });
+
+  it('Should throw exception for invalid values', () => {
+    const stringOrNumber = 'toEnum: Only strings, numbers and symbols are allowed as enum values';
+    expect(() => toEnum({
+      TEST1: 'TEST',
+      TEST2: 'TEST'
+    })).to.throw(TypeError, 'toEnum: Duplicate values detected');
+    expect(() => toEnum({ test: ['a', 'b', 'c'] })).to.throw(TypeError, stringOrNumber);
+    expect(() => toEnum({ test: { a: 1 } })).to.throw(TypeError, stringOrNumber);
+    expect(() => toEnum({ test: undefined })).to.throw(TypeError, stringOrNumber);
+    expect(() => toEnum({ test: null })).to.throw(TypeError, stringOrNumber);
+    expect(() => toEnum({ test: true })).to.throw(TypeError, stringOrNumber);
+    expect(() => toEnum({ test: false })).to.throw(TypeError, stringOrNumber);
   });
 });
