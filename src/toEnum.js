@@ -1,26 +1,19 @@
-const deepFreeze = require('./deepFreeze');
-
 const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
 
 const assert = (condition, msg) => {
   if (!condition) { throw new TypeError(`toEnum: ${msg}`); }
 };
 
-const assertUnique = (arr, values) => {
-  assert(new Set(arr).size === arr.length, `Duplicate ${values} detected`);
-};
-
 const assertKeys = function(keys) {
   assert(keys.length, 'Empty enums are not allowed');
-  assertUnique(keys, 'keys');
   assert(keys.every((k) => !reservedWords.has(k.toLowerCase())), `Reserved word have been used
     as key. [keys, values, haveKye, exists] are not allowed as keys`);
 };
 
 const assertValues = function(values) {
-  assertUnique(values, 'values');
-  assert(values.every((t) => typeof t === 'string' || typeof t === 'number'),
-    'Only strings or numbers are allowed as enum values');
+  assert(new Set(values).size === values.length, 'Duplicate values detected');
+  assert(values.every((t) => typeof t === 'string' || typeof t === 'number'
+    || typeof t === 'symbol'), 'Only strings, numbers and symbols are allowed as enum values');
 };
 
 const assertType = function(args) {
@@ -79,5 +72,5 @@ module.exports = function(arg) {
     return state.valueSet.has(value);
   };
 
-  return deepFreeze(enu);
+  return Object.freeze(enu);
 };
