@@ -1,5 +1,40 @@
 const deepFreeze = require('./deepFreeze');
-const enumUtil = require('./.internals/enumUtil');
+
+const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
+
+const assert = (condition, msg) => {
+  if (!condition) { throw new TypeError(`toEnum: ${msg}`); }
+};
+
+const assertUnique = (arr, values) => {
+  assert(new Set(arr).size === arr.length, `Duplicate ${values} detected`);
+};
+
+const assertKeys = function(keys) {
+  assert(keys.length, 'Empty enums are not allowed');
+  assertUnique(keys, 'keys');
+  assert(keys.every((k) => !reservedWords.has(k.toLowerCase())), `Reserved word have been used
+    as key. [keys, values, haveKye, exists] are not allowed as keys`);
+};
+
+const assertValues = function(values) {
+  assertUnique(values, 'values');
+  assert(values.every((t) => typeof t === 'string' || typeof t === 'number'),
+    'Only strings or numbers are allowed as enum values');
+};
+
+const assertType = function(args) {
+  assert(args && typeof args === 'object', 'Provided value needs to be object or array');
+  if (Array.isArray(args)) {
+    assert(args.every((a) => typeof a === 'string'), 'Only strings are allowed in array notation');
+  }
+};
+
+const fromArray = function(arr) {
+  const obj = {};
+  arr.forEach((key) => (obj[key] = key));
+  return obj;
+};
 
 
 /**
@@ -9,14 +44,14 @@ const enumUtil = require('./.internals/enumUtil');
  * @returns {Object} enum representation
  */
 module.exports = function(arg) {
-  enumUtil.assertType(arg);
-  const enu = Array.isArray(arg) ? enumUtil.fromArray(arg) : arg;
+  assertType(arg);
+  const enu = Array.isArray(arg) ? fromArray(arg) : arg;
 
   const keys = Object.freeze(Object.keys(enu).filter((key) => typeof enu[key] !== 'function'));
-  enumUtil.assertKeys(keys);
+  assertKeys(keys);
 
   const values = Object.freeze(keys.map((key) => enu[key]));
-  enumUtil.assertValues(values);
+  assertValues(values);
 
   // Lazy load
   const state = {
