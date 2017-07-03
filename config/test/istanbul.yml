@@ -5,4 +5,4 @@ reporting:
     print: summary
     reports:
         - lcov
-    dir: ./coverage/src
+    dir: ./coverage

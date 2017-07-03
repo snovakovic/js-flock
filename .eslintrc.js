@@ -18,7 +18,7 @@ module.exports = {
     'comma-dangle': ['error', 'never'],
     'no-underscore-dangle': ['error', { allow: ['_id', '_uid', '__v'] }],
     // Line length
-    'max-len': ['error', 80, 2, { ignoreComments: true }],
+    'max-len': ['error', 100, 2, { ignoreComments: true }],
     // Functions
     'func-names': ['error', 'never'],
     'arrow-parens': ['error', 'always'],
