@@ -1,7 +1,9 @@
 const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
 
-const assert = (condition, msg) => {
-  if (!condition) { throw new TypeError(`toEnum: ${msg}`); }
+const assert = function(condition, msg) {
+  if (!condition) {
+    throw new TypeError(`toEnum: ${msg}`);
+  }
 };
 
 const assertKeys = function(keys) {
