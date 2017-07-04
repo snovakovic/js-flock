@@ -79,7 +79,7 @@ describe('toEnum', () => {
   });
 
   it('Should throw exception on invalid enum', () => {
-    const notObjectOrArray = 'toEnum: Provided value needs to be object or array';
+    const notObjectOrArray = 'toEnum: Provided value need to be object or array';
     expect(() => toEnum(33)).to.throw(TypeError, notObjectOrArray);
     expect(() => toEnum(null)).to.throw(TypeError, notObjectOrArray);
     expect(() => toEnum(['first', 33])).to.throw(TypeError,
