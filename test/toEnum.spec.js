@@ -29,12 +29,12 @@ describe('toEnum', () => {
     const testEnum = toEnum(enumArray);
 
     expect(Object.isFrozen(testEnum)).to.equal(true);
-    expect(testEnum.first).to.equal('first');
-    expect(testEnum.second).to.equal('second');
-    expect(testEnum.values()).to.eql(enumArray);
+    expect(testEnum.first).to.be.a('symbol');
+    expect(testEnum.second).to.be.a('symbol');
+    expect(testEnum.values().length).to.equal(2);
     expect(testEnum.keys()).to.eql(enumArray);
     expect(testEnum.exists(1)).to.eql(false);
-    expect(testEnum.exists('first')).to.eql(true);
+    expect(testEnum.exists(testEnum.second)).to.eql(true);
     expect(testEnum.haveKey('first')).to.eql(true);
     expect(testEnum.haveKey('third')).to.eql(false);
   });
@@ -45,10 +45,9 @@ describe('toEnum', () => {
     const values = testEnum.values();
     const keys = testEnum.keys();
 
-    values[0] = 'changed value';
     keys[0] = 'changed key';
 
-    expect(testEnum.values()).to.eql(enumArray);
+    expect(Object.isFrozen(values)).to.equal(true);
     expect(testEnum.keys()).to.eql(enumArray);
   });
 

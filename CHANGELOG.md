@@ -1,4 +1,12 @@
-## [0.7.0] - 2017-06-27
+## [0.10.0] - 2017-07-05
+### Changed
+- Changed enum short notation to create enum with Symbol
+
+## [0.9.0] - 2017-06-02
+### Changed
+- Add validation(assertion) to enum
+
+## [0.8.0] - 2017-06-27
 ### Changed
 - Singular method emits done as first parameter not last
 - Singular method is preserving this

@@ -27,7 +27,7 @@ const assertType = function(args) {
 
 const fromArray = function(arr) {
   const obj = {};
-  arr.forEach((key) => (obj[key] = key));
+  arr.forEach((key) => (obj[key] = Symbol(key)));
   return obj;
 };
 
