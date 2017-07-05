@@ -9,7 +9,7 @@ const assert = function(condition, msg) {
 const assertKeys = function(keys) {
   assert(keys.length, 'Empty enums are not allowed');
   assert(keys.every((k) => !reservedWords.has(k.toLowerCase())), `Reserved word have been used
-    as key. [keys, values, haveKye, exists] are not allowed as keys`);
+    as key. [keys, values, haveKey, exists] are not allowed as keys`);
 };
 
 const assertValues = function(values) {
@@ -19,7 +19,7 @@ const assertValues = function(values) {
 };
 
 const assertType = function(args) {
-  assert(args && typeof args === 'object', 'Provided value needs to be object or array');
+  assert(args && typeof args === 'object', 'Provided value need to be object or array');
   if (Array.isArray(args)) {
     assert(args.every((a) => typeof a === 'string'), 'Only strings are allowed in array notation');
   }
