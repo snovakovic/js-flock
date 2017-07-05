@@ -176,7 +176,7 @@ Enum representation is immutable (frozen)
   vehicleType.haveKey('something'); // false
 
 
-  // We can also use short notation to define enum.
+  // We can define enum with short notation. Limitation of short notation is that we can't define custom enum helpers.
 
   const gender = toEnum(['MAN', 'WOMEN', 'OTHER']);
 
