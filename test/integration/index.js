@@ -61,7 +61,7 @@ function run(err) {
   });
 
   // toEnum
-  const testEnum = toEnum(['TEST']);
+  const testEnum = toEnum({ TEST: 'TEST' });
   assert.equal(testEnum.TEST, 'TEST');
   console.log('toEnum: SUCCESS');
 
