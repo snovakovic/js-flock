@@ -4,14 +4,14 @@
   "description": "JS utility methods for NODE and Browser.",
   "main": "src/index.js",
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^3.19.0",
+    "chai": "^4.0.2",
+    "eslint": "^4.1.1",
     "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-import": "^2.6.1",
     "istanbul": "^0.4.5",
-    "mocha": "^3.4.1",
-    "sinon": "^2.2.0",
-    "sinon-chai": "^2.10.0"
+    "mocha": "^3.4.2",
+    "sinon": "^2.3.6",
+    "sinon-chai": "^2.11.0"
   },
   "scripts": {
     "test": "istanbul cover --include-all-sources --config ./config/test/istanbul.yml _mocha -- --opts ./config/test/mocha.opts"
