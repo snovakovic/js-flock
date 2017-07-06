@@ -6,10 +6,6 @@ module.exports = {
     es6: true,
     mocha: true
   },
-  ecmaFeatures: {
-    blockBindings: true,
-    templateStrings: true
-  },
   globals: {
     expect: true,
     sinon: true,
