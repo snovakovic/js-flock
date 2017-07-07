@@ -3,18 +3,20 @@ const Glob = require('glob');
 const Path = require('path');
 const Webpack = require('webpack');
 
+
 const src = Path.resolve(__dirname, 'src/');
 const dist = Path.resolve(__dirname, 'dist/');
-
-// Generate entry for each module
 const modules = Glob.sync(`${src}/*.js`);
 const entry = {};
+
+// Generate entry for each module
 modules.forEach((path) => {
   const arr = path.split('/');
   const name = arr[arr.length - 1].replace('.js', '');
   entry[name] = path;
   entry[`${name}.min`] = path;
 });
+
 
 module.exports = {
   entry,
