@@ -1,7 +1,10 @@
+/* eslint-disable no-console, global-require, import/no-extraneous-dependencies*/
+
+process.chdir(__dirname); // Enable running from package script
+
 const assert = require('assert');
 const exec = require('child_process').exec;
 
-/* eslint-disable no-console, global-require, import/no-extraneous-dependencies*/
 function run(err) {
   if (err) {
     console.error('Problem with installing js-flock aborting execution', err);
