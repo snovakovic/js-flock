@@ -1,6 +1,6 @@
 {
   "name": "js-flock",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "JS utility methods for NODE and Browser.",
   "main": "src/index.js",
   "author": "stefan.novakovich@gmail.com",
@@ -30,6 +30,7 @@
     "deepSeal",
     "sort"
   ],
+  "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
@@ -48,6 +49,5 @@
     "sinon": "^2.3.6",
     "sinon-chai": "^2.11.0",
     "webpack": "3.0.0"
-  },
-  "dependencies": {}
+  }
 }
