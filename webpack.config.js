@@ -11,8 +11,8 @@ const entry = {};
 
 // Generate entry for each module
 modules.forEach((path) => {
-  const arr = path.split('/');
-  const name = arr[arr.length - 1].replace('.js', '');
+  const tokens = path.split('/');
+  const name = tokens[tokens.length - 1].replace('.js', '');
   entry[name] = path;
   entry[`${name}.min`] = path;
 });
