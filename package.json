@@ -10,7 +10,7 @@
     "url": "https://github.com/snovakovic/js-flock/issues"
   },
   "scripts": {
-    "build": "rm -rf ./es5 && webpack --config ./webpack.config.js",
+    "build": "rm -rf ./dist && webpack --config ./webpack.config.js",
     "test": "istanbul cover --include-all-sources --config ./config/test/istanbul.yml _mocha -- --opts ./config/test/mocha.opts"
   },
   "repository": {
