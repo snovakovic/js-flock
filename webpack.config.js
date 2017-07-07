@@ -1,8 +1,10 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const Glob = require('glob');
 const Path = require('path');
 const Webpack = require('webpack');
-const Glob = require('glob');
 
 const src = Path.resolve(__dirname, 'src/');
+const dist = Path.resolve(__dirname, 'dist/');
 
 // Generate entry for each module
 const modules = Glob.sync(`${src}/*.js`);
@@ -17,7 +19,7 @@ modules.forEach((path) => {
 module.exports = {
   entry,
   output: {
-    path: Path.resolve(__dirname, 'dist/es5/'),
+    path: `${dist}/es5`,
     filename: '[name].js',
     library: 'js-flock',
     libraryTarget: 'umd',
@@ -42,6 +44,12 @@ module.exports = {
     new Webpack.optimize.UglifyJsPlugin({
       include: /\.min\.js$/,
       minimize: true
-    })
+    }),
+    new CopyWebpackPlugin([
+      { from: src, to: dist },
+      { from: Path.resolve(__dirname, 'package.json'), to: dist },
+      { from: Path.resolve(__dirname, 'README.md'), to: dist },
+      { from: Path.resolve(__dirname, 'CHANGELOG.md'), to: dist }
+    ])
   ]
 };
