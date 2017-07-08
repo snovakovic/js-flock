@@ -1,11 +1,14 @@
 {
   "name": "js-flock",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "JS utility methods for NODE and Browser.",
   "main": "src/index.js",
   "author": "stefan.novakovich@gmail.com",
   "license": "MIT",
   "homepage": "https://github.com/snovakovic/js-flock#readme",
+  "engines" : {
+    "node" : ">=6.0.0"
+  },
   "bugs": {
     "url": "https://github.com/snovakovic/js-flock/issues"
   },
