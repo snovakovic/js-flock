@@ -1,8 +1,6 @@
 const sorter = function(direction, sortBy, a, b) {
-  if (sortBy) { // Get the value from object property
-    a = sortBy(a);
-    b = sortBy(b);
-  }
+  a = sortBy(a);
+  b = sortBy(b);
 
   if (a == null) return 1;
   if (b == null) return -1;
@@ -14,7 +12,9 @@ const sorter = function(direction, sortBy, a, b) {
 const ascSorter = sorter.bind(null, -1);
 const descSorter = sorter.bind(null, 1);
 
-const sort = function(ctx, sortBy, _sorter) {
+const emptySortBy = (a) => a;
+
+const sort = function(ctx, sortBy = emptySortBy, _sorter) {
   if (Array.isArray(ctx)) {
     return ctx.sort(_sorter.bind(null, sortBy));
   }
