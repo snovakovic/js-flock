@@ -73,4 +73,4 @@ function run(err) {
   console.log('sort: SUCCESS');
 }
 
-exec('npm uninstall js-flock && npm install js-flock', run);
+exec('npm uninstall js-flock && npm install --no-save js-flock', run);
