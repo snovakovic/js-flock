@@ -1,3 +1,7 @@
+## [0.10.3] - 2017-07-05
+### Changed
+- Updated sort to remove check if sortBy exists
+
 ## [0.10.0] - 2017-07-05
 ### Changed
 - Changed enum short notation to create enum with Symbol
