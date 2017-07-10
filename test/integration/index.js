@@ -1,4 +1,4 @@
-/* eslint-disable no-console, global-require, import/no-extraneous-dependencies*/
+/* eslint-disable no-console, global-require, import/no-extraneous-dependencies */
 
 process.chdir(__dirname); // Enable running from package script
 
