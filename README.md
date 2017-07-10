@@ -5,7 +5,8 @@
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-npm install js-flock --save
+[![NPM Package](https://nodei.co/npm/js-flock.png?downloads=true)](https://www.npmjs.com/package/js-flock)
+
 
 JS utility methods for NODE and Browser. Requires **ES6** environment as minimum to run the code.
 For now code is not compiled to ES5 and if used in browser you might need to compile it by yourself.
