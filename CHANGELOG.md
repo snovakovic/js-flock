@@ -1,6 +1,8 @@
-## [0.10.3] - 2017-07-05
+## [1.0.0] - 2017-07-11
 ### Changed
 - Updated sort to remove check if sortBy exists
+- Modules are now required in root. e.g js-flock/toEnum instead of js-flock/src/toEnum
+- Added option to load ES5 transpiled modules. e.g js-flock/es5/toEnum or js-flock/es5/toEnum.min
 
 ## [0.10.0] - 2017-07-05
 ### Changed
