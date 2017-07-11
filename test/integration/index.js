@@ -23,13 +23,13 @@ function run(err) {
   assert('toEnum' in jsFlock, true);
 
   // single modules load
-  const collar = require('js-flock/src/collar');
-  const deepFreeze = require('js-flock/src/deepFreeze');
-  const deepSeal = require('js-flock/src/deepSeal');
-  const promisify = require('js-flock/src/promisify');
-  const singular = require('js-flock/src/singular');
-  const sort = require('js-flock/src/sort');
-  const toEnum = require('js-flock/src/toEnum');
+  const collar = require('js-flock/collar');
+  const deepFreeze = require('js-flock/deepFreeze');
+  const deepSeal = require('js-flock/deepSeal');
+  const promisify = require('js-flock/promisify');
+  const singular = require('js-flock/singular');
+  const sort = require('js-flock/sort');
+  const toEnum = require('js-flock/toEnum');
 
   // collar
   collar(Promise.resolve('test'), 5)

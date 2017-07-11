@@ -9,10 +9,10 @@ const execute = function(command) {
   return new Promise((resolve, reject) => {
     exec(command, (err, stdout) => {
       if (err) {
-        reject(err);
+        return reject(err);
       }
       console.info(`${stdout}`);
-      resolve();
+      return resolve();
     });
   });
 };
@@ -22,14 +22,14 @@ execute('npm run build')
     const packagePath = Path.resolve(__dirname, 'dist/package.json');
     const file = Fs.readFileSync(packagePath);
     const json = JSON.parse(file);
-    delete json.private; // Used to prevent accidental publish
+    delete json.private; // Used to prevent accidental publish with npm publish
 
     console.info(`START PUBLISHING version: ${json.version}`);
 
     Fs.writeFileSync(packagePath, JSON.stringify(json), 'utf8');
 
     process.chdir(Path.resolve(__dirname, 'dist'));
-    return execute('npm pack');
+    return execute('npm publish');
   })
   .then(() => {
     process.chdir(Path.resolve(__dirname));
