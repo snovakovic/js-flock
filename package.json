@@ -1,19 +1,18 @@
 {
   "name": "js-flock",
-  "version": "0.10.4",
+  "version": "1.0.0",
   "description": "JS utility methods for NODE and Browser.",
-  "main": "src/index.js",
+  "main": "index.js",
   "author": "stefan.novakovich@gmail.com",
   "license": "MIT",
   "homepage": "https://github.com/snovakovic/js-flock#readme",
-  "engines" : {
-    "node" : ">=6.0.0"
-  },
-  "bugs": {
-    "url": "https://github.com/snovakovic/js-flock/issues"
-  },
+
+
+  "engines" : { "node" : ">=6.0.0" },
+  "bugs": { "url": "https://github.com/snovakovic/js-flock/issues" },
   "scripts": {
     "build": "rm -rf ./dist && webpack --config ./webpack.config.js",
+    "publish": "node publish",
     "test:integration": "node test/integration/index.js",
     "test": "istanbul cover --include-all-sources --config ./config/test/istanbul.yml _mocha -- --opts ./config/test/mocha.opts"
   },
@@ -53,5 +52,8 @@
     "sinon": "^2.3.6",
     "sinon-chai": "^2.11.0",
     "webpack": "3.0.0"
-  }
+  },
+
+  "//": "WARNING: Do not remove!.  Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
+  "private": true
 }
