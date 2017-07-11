@@ -12,8 +12,8 @@ JS utility methods for NODE and Browser.
 
 ### Including library
 
-We can include whole library at once or a module by module. By default unmodified ES6 code is loaded.
-Optionally we can load transpiled ES5 code. Transpiled ES5 code is wrapped in UMD
+We can include whole library at once or a module by module. By default unmodified ES6 code is loaded,
+optionally we can load transpiled ES5 code. Transpiled code is wrapped in UMD
 and can be loaded in browser as CommonJs, AMD or as global var.
 
 ```javascript
