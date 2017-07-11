@@ -1,4 +1,4 @@
-/* eslint-disable no-console, global-require, import/no-extraneous-dependencies */
+/* eslint-disable no-console, global-require, import/no-extraneous-dependencies, import/no-dynamic-require */
 
 process.chdir(__dirname); // Enable running from package script
 
@@ -11,16 +11,18 @@ function run(err) {
     return;
   }
 
+  const modules = ['collar', 'deepFreeze', 'deepSeal', 'promisify', 'singular', 'sort', 'toEnum'];
+
   const jsFlock = require('js-flock');
+  const jsFLockES5 = require('js-flock/es5');
 
   // Full library load
-  assert('collar' in jsFlock, true);
-  assert('deepFreeze' in jsFlock, true);
-  assert('deepSeal' in jsFlock, true);
-  assert('promisify' in jsFlock, true);
-  assert('singular' in jsFlock, true);
-  assert('sort' in jsFlock, true);
-  assert('toEnum' in jsFlock, true);
+  modules.forEach((name) => assert.equal(name in jsFlock, true));
+  modules.forEach((name) => assert.equal(name in jsFLockES5, true));
+
+  // ES5 Library single modules
+  modules.forEach((name) => assert.equal(typeof require(`js-flock/es5/${name}`), 'function'));
+  modules.forEach((name) => assert.equal(typeof require(`js-flock/es5/${name}.min`), 'function'));
 
   // single modules load
   const collar = require('js-flock/collar');

@@ -24,7 +24,7 @@ execute('npm run build')
     const json = JSON.parse(file);
     delete json.private; // Used to prevent accidental publish with npm publish
 
-    console.info(`START PUBLISHING version: ${json.version}`);
+    console.info(`\n\nSTART PUBLISHING version: ${json.version}\n\n`);
 
     Fs.writeFileSync(packagePath, JSON.stringify(json), 'utf8');
 

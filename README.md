@@ -8,18 +8,31 @@
 [![NPM Package](https://nodei.co/npm/js-flock.png?downloads=true)](https://www.npmjs.com/package/js-flock)
 
 
-JS utility methods for NODE and Browser. Requires **ES6** environment as minimum to run the code.
-For now code is not compiled to ES5 and if used in browser you might need to compile it by yourself.
+JS utility methods for NODE and Browser.
+
+### Including library
+
+We can include whole library at once or a module by module. By default unmodified ES6 code is loaded.
+Optionally we can load transpiled ES5 code. Transpiled ES5 code is wrapped in UMD
+and can be loaded in browser as CommonJs, AMD or as global var.
 
 ```javascript
-  // Webpack rule to compile js-flock to ES5 version if needed.
-  {
-    test: /node_modules\/js-flock/,
-    loader: 'babel-loader',
-    include: '/',
-    query: { presets: [['es2015', { modules: false }]] }
-  }, {
+  // Loads whole unmodified ES6 library
+  import jsFlock from 'js-flock';
+
+  // We can also use node require statement to do same thing
+  const jsFlock = require('js-flock');
+
+  // Loads single toEnum module. Ideal for usage in browser
+  import toEnum from 'js-flock/toEnum';
+
+  // Loads transpiled ES5 version of library
+  import jsFlock from 'js-flock/es5';
+
+  // Loads single transpiled module
+  import singular from 'js-flock/es5/singular';
 ```
+
 
 ### Methods:
 
@@ -36,7 +49,7 @@ For now code is not compiled to ES5 and if used in browser you might need to com
 Promisify error first callback function
 
 ```javascript
-  const promisify = require('js-flock').promisify;
+  const promisify = require('js-flock/promisify');
   const readFile = require("fs").readFile;
 
   const readFileAsync = promisify(readFile); // Promise version of read file
@@ -73,7 +86,7 @@ Set maximum waiting time for promise to resolve.
 Reject promise if it's not resolved in that time
 
 ```javascript
-  const collar = require('js-flock').collar;
+  import collar from 'js-flock/collar';
 
   const MAX_WAIT_TIME = 500;
 
@@ -140,7 +153,7 @@ Convert object or list of strings to enum representation.
 Enum representation is immutable (frozen)
 
 ```javascript
-  const toEnum = require('js-flock').toEnum;
+  import toEnum from 'js-flock/toEnum';
 
   const vehicleType = toEnum({
     CAR: 'C',
@@ -193,7 +206,7 @@ Undefined and null values are always sorted to bottom of list no matter if order
 
 
 ```javascript
-  const sort = require('js-flock').sort;
+  import sort from 'js-flock/sort';
 
   sort([1,4,2]).asc(); // sort array in ascending order [1, 2, 4]
   sort([1,4,2]).desc(); // sort array in descending order [4, 2, 1]
@@ -233,7 +246,7 @@ Undefined and null values are always sorted to bottom of list no matter if order
 Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
 
 ```javascript
-  const deepFreeze = require('js-flock').deepFreeze;
+  import deepFreeze from 'js-flock/deepFreeze';
 
   const person = {
     fullName: 'test person',
