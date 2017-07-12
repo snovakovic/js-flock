@@ -6,7 +6,7 @@
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-[![NPM Package](https://nodei.co/npm/js-flock.png?downloads=true)](https://www.npmjs.com/package/js-flock)
+[![NPM Package](https://nodei.co/npm/js-flock.png)](https://www.npmjs.com/package/js-flock)
 
 
 JS utility methods for NODE and Browser.
