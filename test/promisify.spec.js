@@ -21,11 +21,11 @@ describe('promisify', () => {
     const errorFunAsync = promisify(errorFun);
 
     errorFunAsync()
-    .then(shouldNotBeCalled)
-    .catch((err) => {
-      expect(err).to.equal('error');
-      done();
-    });
+      .then(shouldNotBeCalled)
+      .catch((err) => {
+        expect(err).to.equal('error');
+        done();
+      });
   });
 
   it('Should promisify function with multiple inputs', (done) => {
