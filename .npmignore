@@ -1,7 +1,0 @@
-# Ignore everything
-*
-
-# except
-!src/**
-!package.json
-!LICENSE
