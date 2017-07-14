@@ -20,6 +20,17 @@
         "--nolazy"
       ],
       "sourceMaps": true
+    },
+    {
+      "name": "Run Publish",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceRoot}/publish",
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "sourceMaps": true
     }
   ]
 }

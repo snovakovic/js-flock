@@ -23,6 +23,7 @@ execute('npm run build')
     const file = Fs.readFileSync(packagePath);
     const json = JSON.parse(file);
     delete json.private; // Used to prevent accidental publish with npm publish
+    delete json['//'];
 
     console.info(`\n\nSTART PUBLISHING version: ${json.version}\n\n`);
 
