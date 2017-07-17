@@ -132,8 +132,9 @@ module.exports.all = function (cbModule) {
     return cbModule;
   }
 
-  var async = Object.assign({}, cbModule);
   options.suffix = options.suffix || 'Async';
+  options.mutate = typeof options.mutate === 'boolean' ? options.mutate : false;
+  var async = options.mutate ? cbModule : Object.assign({}, cbModule);
 
   Object.keys(cbModule).forEach(function (key) {
     if (shouldInclude(key, cbModule, options.exclude, options.include)) {
