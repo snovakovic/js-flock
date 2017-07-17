@@ -1,4 +1,8 @@
-## [1.1.0] - 2017-07-11
+## [1.2.0] - 2017-07-17
+### Changed
+- Promisify all now accepts mutate option which determines if target module will be mutated. Default value is false to compatible with current behavior.
+
+## [1.1.0] - 2017-07-17
 ### Added
 - promisify.all
 
