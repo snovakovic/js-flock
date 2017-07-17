@@ -168,7 +168,7 @@ module.exports = function (obj) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var promisify = function promisify(fn, args) {
+var promisified = function promisified(fn, args) {
   var _this = this;
 
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -191,8 +191,18 @@ var shouldInclude = function shouldInclude(key, cbModule, excludeList, includeLi
   return typeof cbModule[key] === 'function' && (!includeList || includeList.some(function (k) {
     return k === key;
   })) && (!excludeList || excludeList.every(function (k) {
-    return k === key;
+    return k !== key;
   }));
+};
+
+var promisify = function promisify(fn, options) {
+  return function () {
+    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+
+    return promisified(fn, args, options);
+  };
 };
 
 /**
@@ -201,34 +211,24 @@ var shouldInclude = function shouldInclude(key, cbModule, excludeList, includeLi
  * @param {Function} fn - error first callback function we want to promisify
  * @returns {Function} Function that returns promise
  */
-module.exports = function (fn, options) {
-  return function () {
-    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
-    }
-
-    return promisify(fn, args, options);
-  };
-};
+module.exports = promisify;
 
 module.exports.all = function (cbModule) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  if ((typeof cbModule === 'undefined' ? 'undefined' : _typeof(cbModule)) !== 'object') {
-    throw new TypeError('promisify: Promisify.all supports only objects');
+  if (!cbModule || (typeof cbModule === 'undefined' ? 'undefined' : _typeof(cbModule)) !== 'object' || Array.isArray(cbModule)) {
+    return cbModule;
   }
 
-  var promisified = Object.assign({}, cbModule);
-  options.suffix = options.suffix || 'Async';
-  options.exclude = options.exclude || [];
+  var async = Object.assign({}, cbModule);
   options.suffix = options.suffix || 'Async';
 
   Object.keys(cbModule).forEach(function (key) {
     if (shouldInclude(key, cbModule, options.exclude, options.include)) {
-      promisified['' + key + options.suffix] = promisify(cbModule[key], options);
+      async['' + key + options.suffix] = promisify(cbModule[key], options);
     }
   });
-  return promisified;
+  return async;
 };
 
 /***/ }),
