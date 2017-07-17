@@ -9,6 +9,12 @@ const promisify = function(fn, args, options = {}) {
   });
 };
 
+const shouldInclude = function(key, cbModule, excludeList, includeList) {
+  return typeof cbModule[key] === 'function'
+    && (!includeList || includeList.some((k) => k === key))
+    && (!excludeList || excludeList.every((k) => k === key));
+};
+
 /**
  * Promisify error first callback function
  *
@@ -17,3 +23,22 @@ const promisify = function(fn, args, options = {}) {
  */
 module.exports = (fn, options) =>
   (...args) => promisify(fn, args, options);
+
+
+module.exports.all = (cbModule, options = {}) => {
+  if (typeof cbModule !== 'object') {
+    throw new TypeError('promisify: Promisify.all supports only objects');
+  }
+
+  const promisified = Object.assign({}, cbModule);
+  options.suffix = options.suffix || 'Async';
+  options.exclude = options.exclude || [];
+  options.suffix = options.suffix || 'Async';
+
+  Object.keys(cbModule).forEach((key) => {
+    if (shouldInclude(key, cbModule, options.exclude, options.include)) {
+      promisified[`${key}${options.suffix}`] = promisify(cbModule[key], options);
+    }
+  });
+  return promisified;
+};

@@ -78,6 +78,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 4:
 /***/ (function(module, exports) {
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var promisify = function promisify(fn, args) {
   var _this = this;
 
@@ -97,6 +99,14 @@ var promisify = function promisify(fn, args) {
   });
 };
 
+var shouldInclude = function shouldInclude(key, cbModule, excludeList, includeList) {
+  return typeof cbModule[key] === 'function' && (!includeList || includeList.some(function (k) {
+    return k === key;
+  })) && (!excludeList || excludeList.every(function (k) {
+    return k === key;
+  }));
+};
+
 /**
  * Promisify error first callback function
  *
@@ -111,6 +121,26 @@ module.exports = function (fn, options) {
 
     return promisify(fn, args, options);
   };
+};
+
+module.exports.all = function (cbModule) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  if ((typeof cbModule === 'undefined' ? 'undefined' : _typeof(cbModule)) !== 'object') {
+    throw new TypeError('promisify: Promisify.all supports only objects');
+  }
+
+  var promisified = Object.assign({}, cbModule);
+  options.suffix = options.suffix || 'Async';
+  options.exclude = options.exclude || [];
+  options.suffix = options.suffix || 'Async';
+
+  Object.keys(cbModule).forEach(function (key) {
+    if (shouldInclude(key, cbModule, options.exclude, options.include)) {
+      promisified['' + key + options.suffix] = promisify(cbModule[key], options);
+    }
+  });
+  return promisified;
 };
 
 /***/ })
