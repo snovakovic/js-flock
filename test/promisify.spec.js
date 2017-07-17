@@ -6,6 +6,23 @@ const shouldNotBeCalled = () => { throw Error('This should not be called'); };
 
 
 describe('promisify', () => {
+  let mdl;
+
+  beforeEach(() => {
+    mdl = {
+      name: 'test-module',
+      success(inp, cb) {
+        cb(undefined, `${inp}-success`);
+      },
+      error(cb) {
+        cb('error');
+      },
+      third(cb) {
+        cb('third');
+      }
+    };
+  });
+
   it('Should resolve promisified function', (done) => {
     const successFun = (cb) => cb(undefined, 'response');
     const successFunAsync = promisify(successFun);
@@ -95,5 +112,43 @@ describe('promisify', () => {
         expect(err).to.be.an('error');
         done();
       });
+  });
+
+  it('Should promisify all', (done) => {
+    const asyncModule = promisify.all(mdl);
+
+    const prom1 = asyncModule.successAsync('test').then((response) => {
+      expect(response).to.equal('test-success');
+    }).catch(shouldNotBeCalled);
+
+    const prom2 = asyncModule.errorAsync().then(shouldNotBeCalled)
+      .catch((err) => {
+        expect(err).to.equal('error');
+      });
+
+    expect('nameAsync' in asyncModule).to.equal(false);
+    expect('thirdAsync' in asyncModule).to.equal(true);
+
+    Promise.all([prom1, prom2])
+      .then(() => done());
+  });
+
+  it('Should promise all except excluded functions', () => {
+    const asyncModule = promisify.all(mdl, { exclude: ['error', 'third'] });
+    expect('successAsync' in asyncModule).to.equal(true);
+    expect('errorAsync' in asyncModule).to.equal(false);
+    expect('thirdAsync' in asyncModule).to.equal(false);
+  });
+
+  it('Should promise only included functions', () => {
+    const asyncModule = promisify.all(mdl, { include: ['error', 'third'] });
+    expect('successAsync' in asyncModule).to.equal(false);
+    expect('errorAsync' in asyncModule).to.equal(true);
+    expect('thirdAsync' in asyncModule).to.equal(true);
+  });
+
+  it('Should ignore if provided modules is not object', () => {
+    const asyncModule = promisify.all('test');
+    expect(asyncModule).to.equal('test');
   });
 });

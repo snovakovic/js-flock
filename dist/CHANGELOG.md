@@ -1,3 +1,7 @@
+## [1.1.0] - 2017-07-11
+### Added
+- promisify.all
+
 ## [1.0.0] - 2017-07-11
 ### Changed
 - Updated sort to remove check if sortBy exists
