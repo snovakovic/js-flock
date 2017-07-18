@@ -15,7 +15,11 @@ const shouldInclude = function(key, cbModule, excludeList, includeList) {
     && (!excludeList || excludeList.every((k) => k !== key));
 };
 
-const promisify = (fn, options) => (...args) => promisified(fn, args, options);
+const promisify = function(fn, options) {
+  return function(...args) {
+    return promisified.call(this, fn, args, options);
+  };
+};
 
 /**
  * Promisify error first callback function
