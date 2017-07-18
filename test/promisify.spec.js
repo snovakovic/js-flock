@@ -21,7 +21,7 @@ describe('promisify', () => {
         cb('error');
       },
       third(cb) {
-        cb('third');
+        cb(undefined, 'third');
       }
     };
   });
