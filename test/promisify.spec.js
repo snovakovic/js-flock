@@ -11,6 +11,9 @@ describe('promisify', () => {
   beforeEach(() => {
     mdl = {
       name: 'test-module',
+      getName(cb) {
+        cb(undefined, this.name);
+      },
       success(inp, cb) {
         cb(undefined, `${inp}-success`);
       },
@@ -18,7 +21,7 @@ describe('promisify', () => {
         cb('error');
       },
       third(cb) {
-        cb('third');
+        cb(undefined, 'third');
       }
     };
   });
@@ -133,20 +136,31 @@ describe('promisify', () => {
       .then(() => done());
   });
 
-  it('Should promisify all and not mutate the module', () => {
+  it('Should promisify all preserving this', (done) => {
     const asyncModule = promisify.all(mdl);
-    expect(mdl).to.not.have.any.keys('successAsync', 'errorAsync', 'thirdAsync');
-    expect(asyncModule).to.have.all.keys(
-      'name', 'success', 'error', 'third', 'successAsync', 'errorAsync', 'thirdAsync'
-    );
+    asyncModule.getNameAsync()
+      .then((name) => {
+        expect(name).to.be.equal(mdl.name);
+        done();
+      })
+      .catch(shouldNotBeCalled);
+  });
+
+  it('Should promisify all and not mutate the module', () => {
+    const allKeys = Object.keys(mdl);
+    const asyncKeys = ['getNameAsync', 'successAsync', 'errorAsync', 'thirdAsync'];
+    const asyncModule = promisify.all(mdl);
+    allKeys.push(...asyncKeys);
+    expect(mdl).to.not.have.any.keys(...asyncKeys);
+    expect(asyncModule).to.have.all.keys(allKeys);
   });
 
   it('Should promisify all and mutate the module ', () => {
+    const allKeys = Object.keys(mdl);
     const asyncModule = promisify.all(mdl, { mutate: true });
+    allKeys.push('getNameAsync', 'successAsync', 'errorAsync', 'thirdAsync');
     expect(asyncModule).to.deep.equal(mdl);
-    expect(mdl).to.have.all.keys(
-      'name', 'success', 'error', 'third', 'successAsync', 'errorAsync', 'thirdAsync'
-    );
+    expect(mdl).to.have.all.keys(allKeys);
   });
 
   it('Should promise all except excluded functions', () => {
