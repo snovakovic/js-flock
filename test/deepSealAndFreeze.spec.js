@@ -39,6 +39,39 @@ describe('deepSealOrFreeze', () => {
       expect(Object.isFrozen(circ1.circ2)).to.equal(true);
       expect(Object.isFrozen(circ1.circ2.second)).to.equal(true);
     });
+
+    it('Should not freeze prototype chain', () => {
+      const ob1 = { proto: { test: { is: 1 } } };
+      const ob2 = Object.create(ob1);
+      ob2.child = { test: 1 };
+
+      deepFreeze(ob2);
+      expect(Object.isFrozen(ob2)).to.equal(true);
+      expect(Object.isFrozen(ob2.child)).to.equal(true);
+      expect(Object.isFrozen(ob2.proto)).to.equal(false);
+      expect(Object.isFrozen(ob2.proto.test)).to.equal(false);
+    });
+
+    it('should deep freeze complex object', () => {
+      const fun = () => {};
+      fun.test = { isFrozen: { is: false } };
+      const arr = [{ isFrozen: { is: false } }];
+      arr.test = { isFrozen: { is: false } };
+      const set = new Set([{ isFrozen: { is: false } }]);
+      set.test = { isFrozen: { is: false } };
+
+      const ob = { arr, fun, set };
+
+      deepFreeze(ob);
+      expect(Object.isFrozen(ob)).to.equal(true);
+      expect(Object.isFrozen(ob.fun)).to.equal(true);
+      expect(Object.isFrozen(ob.fun.test)).to.equal(true);
+      expect(Object.isFrozen(ob.arr)).to.equal(true);
+      expect(Object.isFrozen(ob.arr.test)).to.equal(true);
+      expect(Object.isFrozen(ob.arr.test)).to.equal(true);
+      expect(Object.isFrozen(ob.set)).to.equal(true);
+      expect(Object.isFrozen(ob.set.test)).to.equal(true);
+    });
   });
 
   describe('deepSeal', () => {
