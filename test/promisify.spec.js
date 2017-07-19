@@ -169,4 +169,15 @@ describe('promisify', () => {
     const asyncModule = promisify.all('test');
     expect(asyncModule).to.equal('test');
   });
+
+  it('Should not promisify prototype chain', () => {
+    const ob = Object.create(mdl);
+    ob.name = 'ob-name';
+    ob.say = function(cb) { cb(undefined, this.name); };
+    promisify.all(ob, { mutate: true });
+
+    expect('sayAsync' in ob).to.equal(true);
+    expect('getName' in ob).to.equal(true);
+    expect('getNameAsync' in ob).to.equal(false);
+  });
 });
