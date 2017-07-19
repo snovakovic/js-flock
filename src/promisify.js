@@ -45,8 +45,7 @@ module.exports.all = (cbModule, options = {}) => {
   }
 
   options.suffix = options.suffix || 'Async';
-  options.mutate = typeof options.mutate === 'boolean' ? options.mutate : false;
-  const async = options.mutate ? cbModule : Object.assign({}, cbModule);
+  const async = options.mutate === true ? cbModule : Object.assign({}, cbModule);
 
   Object.keys(cbModule).forEach((key) => {
     if (shouldPromisify(key, cbModule, options.exclude, options.include)) {
