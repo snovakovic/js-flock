@@ -76,9 +76,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ({
 
 /***/ 4:
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var isPlainObject = __webpack_require__(5);
 
 var promisified = function promisified(fn, args) {
   var _this = this;
@@ -99,7 +99,7 @@ var promisified = function promisified(fn, args) {
   });
 };
 
-var shouldInclude = function shouldInclude(key, cbModule, excludeList, includeList) {
+var shouldPromisify = function shouldPromisify(key, cbModule, excludeList, includeList) {
   return typeof cbModule[key] === 'function' && (!includeList || includeList.some(function (k) {
     return k === key;
   })) && (!excludeList || excludeList.every(function (k) {
@@ -113,7 +113,7 @@ var promisify = function promisify(fn, options) {
       args[_key2] = arguments[_key2];
     }
 
-    return promisified(fn, args, options);
+    return promisified.call(this, fn, args, options);
   };
 };
 
@@ -125,23 +125,44 @@ var promisify = function promisify(fn, options) {
  */
 module.exports = promisify;
 
+/**
+ * Promisifies the entire object by going through the object's properties and creating an
+ * promisified equivalent of each function on the object. It does not go through object prototype.
+ *
+ * @param {Object} cbModule - Module with error first callback functions we want to promisify
+ * @returns {Object} Promisified module
+ */
 module.exports.all = function (cbModule) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  if (!cbModule || (typeof cbModule === 'undefined' ? 'undefined' : _typeof(cbModule)) !== 'object' || Array.isArray(cbModule)) {
+  if (!isPlainObject(cbModule)) {
     return cbModule;
   }
 
   options.suffix = options.suffix || 'Async';
-  options.mutate = typeof options.mutate === 'boolean' ? options.mutate : false;
-  var async = options.mutate ? cbModule : Object.assign({}, cbModule);
+  var async = options.mutate === true ? cbModule : Object.assign({}, cbModule);
 
   Object.keys(cbModule).forEach(function (key) {
-    if (shouldInclude(key, cbModule, options.exclude, options.include)) {
+    if (shouldPromisify(key, cbModule, options.exclude, options.include)) {
       async['' + key + options.suffix] = promisify(cbModule[key], options);
     }
   });
+
   return async;
+};
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+module.exports = function (testVar) {
+  if (!testVar || (typeof testVar === 'undefined' ? 'undefined' : _typeof(testVar)) !== 'object') {
+    return false;
+  }
+  return Object.prototype.toString.call(testVar) === '[object Object]';
 };
 
 /***/ })
