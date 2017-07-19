@@ -9,7 +9,7 @@ const promisified = function(fn, args, options = {}) {
   });
 };
 
-const shouldInclude = function(key, cbModule, excludeList, includeList) {
+const shouldPromisify = function(key, cbModule, excludeList, includeList) {
   return typeof cbModule[key] === 'function'
     && (!includeList || includeList.some((k) => k === key))
     && (!excludeList || excludeList.every((k) => k !== key));
@@ -21,6 +21,7 @@ const promisify = function(fn, options) {
   };
 };
 
+
 /**
  * Promisify error first callback function
  *
@@ -28,7 +29,6 @@ const promisify = function(fn, options) {
  * @returns {Function} Function that returns promise
  */
 module.exports = promisify;
-
 
 module.exports.all = (cbModule, options = {}) => {
   if (!cbModule || typeof cbModule !== 'object' || Array.isArray(cbModule)) {
@@ -40,9 +40,10 @@ module.exports.all = (cbModule, options = {}) => {
   const async = options.mutate ? cbModule : Object.assign({}, cbModule);
 
   Object.keys(cbModule).forEach((key) => {
-    if (shouldInclude(key, cbModule, options.exclude, options.include)) {
+    if (shouldPromisify(key, cbModule, options.exclude, options.include)) {
       async[`${key}${options.suffix}`] = promisify(cbModule[key], options);
     }
   });
+
   return async;
 };
