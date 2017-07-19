@@ -70,11 +70,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -108,22 +109,23 @@ module.exports = function deep(action, obj, options) {
 };
 
 /***/ }),
-/* 1 */,
-/* 2 */
+
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
 
 /**
-* Recursively apply Object.freez.
-*
-* @param {Object} obj - object that will be frozen including all child object/functions
-* @returns {Object} frozen object
-*/
+ * Recursively apply Object.preventExtensions.
+ *
+ * @param {Object} obj - object for which we want to prevent extension including all child object/functions
+ * @returns {Object} object that is not extensible
+ */
 module.exports = function (obj, options) {
-  return deep('freeze', obj, options);
+  return deep('preventExtensions', obj, options);
 };
 
 /***/ })
-/******/ ]);
+
+/******/ });
 });

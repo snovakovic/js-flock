@@ -11,7 +11,8 @@ function run(err) {
     return;
   }
 
-  const modules = ['collar', 'deepFreeze', 'deepSeal', 'promisify', 'singular', 'sort', 'toEnum'];
+  const modules = ['collar', 'deepFreeze', 'deepSeal', 'deepPreventExtensions', 'promisify',
+    'singular', 'sort', 'toEnum'];
 
   const jsFlock = require('js-flock');
   const jsFLockES5 = require('js-flock/es5');
@@ -28,6 +29,7 @@ function run(err) {
   const collar = require('js-flock/collar');
   const deepFreeze = require('js-flock/deepFreeze');
   const deepSeal = require('js-flock/deepSeal');
+  const deepPreventExtensions = require('js-flock/deepPreventExtensions');
   const promisify = require('js-flock/promisify');
   const singular = require('js-flock/singular');
   const sort = require('js-flock/sort');
@@ -49,6 +51,11 @@ function run(err) {
   const sealed = deepSeal({ a: 1 });
   assert.equal(Object.isSealed(sealed), true);
   console.log('deepSeal: SUCCESS');
+
+  // deepSeal
+  const notExtensible = deepPreventExtensions({ a: 1 });
+  assert.equal(Object.isExtensible(notExtensible), false);
+  console.log('deepPreventExtensions: SUCCESS');
 
   // singular
   let singularCounter = 0;

@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -81,7 +81,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var isApplied = {
   freeze: Object.isFrozen,
-  seal: Object.isSealed
+  seal: Object.isSealed,
+  preventExtensions: function preventExtensions(prop) {
+    return !Object.isExtensible(prop);
+  }
 };
 
 /**
@@ -90,15 +93,16 @@ var isApplied = {
  * @param {Object} obj
  * @returns {Object}
  */
-module.exports = function deep(action, obj) {
+module.exports = function deep(action, obj, options) {
+  options = options || {};
   Object[action](obj);
 
-  Object.keys(obj).forEach(function (key) {
+  for (var key in obj) {
     var prop = obj[key];
-    if (prop !== null && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop)) {
-      deep(action, prop);
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
+      deep(action, prop, options);
     }
-  });
+  }
 
   return obj;
 };
@@ -137,13 +141,13 @@ module.exports = function (promise) {
 var deep = __webpack_require__(0);
 
 /**
- * Recursively apply Object.freez.
- *
- * @param {Object} obj - object that will be frozen including all child object/functions
- * @returns {Object} frozen object
- */
-module.exports = function (obj) {
-  return deep('freeze', obj);
+* Recursively apply Object.freez.
+*
+* @param {Object} obj - object that will be frozen including all child object/functions
+* @returns {Object} frozen object
+*/
+module.exports = function (obj, options) {
+  return deep('freeze', obj, options);
 };
 
 /***/ }),
@@ -158,8 +162,8 @@ var deep = __webpack_require__(0);
  * @param {Object} obj - object that will be sealed including all child object/functions
  * @returns {Object} sealed object
  */
-module.exports = function (obj) {
-  return deep('seal', obj);
+module.exports = function (obj, options) {
+  return deep('seal', obj, options);
 };
 
 /***/ }),
@@ -429,7 +433,8 @@ module.exports = function (arg) {
 };
 
 /***/ }),
-/* 9 */
+/* 9 */,
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.collar = __webpack_require__(1);

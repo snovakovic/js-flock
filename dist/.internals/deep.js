@@ -1,7 +1,9 @@
 const isApplied = {
   freeze: Object.isFrozen,
-  seal: Object.isSealed
+  seal: Object.isSealed,
+  preventExtensions: (prop) => !Object.isExtensible(prop)
 };
+
 
 /**
  * Recursively apply {action} to object property
@@ -9,17 +11,19 @@ const isApplied = {
  * @param {Object} obj
  * @returns {Object}
  */
-module.exports = function deep(action, obj) {
+module.exports = function deep(action, obj, options) {
+  options = options || {};
   Object[action](obj);
 
-  Object.keys(obj).forEach((key) => {
+  for (const key in obj) {
     const prop = obj[key];
-    if (prop !== null &&
-      (typeof prop === 'object' || typeof prop === 'function') &&
-      !isApplied[action](prop)) {
-      deep(action, prop);
+    if (prop
+      && (typeof prop === 'object' || typeof prop === 'function')
+      && !isApplied[action](prop)
+      && (options.proto || obj.hasOwnProperty(key))) {
+      deep(action, prop, options);
     }
-  });
+  }
 
   return obj;
 };
