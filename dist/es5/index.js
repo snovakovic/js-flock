@@ -157,6 +157,22 @@ module.exports = function (obj, options) {
 var deep = __webpack_require__(0);
 
 /**
+ * Recursively apply Object.preventExtensions.
+ *
+ * @param {Object} obj - object for which we want to prevent extension including all child object/functions
+ * @returns {Object} object that is not extensible
+ */
+module.exports = function (obj, options) {
+  return deep('preventExtensions', obj, options);
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var deep = __webpack_require__(0);
+
+/**
  * Recursively apply Object.seal.
  *
  * @param {Object} obj - object that will be sealed including all child object/functions
@@ -167,10 +183,10 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isPlainObject = __webpack_require__(5);
+var isPlainObject = __webpack_require__(6);
 
 var promisified = function promisified(fn, args) {
   var _this = this;
@@ -244,7 +260,7 @@ module.exports.all = function (cbModule) {
 };
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -257,7 +273,7 @@ module.exports = function (testVar) {
 };
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /**
@@ -290,7 +306,7 @@ module.exports = function (fn) {
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 var sorter = function sorter(direction, sortBy, a, b) {
@@ -333,7 +349,7 @@ module.exports = function (ctx) {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -433,17 +449,17 @@ module.exports = function (arg) {
 };
 
 /***/ }),
-/* 9 */,
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.collar = __webpack_require__(1);
 exports.deepFreeze = __webpack_require__(2);
-exports.deepSeal = __webpack_require__(3);
-exports.promisify = __webpack_require__(4);
-exports.singular = __webpack_require__(6);
-exports.sort = __webpack_require__(7);
-exports.toEnum = __webpack_require__(8);
+exports.deepSeal = __webpack_require__(4);
+exports.deepPreventExtensions = __webpack_require__(3);
+exports.promisify = __webpack_require__(5);
+exports.singular = __webpack_require__(7);
+exports.sort = __webpack_require__(8);
+exports.toEnum = __webpack_require__(9);
 
 /***/ })
 /******/ ]);
