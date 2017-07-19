@@ -144,18 +144,25 @@ describe('promisify', () => {
     expect(mdl).to.have.all.keys(allKeys);
   });
 
-  it('Should promise all except excluded functions', () => {
+  it('Should promisify all except excluded functions', () => {
     const asyncModule = promisify.all(mdl, { exclude: ['error', 'getName'] });
     expect('successAsync' in asyncModule).to.equal(true);
     expect('errorAsync' in asyncModule).to.equal(false);
     expect('getNameAsync' in asyncModule).to.equal(false);
   });
 
-  it('Should promise only included functions', () => {
+  it('Should promisify only included functions', () => {
     const asyncModule = promisify.all(mdl, { include: ['error', 'getName'] });
     expect('successAsync' in asyncModule).to.equal(false);
     expect('errorAsync' in asyncModule).to.equal(true);
     expect('getNameAsync' in asyncModule).to.equal(true);
+  });
+
+  it('Should promisify all and apply custom suffix', () => {
+    const asyncModule = promisify.all(mdl, { suffix: 'Promisified' });
+    const allKeys = Object.keys(mdl);
+    allKeys.push('getNamePromisified', 'successPromisified', 'errorPromisified');
+    expect(asyncModule).to.have.all.keys(allKeys);
   });
 
   it('Should ignore if provided modules is not object', () => {
