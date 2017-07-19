@@ -7,6 +7,7 @@ describe('deep', () => {
   let obj;
   let circ1;
   let circ2;
+  let proto;
 
   beforeEach(() => {
     obj = {
@@ -23,6 +24,13 @@ describe('deep', () => {
     // Create circular reference
     circ2.circ1 = circ1;
     circ1.circ2 = circ2;
+
+    const ob1 = { proto: { test: { is: 1 } } };
+    const ob2 = Object.create(ob1);
+    ob2.ob2Prop = { prop: 'prop' };
+    proto = Object.create(ob2);
+    proto.child = { test: 1 };
+    proto.fun = () => {};
   });
 
   describe('deepFreeze', () => {
@@ -41,15 +49,26 @@ describe('deep', () => {
     });
 
     it('Should not freeze prototype chain', () => {
-      const ob1 = { proto: { test: { is: 1 } } };
-      const ob2 = Object.create(ob1);
-      ob2.child = { test: 1 };
+      deepFreeze(proto);
+      expect(Object.isFrozen(proto)).to.equal(true);
+      expect(Object.isFrozen(proto.child)).to.equal(true);
+      expect(Object.isFrozen(proto.function)).to.equal(true);
+      expect(Object.isFrozen(proto.ob2Prop)).to.equal(false);
+      expect(Object.isFrozen(proto.proto.test)).to.equal(false);
+    });
 
-      deepFreeze(ob2);
-      expect(Object.isFrozen(ob2)).to.equal(true);
-      expect(Object.isFrozen(ob2.child)).to.equal(true);
-      expect(Object.isFrozen(ob2.proto)).to.equal(false);
-      expect(Object.isFrozen(ob2.proto.test)).to.equal(false);
+    it('Should not break on invalid options', () => {
+      deepFreeze(obj, null);
+      expect(Object.isFrozen(obj)).to.equal(true);
+    });
+
+    it('Should freeze prototype chain', () => {
+      deepFreeze(proto, { proto: true });
+      expect(Object.isFrozen(proto)).to.equal(true);
+      expect(Object.isFrozen(proto.child)).to.equal(true);
+      expect(Object.isFrozen(proto.ob2Prop)).to.equal(true);
+      expect(Object.isFrozen(proto.proto)).to.equal(true);
+      expect(Object.isFrozen(proto.proto.test)).to.equal(true);
     });
 
     it('should deep freeze complex object', () => {

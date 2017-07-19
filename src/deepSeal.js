@@ -6,4 +6,4 @@ const deep = require('./.internals/deep');
  * @param {Object} obj - object that will be sealed including all child object/functions
  * @returns {Object} sealed object
  */
-module.exports = (obj) => deep('seal', obj);
+module.exports = (obj, options) => deep('seal', obj, options);
