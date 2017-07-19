@@ -91,6 +91,37 @@ describe('deep', () => {
       expect(Object.isFrozen(ob.set)).to.equal(true);
       expect(Object.isFrozen(ob.set.test)).to.equal(true);
     });
+
+    it('Should pass on readme examples', () => {
+      const person = {
+        fullName: 'test person',
+        dob: new Date(),
+        address: {
+          country: 'testiland',
+          city: 'this one'
+        }
+      };
+
+      Object.freeze(person);
+
+      expect(Object.isFrozen(person)).to.equal(true);
+      expect(Object.isFrozen(person.address)).to.equal(false);
+
+      deepFreeze(person);
+
+      expect(Object.isFrozen(person)).to.equal(true);
+      expect(Object.isFrozen(person.address)).to.equal(true);
+
+
+      const ob1 = { test: { a: 'a' } };
+      const ob2 = Object.create(ob1);
+
+      deepFreeze(ob2);
+      expect(Object.isFrozen(ob2.test)).to.equal(false);
+
+      deepFreeze(ob2, { proto: true });
+      expect(Object.isFrozen(ob2.test)).to.equal(true);
+    });
   });
 
   describe('deepSeal', () => {

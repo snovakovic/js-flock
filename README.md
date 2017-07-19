@@ -257,7 +257,7 @@ Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/Ja
       country: 'testiland',
       city: 'this one'
     }
-  }
+  };
 
   Object.freeze(person);
 
@@ -268,6 +268,21 @@ Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/Ja
 
   Object.isFrozen(person); // true
   Object.isFrozen(person.address); // true WE HE
+```
+
+By default deepFreeze do not loop over prototype chain.
+That behaviour can be overridden by providing { proto: true } option.
+By providing { proto: true } option we instruct deepFreeze to iterate over all enumerable properties of the object itself and those the object inherits from its constructor's prototype.
+
+```javascript
+  const ob1 = { test: { a: 'a' } };
+  const ob2 = Object.create(ob1);
+
+  deepFreeze(ob2);
+  Object.isFrozen(ob2.test); // false - because test property is on ob2 prototype
+
+  deepFreeze(ob2, { proto: true });
+  Object.isFrozen(ob2.test); // true
 ```
 
 ### deepSeal
