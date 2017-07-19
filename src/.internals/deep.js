@@ -15,7 +15,7 @@ module.exports = function deep(action, obj, options) {
   options = options || {};
   Object[action](obj);
 
-  for (const key in obj) {
+  for (const key in obj) { // eslint-disable-line no-restricted-syntax, guard-for-in
     const prop = obj[key];
     if (prop
       && (typeof prop === 'object' || typeof prop === 'function')
