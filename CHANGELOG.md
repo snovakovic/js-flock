@@ -1,3 +1,14 @@
+## [1.4.0] - 2017-07-19
+### Added
+- deepPreventExtensions
+### Changed
+- Added options { proto: true } in deep (seal, freeze, preventExtensions) that instructs deep
+to loop over prototype chain.
+
+## [1.3.0] - 2017-07-18
+### Fixed
+- Fixed promisified function to preserve this.
+
 ## [1.2.0] - 2017-07-17
 ### Changed
 - Promisify all now accepts mutate option which determines if target module will be mutated. Default value is false to compatible with current behavior.
