@@ -1,3 +1,5 @@
+const isPlainObject = require('./.internals/isPlainObject');
+
 const promisified = function(fn, args, options = {}) {
   return new Promise((resolve, reject) => {
     args.push((err, ...result) => {
@@ -9,7 +11,7 @@ const promisified = function(fn, args, options = {}) {
   });
 };
 
-const shouldInclude = function(key, cbModule, excludeList, includeList) {
+const shouldPromisify = function(key, cbModule, excludeList, includeList) {
   return typeof cbModule[key] === 'function'
     && (!includeList || includeList.some((k) => k === key))
     && (!excludeList || excludeList.every((k) => k !== key));
@@ -21,6 +23,7 @@ const promisify = function(fn, options) {
   };
 };
 
+
 /**
  * Promisify error first callback function
  *
@@ -29,20 +32,26 @@ const promisify = function(fn, options) {
  */
 module.exports = promisify;
 
-
+/**
+ * Promisifies the entire object by going through the object's properties and creating an
+ * promisified equivalent of each function on the object. It does not go through object prototype.
+ *
+ * @param {Object} cbModule - Module with error first callback functions we want to promisify
+ * @returns {Object} Promisified module
+ */
 module.exports.all = (cbModule, options = {}) => {
-  if (!cbModule || typeof cbModule !== 'object' || Array.isArray(cbModule)) {
+  if (!isPlainObject(cbModule)) {
     return cbModule;
   }
 
   options.suffix = options.suffix || 'Async';
-  options.mutate = typeof options.mutate === 'boolean' ? options.mutate : false;
-  const async = options.mutate ? cbModule : Object.assign({}, cbModule);
+  const async = options.mutate === true ? cbModule : Object.assign({}, cbModule);
 
   Object.keys(cbModule).forEach((key) => {
-    if (shouldInclude(key, cbModule, options.exclude, options.include)) {
+    if (shouldPromisify(key, cbModule, options.exclude, options.include)) {
       async[`${key}${options.suffix}`] = promisify(cbModule[key], options);
     }
   });
+
   return async;
 };

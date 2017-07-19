@@ -11,24 +11,14 @@ describe('promisify', () => {
   beforeEach(() => {
     mdl = {
       name: 'test-module',
-      getName(cb) {
-        cb(undefined, this.name);
-      },
-      success(inp, cb) {
-        cb(undefined, `${inp}-success`);
-      },
-      error(cb) {
-        cb('error');
-      },
-      third(cb) {
-        cb(undefined, 'third');
-      }
+      getName(cb) { cb(undefined, this.name); },
+      success(inp, cb) { cb(undefined, `${inp}-success`); },
+      error(cb) { cb('error'); }
     };
   });
 
   it('Should resolve promisified function', (done) => {
-    const successFun = (cb) => cb(undefined, 'response');
-    const successFunAsync = promisify(successFun);
+    const successFunAsync = promisify((cb) => cb(undefined, 'response'));
 
     successFunAsync().then((response) => {
       expect(response).to.equal('response');
@@ -37,8 +27,7 @@ describe('promisify', () => {
   });
 
   it('Should reject promisified function', (done) => {
-    const errorFun = (cb) => cb('error');
-    const errorFunAsync = promisify(errorFun);
+    const errorFunAsync = promisify((cb) => cb('error'));
 
     errorFunAsync()
       .then(shouldNotBeCalled)
@@ -49,10 +38,9 @@ describe('promisify', () => {
   });
 
   it('Should promisify function with multiple inputs', (done) => {
-    const successFun = function(p1, p2, cb) {
+    const successFunAsync = promisify((p1, p2, cb) => {
       setTimeout(() => cb(undefined, [`${p1}-res`, `${p2}-res`]), 50);
-    };
-    const successFunAsync = promisify(successFun);
+    });
 
     successFunAsync('p1', 'p2').then(([response1, response2]) => {
       expect(response1).to.equal('p1-res');
@@ -74,8 +62,7 @@ describe('promisify', () => {
   });
 
   it('Should return single param if multiArgs is not provided', (done) => {
-    const fun = (cb) => cb(undefined, 'res1', 2);
-    const funAsync = promisify(fun);
+    const funAsync = promisify((cb) => cb(undefined, 'res1', 2));
 
     funAsync().then((r1, r2) => {
       expect(r1).to.equal('res1');
@@ -85,8 +72,7 @@ describe('promisify', () => {
   });
 
   it('Should handle function with no params', (done) => {
-    const fun = (cb) => cb(undefined);
-    const funAsync = promisify(fun);
+    const funAsync = promisify((cb) => cb(undefined));
 
     funAsync().then((response) => {
       expect(response).to.equal(undefined);
@@ -97,7 +83,6 @@ describe('promisify', () => {
   it('Should handle function with no params and multiArgs option', (done) => {
     const fun = (cb) => cb(undefined);
     const funAsync = promisify(fun, { multiArgs: true });
-
     funAsync().then(([res1, res2]) => {
       expect(res1).to.equal(undefined);
       expect(res2).to.equal(undefined);
@@ -106,10 +91,8 @@ describe('promisify', () => {
   });
 
   it('Should handle function that throws error', (done) => {
-    const badFun = () => { throw Error('Error have happened in function'); };
-    const badFunAsync = promisify(badFun);
-
-    badFunAsync()
+    const errorFunAsync = promisify(() => { throw Error('Error have happened in function'); });
+    errorFunAsync()
       .then(shouldNotBeCalled)
       .catch((err) => {
         expect(err).to.be.an('error');
@@ -119,21 +102,17 @@ describe('promisify', () => {
 
   it('Should promisify all', (done) => {
     const asyncModule = promisify.all(mdl);
-
     const prom1 = asyncModule.successAsync('test').then((response) => {
       expect(response).to.equal('test-success');
     }).catch(shouldNotBeCalled);
-
     const prom2 = asyncModule.errorAsync().then(shouldNotBeCalled)
       .catch((err) => {
         expect(err).to.equal('error');
       });
 
     expect('nameAsync' in asyncModule).to.equal(false);
-    expect('thirdAsync' in asyncModule).to.equal(true);
-
-    Promise.all([prom1, prom2])
-      .then(() => done());
+    expect('getNameAsync' in asyncModule).to.equal(true);
+    Promise.all([prom1, prom2]).then(() => done());
   });
 
   it('Should promisify all preserving this', (done) => {
@@ -148,37 +127,57 @@ describe('promisify', () => {
 
   it('Should promisify all and not mutate the module', () => {
     const allKeys = Object.keys(mdl);
-    const asyncKeys = ['getNameAsync', 'successAsync', 'errorAsync', 'thirdAsync'];
+    const asyncKeys = ['getNameAsync', 'successAsync', 'errorAsync'];
     const asyncModule = promisify.all(mdl);
     allKeys.push(...asyncKeys);
-    expect(mdl).to.not.have.any.keys(...asyncKeys);
+
+    expect(mdl).to.not.have.any.keys(asyncKeys);
     expect(asyncModule).to.have.all.keys(allKeys);
   });
 
   it('Should promisify all and mutate the module ', () => {
     const allKeys = Object.keys(mdl);
     const asyncModule = promisify.all(mdl, { mutate: true });
-    allKeys.push('getNameAsync', 'successAsync', 'errorAsync', 'thirdAsync');
+    allKeys.push('getNameAsync', 'successAsync', 'errorAsync');
+
     expect(asyncModule).to.deep.equal(mdl);
     expect(mdl).to.have.all.keys(allKeys);
   });
 
-  it('Should promise all except excluded functions', () => {
-    const asyncModule = promisify.all(mdl, { exclude: ['error', 'third'] });
+  it('Should promisify all except excluded functions', () => {
+    const asyncModule = promisify.all(mdl, { exclude: ['error', 'getName'] });
     expect('successAsync' in asyncModule).to.equal(true);
     expect('errorAsync' in asyncModule).to.equal(false);
-    expect('thirdAsync' in asyncModule).to.equal(false);
+    expect('getNameAsync' in asyncModule).to.equal(false);
   });
 
-  it('Should promise only included functions', () => {
-    const asyncModule = promisify.all(mdl, { include: ['error', 'third'] });
+  it('Should promisify only included functions', () => {
+    const asyncModule = promisify.all(mdl, { include: ['error', 'getName'] });
     expect('successAsync' in asyncModule).to.equal(false);
     expect('errorAsync' in asyncModule).to.equal(true);
-    expect('thirdAsync' in asyncModule).to.equal(true);
+    expect('getNameAsync' in asyncModule).to.equal(true);
+  });
+
+  it('Should promisify all and apply custom suffix', () => {
+    const asyncModule = promisify.all(mdl, { suffix: 'Promisified' });
+    const allKeys = Object.keys(mdl);
+    allKeys.push('getNamePromisified', 'successPromisified', 'errorPromisified');
+    expect(asyncModule).to.have.all.keys(allKeys);
   });
 
   it('Should ignore if provided modules is not object', () => {
     const asyncModule = promisify.all('test');
     expect(asyncModule).to.equal('test');
+  });
+
+  it('Should not promisify prototype chain', () => {
+    const ob = Object.create(mdl);
+    ob.name = 'ob-name';
+    ob.say = function(cb) { cb(undefined, this.name); };
+    const obAsync = promisify.all(ob, { mutate: true });
+
+    expect('sayAsync' in obAsync).to.equal(true);
+    expect('getName' in obAsync).to.equal(true);
+    expect('getNameAsync' in obAsync).to.equal(false);
   });
 });
