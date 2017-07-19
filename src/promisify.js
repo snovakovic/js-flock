@@ -1,3 +1,5 @@
+const isPlainObject = require('./.internals/isPlainObject');
+
 const promisified = function(fn, args, options = {}) {
   return new Promise((resolve, reject) => {
     args.push((err, ...result) => {
@@ -30,8 +32,15 @@ const promisify = function(fn, options) {
  */
 module.exports = promisify;
 
+/**
+ * Promisifies the entire object by going through the object's properties and creating an
+ * promisified equivalent of each function on the object. It does not go through object prototype.
+ *
+ * @param {Object} cbModule - Module with error first callback functions we want to promisify
+ * @returns {Object} Promisified module
+ */
 module.exports.all = (cbModule, options = {}) => {
-  if (!cbModule || typeof cbModule !== 'object' || Array.isArray(cbModule)) {
+  if (!isPlainObject(cbModule)) {
     return cbModule;
   }
 
