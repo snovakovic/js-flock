@@ -17,7 +17,6 @@ module.exports = function deep(action, obj, options) {
 
   for (const key in obj) {
     const prop = obj[key];
-
     if (prop
       && (typeof prop === 'object' || typeof prop === 'function')
       && !isApplied[action](prop)
