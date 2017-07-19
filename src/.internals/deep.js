@@ -1,6 +1,7 @@
 const isApplied = {
   freeze: Object.isFrozen,
-  seal: Object.isSealed
+  seal: Object.isSealed,
+  preventExtensions: (prop) => !Object.isExtensible(prop)
 };
 
 /**

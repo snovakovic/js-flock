@@ -1,9 +1,9 @@
 const expect = require('chai').expect;
 const deepFreeze = require('../src/deepFreeze');
 const deepSeal = require('../src/deepSeal');
+const deepPreventExtensions = require('../src/deepPreventExtensions');
 
-
-describe('deepSealOrFreeze', () => {
+describe('deep', () => {
   let obj;
   let circ1;
   let circ2;
@@ -87,6 +87,15 @@ describe('deepSealOrFreeze', () => {
       expect(Object.isSealed(circ1.first)).to.equal(true);
       expect(Object.isSealed(circ1.circ2)).to.equal(true);
       expect(Object.isSealed(circ1.circ2.second)).to.equal(true);
+    });
+  });
+
+  describe('deepPreventExtensions', () => {
+    it('Should deep prevent extension', () => {
+      deepPreventExtensions(obj);
+      expect(Object.isExtensible(obj)).to.equal(false);
+      expect(Object.isExtensible(obj.first.second)).to.equal(false);
+      expect(Object.isExtensible(obj.first.second.third)).to.equal(false);
     });
   });
 });
