@@ -50,6 +50,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: src, to: dist },
       { from: Path.resolve(__dirname, 'publish.js'), to: dist },
+      { from: Path.resolve(__dirname, '.npmignore'), to: dist },
       { from: Path.resolve(__dirname, 'package.json'), to: dist },
       { from: Path.resolve(__dirname, 'README.md'), to: dist },
       { from: Path.resolve(__dirname, 'CHANGELOG.md'), to: dist }
