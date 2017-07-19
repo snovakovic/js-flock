@@ -44,6 +44,7 @@ and can be loaded in browser as CommonJs, AMD or as global var.
 - [collar](#collar)
 - [deepFreeze](#deepfreeze)
 - [deepSeal](#deepseal)
+- [deepPreventExtensions](#deepPreventExtensions)
 
 ### toEnum
 
@@ -272,4 +273,9 @@ Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/Ja
 ### deepSeal
 
 Recursively apply [Object.seal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal).
+For example check [deepFreeze](#deepfreeze)
+
+### deepPreventExtensions
+
+Recursively apply [Object.preventExtensions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/preventExtensions).
 For example check [deepFreeze](#deepfreeze)
