@@ -98,6 +98,7 @@ module.exports = function deep(action, obj, options) {
   Object[action](obj);
 
   for (var key in obj) {
+    // eslint-disable-line no-restricted-syntax, guard-for-in
     var prop = obj[key];
     if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
       deep(action, prop, options);
