@@ -15,12 +15,12 @@ module.exports = function deep(action, obj, options) {
   options = options || {};
   Object[action](obj);
 
-  for (const key in obj) { // eslint-disable-line no-restricted-syntax, guard-for-in
+  for (const key in obj) {
     const prop = obj[key];
-    if (prop
-      && (typeof prop === 'object' || typeof prop === 'function')
-      && !isApplied[action](prop)
-      && (options.proto || obj.hasOwnProperty(key))) {
+    if (prop &&
+      (typeof prop === 'object' || typeof prop === 'function') &&
+      !isApplied[action](prop) &&
+      (options.proto === true || obj.hasOwnProperty(key))) {
       deep(action, prop, options);
     }
   }

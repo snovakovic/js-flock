@@ -21,6 +21,8 @@ module.exports = {
     'space-before-function-paren': ['error', 'never'],
     'no-param-reassign': ['error', { props: false }],
     'no-prototype-builtins': 0,
-    'no-param-reassign': 0
+    'no-param-reassign': 0,
+    'no-restricted-syntax': 0,
+    'no-underscore-dangle': 0
   }
 };
