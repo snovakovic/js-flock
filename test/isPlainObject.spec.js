@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const isPlainObject = require('../src/isPlainObject');
 
 
-describe('isPLainObjectg', () => {
+describe('isPLainObject', () => {
   it('Should return true', () => {
     expect(isPlainObject({})).to.be.equal(true);
     expect(isPlainObject({ test: 'test' })).to.be.equal(true);
