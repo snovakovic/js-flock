@@ -1,7 +1,4 @@
-const promisified = function(fn, args, options) {
-  options = options || {};
-  options.multiArgs = options.multiArgs || false;
-
+const promisified = function(fn, args, options = {}) {
   return new Promise((resolve, reject) => {
     args.push((err, ...result) => {
       if (err) return reject(err);
@@ -20,7 +17,7 @@ const shouldPromisify = function(key, cbModule, { exclude, include, proto }) {
     (!exclude || exclude.every((k) => k !== key));
 };
 
-const getKey = function(cbModule, key, suffix) {
+const getKey = function(cbModule, key, suffix = 'Async') {
   const asyncKey = `${key}${suffix}`;
   if (asyncKey in cbModule) {
     return getKey(cbModule, asyncKey, 'Promisified');
@@ -39,10 +36,7 @@ const promisify = function(fn, options) {
 
 module.exports = promisify;
 
-module.exports.all = (cbModule, opt) => {
-  const options = Object.assign({}, opt);
-  options.suffix = options.suffix || 'Async';
-
+module.exports.all = (cbModule, options = {}) => {
   for (const key in cbModule) {
     if (shouldPromisify(key, cbModule, options)) {
       const asyncKey = getKey(cbModule, key, options.suffix);
