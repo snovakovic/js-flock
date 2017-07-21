@@ -1,29 +1,3 @@
-const { truthy } = require('./internals/assert');
-
-
-const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
-
-const assert = (cond, msg) => truthy(cond, `toEnum: ${msg}`);
-
-const assertKeys = function(keys) {
-  assert(keys.length, 'Empty enums are not allowed');
-  assert(keys.every((k) => !reservedWords.has(k.toLowerCase())), `Reserved word have been used
-    as key. [keys, values, haveKey, exists] are not allowed as keys`);
-};
-
-const assertValues = function(values) {
-  assert(new Set(values).size === values.length, 'Duplicate values detected');
-  assert(values.every((t) => typeof t === 'string' || typeof t === 'number'
-    || typeof t === 'symbol'), 'Only strings, numbers and symbols are allowed as enum values');
-};
-
-const assertType = function(args) {
-  assert(args && typeof args === 'object', 'Provided value need to be object or array');
-  if (Array.isArray(args)) {
-    assert(args.every((a) => typeof a === 'string'), 'Only strings are allowed in array notation');
-  }
-};
-
 const fromArray = function(arr) {
   const obj = {};
   arr.forEach((key) => (obj[key] = Symbol(key)));
@@ -38,14 +12,13 @@ const fromArray = function(arr) {
  * @returns {Object} enum representation
  */
 module.exports = function(arg) {
-  assertType(arg);
   const enu = Array.isArray(arg) ? fromArray(arg) : arg;
-
   const keys = Object.freeze(Object.keys(enu).filter((key) => typeof enu[key] !== 'function'));
-  assertKeys(keys);
-
   const values = Object.freeze(keys.map((key) => enu[key]));
-  assertValues(values);
+
+  if (new Set(values).size !== values.length) {
+    throw new TypeError('Duplicate values detected');
+  }
 
   // Lazy load
   const state = {
