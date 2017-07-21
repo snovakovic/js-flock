@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const toEnum = require('../src/toEnum');
 
 
-describe.only('toEnum', () => {
+describe('toEnum', () => {
   let arr;
   let obj;
 

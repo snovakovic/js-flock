@@ -1,5 +1,7 @@
 - removed assertion from to enum
+- toEnum does not muteate input
 - promisify don't accept mutate and always mutate module
+- promisify.all does not mutate input options object
 
 ## [1.4.0] - 2017-07-19
 ### Added

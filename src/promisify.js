@@ -20,12 +20,19 @@ const shouldPromisify = function(key, cbModule, { exclude, include, proto }) {
     (!exclude || exclude.every((k) => k !== key));
 };
 
+const getKey = function(cbModule, key, suffix) {
+  const asyncKey = `${key}${suffix}`;
+  if (asyncKey in cbModule) {
+    return getKey(cbModule, asyncKey, 'Promisified');
+  }
+  return asyncKey;
+};
+
 const promisify = function(fn, options) {
   return function(...args) {
     return promisified.call(this, fn, args, options);
   };
 };
-
 
 /**
  * Promisify error first callback function
@@ -42,13 +49,13 @@ module.exports = promisify;
  * @param {Object} cbModule - Module with error first callback functions we want to promisify
  * @returns {Object} Mutated module with new async methods
  */
-module.exports.all = (cbModule, options) => {
-  options = options || {};
+module.exports.all = (cbModule, opt) => {
+  const options = Object.assign({}, opt);
   options.suffix = options.suffix || 'Async';
 
   for (const key in cbModule) {
     if (shouldPromisify(key, cbModule, options)) {
-      const asyncKey = `${key}${options.suffix}`;
+      const asyncKey = getKey(cbModule, key, options.suffix);
       cbModule[asyncKey] = promisify(cbModule[key], options);
       cbModule[asyncKey].__promisified__ = true;
     }

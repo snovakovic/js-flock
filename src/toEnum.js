@@ -1,17 +1,11 @@
-const isPlainObject = require('./internals/isPlainObject');
-
 const castObject = function(args) {
-  if (isPlainObject(args)) {
-    return args;
-  }
-
   if (Array.isArray(args)) {
     const obj = {};
     args.forEach((key) => (obj[key] = Symbol(key)));
     return obj;
   }
 
-  return {};
+  return typeof args === 'object' ? Object.assign({}, args) : {};
 };
 
 const hardBindFunction = function(obj, key) {

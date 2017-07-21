@@ -187,20 +187,11 @@ describe('promisify', () => {
     };
 
     promisify.all(test);
+    const keys = ['test', 'testAsync', 'testAsyncAsync', 'testAsyncPromisified'];
+    expect(test).to.include.all.keys(keys);
     expect(test.testAsync((err, val) => {
       expect(val).to.be.equal('testAsync');
       done();
     }));
-  });
-
-  it('Should throw assertion error on invalid input', () => {
-    expect(() => promisify.all('test'))
-      .to.throw(TypeError, 'promisify: Module need to be object');
-    expect(() => promisify.all(mdl, { include: null }))
-      .to.throw(TypeError, 'promisify: options.include need to be array');
-    expect(() => promisify.all(mdl, { exclude: 'test' }))
-      .to.throw(TypeError, 'promisify: options.exclude need to be array');
-    expect(() => promisify.all(mdl, { suffix: 33 }))
-      .to.throw(TypeError, 'promisify: options.suffix need to be string');
   });
 });
