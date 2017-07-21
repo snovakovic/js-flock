@@ -17,7 +17,7 @@ module.exports = function(arg) {
   const values = Object.freeze(keys.map((key) => enu[key]));
 
   if (new Set(values).size !== values.length) {
-    throw new TypeError('Duplicate values detected');
+    throw new TypeError('toEnum: Duplicate values detected');
   }
 
   // Lazy load
