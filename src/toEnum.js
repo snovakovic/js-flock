@@ -15,6 +15,7 @@ const hardBindFunction = function(obj, key) {
   }
 };
 
+
 /**
  * Convert object or list of strings to enum representation
  *

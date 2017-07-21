@@ -8,29 +8,6 @@ const shouldNotBeCalled = () => {
 
 
 describe('promisify', () => {
-  let mdl;
-  let proto;
-
-  beforeEach(() => {
-    mdl = {
-      name: 'test-module',
-      getName(cb) {
-        cb(undefined, this.name);
-      },
-      success(inp, cb) {
-        cb(undefined, `${inp}-success`);
-      },
-      error(cb) {
-        cb('error');
-      }
-    };
-
-    const ob1 = Object.create(mdl);
-    ob1.ob1 = () => {};
-    proto = Object.create(ob1);
-    proto.proto = () => {};
-  });
-
   it('Should resolve promisified function', (done) => {
     const successFunAsync = promisify((cb) => cb(undefined, 'response'));
     successFunAsync().then((response) => {
@@ -112,6 +89,32 @@ describe('promisify', () => {
         expect(err).to.be.an('error');
         done();
       });
+  });
+});
+
+
+describe('promisify.all', () => {
+  let mdl;
+  let proto;
+
+  beforeEach(() => {
+    mdl = {
+      name: 'test-module',
+      getName(cb) {
+        cb(undefined, this.name);
+      },
+      success(inp, cb) {
+        cb(undefined, `${inp}-success`);
+      },
+      error(cb) {
+        cb('error');
+      }
+    };
+
+    const ob1 = Object.create(mdl);
+    ob1.ob1 = () => {};
+    proto = Object.create(ob1);
+    proto.proto = () => {};
   });
 
   it('Should promisify all', (done) => {

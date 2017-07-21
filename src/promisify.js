@@ -34,6 +34,7 @@ const promisify = function(fn, options) {
   };
 };
 
+
 /**
  * Promisify error first callback function
  *
