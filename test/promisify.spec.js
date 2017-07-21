@@ -180,15 +180,27 @@ describe('promisify', () => {
     expect(mdl).to.not.include.all.keys(['getNameAsyncAsync', 'successAsyncAsync']);
   });
 
-  // it('Should not override existing methods', () => {
-  //   const test = {
-  //     test: () => {},
-  //     testAsync: () => {}
-  //   };
-  // });
+  it('Should not override existing methods', (done) => {
+    const test = {
+      test: (cb) => { cb(undefined, 'test'); },
+      testAsync: (cb) => { cb(undefined, 'testAsync'); }
+    };
 
-  it('Should not brake module on invalid input', () => {
-    const asyncModule = promisify.all('test');
-    expect(asyncModule).to.equal('test');
+    promisify.all(test);
+    expect(test.testAsync((err, val) => {
+      expect(val).to.be.equal('testAsync');
+      done();
+    }));
+  });
+
+  it('Should throw assertion error on invalid input', () => {
+    expect(() => promisify.all('test'))
+      .to.throw(TypeError, 'promisify: Module need to be object');
+    expect(() => promisify.all(mdl, { include: null }))
+      .to.throw(TypeError, 'promisify: options.include need to be array');
+    expect(() => promisify.all(mdl, { exclude: 'test' }))
+      .to.throw(TypeError, 'promisify: options.exclude need to be array');
+    expect(() => promisify.all(mdl, { suffix: 33 }))
+      .to.throw(TypeError, 'promisify: options.suffix need to be string');
   });
 });

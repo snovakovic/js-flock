@@ -1,4 +1,7 @@
 const isPlainObject = require('./internals/isPlainObject');
+const { truthy } = require('./internals/assert');
+
+const assert = (cond, msg) => truthy(cond, `promisify: ${msg}`);
 
 const promisified = function(fn, args, options) {
   options = options || {};
@@ -45,15 +48,15 @@ module.exports = promisify;
  * @returns {Object} Mutated module with new async methods
  */
 module.exports.all = (cbModule, options) => {
-  if (!isPlainObject(cbModule)) {
-    return cbModule;
-  }
-
   options = options || {};
   options.suffix = options.suffix || 'Async';
-  options.proto = options.proto || false;
-  options.include = Array.isArray(options.include) ? options.include : undefined;
-  options.exclude = Array.isArray(options.exclude) ? options.exclude : undefined;
+
+  assert(isPlainObject(cbModule), 'Module need to be object');
+  assert(typeof options.suffix === 'string', 'options.suffix need to be string');
+  assert(!options.hasOwnProperty('include') || Array.isArray(options.include),
+    'options.include need to be array');
+  assert(!options.hasOwnProperty('exclude') || Array.isArray(options.exclude),
+    'options.exclude need to be array');
 
   for (const key in cbModule) {
     if (shouldPromisify(key, cbModule, options)) {

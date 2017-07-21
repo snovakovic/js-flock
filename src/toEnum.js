@@ -1,5 +1,6 @@
 const { truthy } = require('./internals/assert');
 
+
 const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
 
 const assert = (cond, msg) => truthy(cond, `toEnum: ${msg}`);
