@@ -47,10 +47,7 @@ describe('singular', () => {
 
   it('Should preserve this', () => {
     const obj = { test: 'test' };
-    const test = singular(function() {
-      expect(this).to.equal(obj);
-    });
-
+    const test = singular(function() { expect(this).to.equal(obj); });
     test.apply(obj);
   });
 });
