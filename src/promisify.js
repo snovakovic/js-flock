@@ -35,21 +35,10 @@ const promisify = function(fn, options) {
 };
 
 
-/**
- * Promisify error first callback function
- *
- * @param {Function} fn - error first callback function we want to promisify
- * @returns {Function} Promisifed version of function
- */
+// Public
+
 module.exports = promisify;
 
-/**
- * Promisifies the entire object by going through the object's properties and creating an
- * promisified equivalent of each function on the object and its prototype chain
- *
- * @param {Object} cbModule - Module with error first callback functions we want to promisify
- * @returns {Object} Mutated module with new async methods
- */
 module.exports.all = (cbModule, opt) => {
   const options = Object.assign({}, opt);
   options.suffix = options.suffix || 'Async';

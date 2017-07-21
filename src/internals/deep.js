@@ -5,12 +5,8 @@ const isApplied = {
 };
 
 
-/**
- * Recursively apply {action} to object property
- *
- * @param {Object} obj
- * @returns {Object}
- */
+// Public
+
 module.exports = function deep(action, obj, options) {
   options = options || {};
   Object[action](obj);

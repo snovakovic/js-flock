@@ -16,12 +16,8 @@ const hardBindFunction = function(obj, key) {
 };
 
 
-/**
- * Convert object or list of strings to enum representation
- *
- * @param {Object, Array} arg Object or array of string from which we will generate enum representation
- * @returns {Object} enum representation
- */
+// Public
+
 module.exports = function(arg) {
   const enu = castObject(arg);
   const keys = Object.keys(enu).filter((key) => typeof enu[key] !== 'function');
