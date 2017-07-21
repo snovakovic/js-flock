@@ -1,4 +1,4 @@
-const deep = require('./.internals/deep');
+const deep = require('./internals/deep');
 
 /**
  * Recursively apply Object.preventExtensions.

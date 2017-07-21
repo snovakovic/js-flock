@@ -1,4 +1,4 @@
-const isPlainObject = require('./.internals/isPlainObject');
+const isPlainObject = require('./internals/isPlainObject');
 
 const promisified = function(fn, args, options = {}) {
   return new Promise((resolve, reject) => {

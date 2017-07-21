@@ -1,4 +1,4 @@
-const isPlainObject = require('./.internals/isPlainObject');
+const isPlainObject = require('./internals/isPlainObject');
 
 const promisified = function(fn, args, options) {
   options = options || {};
@@ -17,7 +17,7 @@ const promisified = function(fn, args, options) {
 const shouldPromisify = function(key, cbModule, { exclude, include, proto }) {
   return typeof cbModule[key] === 'function' &&
     cbModule[key].__promisified__ !== true &&
-    (proto !== false || cbModule.hasOwnProperty(key)) &&
+    (proto === true || cbModule.hasOwnProperty(key)) &&
     (!include || include.some((k) => k === key)) &&
     (!exclude || exclude.every((k) => k !== key));
 };
@@ -51,8 +51,9 @@ module.exports.all = (cbModule, options) => {
 
   options = options || {};
   options.suffix = options.suffix || 'Async';
-  options.proto = options.proto || true;
-  // Todo handle invalid include exclude
+  options.proto = options.proto || false;
+  options.include = Array.isArray(options.include) ? options.include : undefined;
+  options.exclude = Array.isArray(options.exclude) ? options.exclude : undefined;
 
   for (const key in cbModule) {
     if (shouldPromisify(key, cbModule, options)) {

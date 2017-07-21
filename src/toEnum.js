@@ -1,10 +1,8 @@
+const { truthy } = require('./internals/assert');
+
 const reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
 
-const assert = function(condition, msg) {
-  if (!condition) {
-    throw new TypeError(`toEnum: ${msg}`);
-  }
-};
+const assert = (cond, msg) => truthy(cond, `toEnum: ${msg}`);
 
 const assertKeys = function(keys) {
   assert(keys.length, 'Empty enums are not allowed');

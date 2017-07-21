@@ -160,18 +160,18 @@ describe('promisify', () => {
     expect(asyncModule).to.include.all.keys(asyncKeys);
   });
 
-  it('Should promisify prototype chain', () => {
-    const asyncKeys = ['getNameAsync', 'ob1Async', 'protoAsync'];
+  it('Should not promisify prototype chain', () => {
+    console.log(proto);
     promisify.all(proto);
-    expect(proto).to.include.all.keys(asyncKeys);
+    expect(proto).to.include.all.keys(['protoAsync']);
+    expect(proto).to.not.include.all.keys(['getNameAsync', 'ob1Async']);
   });
 
-  // it.only('Should not promisify prototype chain', () => {
-  //   console.log(proto);
-  //   promisify.all(proto, { proto: false });
-  //   expect(proto).to.include.all.keys(['protoAsync']);
-  //   expect(proto).to.not.include.all.keys(['getNameAsync', 'ob1Async']);
-  // });
+  it('Should promisify prototype chain', () => {
+    const asyncKeys = ['getNameAsync', 'ob1Async', 'protoAsync'];
+    promisify.all(proto, { proto: true });
+    expect(proto).to.include.all.keys(asyncKeys);
+  });
 
   it('Should skip already promisified functions', () => {
     promisify.all(mdl);
