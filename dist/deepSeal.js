@@ -1,9 +1,6 @@
 const deep = require('./internals/deep');
 
-/**
- * Recursively apply Object.seal.
- *
- * @param {Object} obj - object that will be sealed including all child object/functions
- * @returns {Object} sealed object
- */
+
+// Public
+
 module.exports = (obj, options) => deep('seal', obj, options);

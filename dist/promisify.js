@@ -1,5 +1,3 @@
-const isPlainObject = require('./internals/isPlainObject');
-
 const promisified = function(fn, args, options = {}) {
   return new Promise((resolve, reject) => {
     args.push((err, ...result) => {
@@ -11,10 +9,20 @@ const promisified = function(fn, args, options = {}) {
   });
 };
 
-const shouldPromisify = function(key, cbModule, excludeList, includeList) {
-  return typeof cbModule[key] === 'function'
-    && (!includeList || includeList.some((k) => k === key))
-    && (!excludeList || excludeList.every((k) => k !== key));
+const shouldPromisify = function(key, cbModule, { exclude, include, proto }) {
+  return typeof cbModule[key] === 'function' &&
+    cbModule[key].__promisified__ !== true &&
+    (proto === true || cbModule.hasOwnProperty(key)) &&
+    (!include || include.some((k) => k === key)) &&
+    (!exclude || exclude.every((k) => k !== key));
+};
+
+const getKey = function(cbModule, key, suffix = 'Async') {
+  const asyncKey = `${key}${suffix}`;
+  if (asyncKey in cbModule) {
+    return getKey(cbModule, asyncKey, 'Promisified');
+  }
+  return asyncKey;
 };
 
 const promisify = function(fn, options) {
@@ -24,34 +32,18 @@ const promisify = function(fn, options) {
 };
 
 
-/**
- * Promisify error first callback function
- *
- * @param {Function} fn - error first callback function we want to promisify
- * @returns {Function} Function that returns promise
- */
+// Public
+
 module.exports = promisify;
 
-/**
- * Promisifies the entire object by going through the object's properties and creating an
- * promisified equivalent of each function on the object. It does not go through object prototype.
- *
- * @param {Object} cbModule - Module with error first callback functions we want to promisify
- * @returns {Object} Promisified module
- */
 module.exports.all = (cbModule, options = {}) => {
-  if (!isPlainObject(cbModule)) {
-    return cbModule;
+  for (const key in cbModule) {
+    if (shouldPromisify(key, cbModule, options)) {
+      const asyncKey = getKey(cbModule, key, options.suffix);
+      cbModule[asyncKey] = promisify(cbModule[key], options);
+      cbModule[asyncKey].__promisified__ = true;
+    }
   }
 
-  options.suffix = options.suffix || 'Async';
-  const async = options.mutate === true ? cbModule : Object.assign({}, cbModule);
-
-  Object.keys(cbModule).forEach((key) => {
-    if (shouldPromisify(key, cbModule, options.exclude, options.include)) {
-      async[`${key}${options.suffix}`] = promisify(cbModule[key], options);
-    }
-  });
-
-  return async;
+  return cbModule;
 };

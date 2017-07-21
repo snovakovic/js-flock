@@ -106,6 +106,8 @@ var sort = function sort(ctx) {
   return ctx;
 };
 
+// Public
+
 module.exports = function (ctx) {
   return {
     asc: function asc(sortBy) {

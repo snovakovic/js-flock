@@ -83,14 +83,8 @@ var REJECTION_REASON = Object.freeze({
   message: 'Promise have timed out'
 });
 
-/**
- * Set maximum waiting time for promise to resolve
- * Reject promise if it's not resolved in that time
- *
- * @param {Promise} promise promise that will be constrained with max time to resolve
- * @param {number} [ttl=5000] time to wait for promise to resolve
- * @returns {Promise}
- */
+// Public
+
 module.exports = function (promise) {
   var ttl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5000;
 

@@ -87,20 +87,15 @@ var isApplied = {
   }
 };
 
-/**
- * Recursively apply {action} to object property
- *
- * @param {Object} obj
- * @returns {Object}
- */
+// Public
+
 module.exports = function deep(action, obj, options) {
   options = options || {};
   Object[action](obj);
 
   for (var key in obj) {
-    // eslint-disable-line no-restricted-syntax, guard-for-in
     var prop = obj[key];
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto === true || obj.hasOwnProperty(key))) {
       deep(action, prop, options);
     }
   }
@@ -117,14 +112,8 @@ var REJECTION_REASON = Object.freeze({
   message: 'Promise have timed out'
 });
 
-/**
- * Set maximum waiting time for promise to resolve
- * Reject promise if it's not resolved in that time
- *
- * @param {Promise} promise promise that will be constrained with max time to resolve
- * @param {number} [ttl=5000] time to wait for promise to resolve
- * @returns {Promise}
- */
+// Public
+
 module.exports = function (promise) {
   var ttl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5000;
 
@@ -141,12 +130,8 @@ module.exports = function (promise) {
 
 var deep = __webpack_require__(0);
 
-/**
-* Recursively apply Object.freez.
-*
-* @param {Object} obj - object that will be frozen including all child object/functions
-* @returns {Object} frozen object
-*/
+// Public
+
 module.exports = function (obj, options) {
   return deep('freeze', obj, options);
 };
@@ -157,12 +142,8 @@ module.exports = function (obj, options) {
 
 var deep = __webpack_require__(0);
 
-/**
- * Recursively apply Object.preventExtensions.
- *
- * @param {Object} obj - object for which we want to prevent extension including all child object/functions
- * @returns {Object} object that is not extensible
- */
+// Public
+
 module.exports = function (obj, options) {
   return deep('preventExtensions', obj, options);
 };
@@ -173,21 +154,27 @@ module.exports = function (obj, options) {
 
 var deep = __webpack_require__(0);
 
-/**
- * Recursively apply Object.seal.
- *
- * @param {Object} obj - object that will be sealed including all child object/functions
- * @returns {Object} sealed object
- */
+// Public
+
 module.exports = function (obj, options) {
   return deep('seal', obj, options);
 };
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var isPlainObject = __webpack_require__(6);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+// Public
+
+module.exports = function (testVar) {
+  return !!(testVar && (typeof testVar === 'undefined' ? 'undefined' : _typeof(testVar)) === 'object' && Object.prototype.toString.call(testVar) === '[object Object]');
+};
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
 
 var promisified = function promisified(fn, args) {
   var _this = this;
@@ -208,12 +195,26 @@ var promisified = function promisified(fn, args) {
   });
 };
 
-var shouldPromisify = function shouldPromisify(key, cbModule, excludeList, includeList) {
-  return typeof cbModule[key] === 'function' && (!includeList || includeList.some(function (k) {
+var shouldPromisify = function shouldPromisify(key, cbModule, _ref) {
+  var exclude = _ref.exclude,
+      include = _ref.include,
+      proto = _ref.proto;
+
+  return typeof cbModule[key] === 'function' && cbModule[key].__promisified__ !== true && (proto === true || cbModule.hasOwnProperty(key)) && (!include || include.some(function (k) {
     return k === key;
-  })) && (!excludeList || excludeList.every(function (k) {
+  })) && (!exclude || exclude.every(function (k) {
     return k !== key;
   }));
+};
+
+var getKey = function getKey(cbModule, key) {
+  var suffix = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'Async';
+
+  var asyncKey = '' + key + suffix;
+  if (asyncKey in cbModule) {
+    return getKey(cbModule, asyncKey, 'Promisified');
+  }
+  return asyncKey;
 };
 
 var promisify = function promisify(fn, options) {
@@ -226,66 +227,30 @@ var promisify = function promisify(fn, options) {
   };
 };
 
-/**
- * Promisify error first callback function
- *
- * @param {Function} fn - error first callback function we want to promisify
- * @returns {Function} Function that returns promise
- */
+// Public
+
 module.exports = promisify;
 
-/**
- * Promisifies the entire object by going through the object's properties and creating an
- * promisified equivalent of each function on the object. It does not go through object prototype.
- *
- * @param {Object} cbModule - Module with error first callback functions we want to promisify
- * @returns {Object} Promisified module
- */
 module.exports.all = function (cbModule) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  if (!isPlainObject(cbModule)) {
-    return cbModule;
-  }
-
-  options.suffix = options.suffix || 'Async';
-  var async = options.mutate === true ? cbModule : Object.assign({}, cbModule);
-
-  Object.keys(cbModule).forEach(function (key) {
-    if (shouldPromisify(key, cbModule, options.exclude, options.include)) {
-      async['' + key + options.suffix] = promisify(cbModule[key], options);
+  for (var key in cbModule) {
+    if (shouldPromisify(key, cbModule, options)) {
+      var asyncKey = getKey(cbModule, key, options.suffix);
+      cbModule[asyncKey] = promisify(cbModule[key], options);
+      cbModule[asyncKey].__promisified__ = true;
     }
-  });
-
-  return async;
-};
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-module.exports = function (testVar) {
-  if (!testVar || (typeof testVar === 'undefined' ? 'undefined' : _typeof(testVar)) !== 'object') {
-    return false;
   }
-  return Object.prototype.toString.call(testVar) === '[object Object]';
+
+  return cbModule;
 };
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-/**
- * Creates singular function that after is called can't be called again until it finishes with execution.
- * Singular functions injects done function as a first argument of original function.
- * When called done indicates that function has finished with execution and that it can be called again.
- *
- * @since 0.7.0
- * @param {Function} fn - function which execution we want to control
- * @returns {Function} Function with controlled execution
- */
+// Public
+
 module.exports = function (fn) {
   var inProgress = false;
   var done = function done() {
@@ -338,6 +303,8 @@ var sort = function sort(ctx) {
   return ctx;
 };
 
+// Public
+
 module.exports = function (ctx) {
   return {
     asc: function asc(sortBy) {
@@ -355,77 +322,52 @@ module.exports = function (ctx) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
-
-var assert = function assert(condition, msg) {
-  if (!condition) {
-    throw new TypeError('toEnum: ' + msg);
-  }
-};
-
-var assertKeys = function assertKeys(keys) {
-  assert(keys.length, 'Empty enums are not allowed');
-  assert(keys.every(function (k) {
-    return !reservedWords.has(k.toLowerCase());
-  }), 'Reserved word have been used\n    as key. [keys, values, haveKey, exists] are not allowed as keys');
-};
-
-var assertValues = function assertValues(values) {
-  assert(new Set(values).size === values.length, 'Duplicate values detected');
-  assert(values.every(function (t) {
-    return typeof t === 'string' || typeof t === 'number' || (typeof t === 'undefined' ? 'undefined' : _typeof(t)) === 'symbol';
-  }), 'Only strings, numbers and symbols are allowed as enum values');
-};
-
-var assertType = function assertType(args) {
-  assert(args && (typeof args === 'undefined' ? 'undefined' : _typeof(args)) === 'object', 'Provided value need to be object or array');
+var castObject = function castObject(args) {
   if (Array.isArray(args)) {
-    assert(args.every(function (a) {
-      return typeof a === 'string';
-    }), 'Only strings are allowed in array notation');
+    var obj = {};
+    args.forEach(function (key) {
+      return obj[key] = Symbol(key);
+    });
+    return obj;
+  }
+
+  return (typeof args === 'undefined' ? 'undefined' : _typeof(args)) === 'object' ? Object.assign({}, args) : {};
+};
+
+var hardBindFunction = function hardBindFunction(obj, key) {
+  var prop = obj[key];
+  if (typeof prop === 'function') {
+    prop = prop.bind(obj);
   }
 };
 
-var fromArray = function fromArray(arr) {
-  var obj = {};
-  arr.forEach(function (key) {
-    return obj[key] = Symbol(key);
-  });
-  return obj;
-};
+// Public
 
-/**
- * Convert object or list of strings to enum representation
- *
- * @param {Object, Array} arg Object or array of string from which we will generate enum representation
- * @returns {Object} enum representation
- */
 module.exports = function (arg) {
-  assertType(arg);
-  var enu = Array.isArray(arg) ? fromArray(arg) : arg;
-
-  var keys = Object.freeze(Object.keys(enu).filter(function (key) {
+  var enu = castObject(arg);
+  var keys = Object.keys(enu).filter(function (key) {
     return typeof enu[key] !== 'function';
-  }));
-  assertKeys(keys);
-
-  var values = Object.freeze(keys.map(function (key) {
+  });
+  var values = keys.map(function (key) {
     return enu[key];
-  }));
-  assertValues(values);
+  });
 
-  // Lazy load
+  if (new Set(values).size !== values.length) {
+    throw new TypeError('toEnum: Duplicate values detected');
+  }
+
+  Object.freeze(keys);
+  Object.freeze(values);
+  Object.keys(enu).forEach(function (key) {
+    return hardBindFunction(enu, key);
+  });
+
+  // Lazy load state
+
   var state = {
     keySet: undefined,
     valueSet: undefined
   };
-
-  // Hard bind custom enum helpers
-  Object.keys(enu).filter(function (key) {
-    return typeof enu[key] === 'function';
-  }).forEach(function (key) {
-    return enu[key] = enu[key].bind(enu);
-  });
 
   // Append standard enum helpers
 
@@ -455,9 +397,10 @@ module.exports = function (arg) {
 
 exports.collar = __webpack_require__(1);
 exports.deepFreeze = __webpack_require__(2);
-exports.deepSeal = __webpack_require__(4);
 exports.deepPreventExtensions = __webpack_require__(3);
-exports.promisify = __webpack_require__(5);
+exports.deepSeal = __webpack_require__(4);
+exports.isPlainObject = __webpack_require__(5);
+exports.promisify = __webpack_require__(6);
 exports.singular = __webpack_require__(7);
 exports.sort = __webpack_require__(8);
 exports.toEnum = __webpack_require__(9);

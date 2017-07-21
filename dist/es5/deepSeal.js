@@ -87,20 +87,15 @@ var isApplied = {
   }
 };
 
-/**
- * Recursively apply {action} to object property
- *
- * @param {Object} obj
- * @returns {Object}
- */
+// Public
+
 module.exports = function deep(action, obj, options) {
   options = options || {};
   Object[action](obj);
 
   for (var key in obj) {
-    // eslint-disable-line no-restricted-syntax, guard-for-in
     var prop = obj[key];
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto === true || obj.hasOwnProperty(key))) {
       deep(action, prop, options);
     }
   }
@@ -117,12 +112,8 @@ module.exports = function deep(action, obj, options) {
 
 var deep = __webpack_require__(0);
 
-/**
- * Recursively apply Object.seal.
- *
- * @param {Object} obj - object that will be sealed including all child object/functions
- * @returns {Object} sealed object
- */
+// Public
+
 module.exports = function (obj, options) {
   return deep('seal', obj, options);
 };

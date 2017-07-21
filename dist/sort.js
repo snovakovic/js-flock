@@ -21,6 +21,9 @@ const sort = function(ctx, sortBy = emptySortBy, _sorter) {
   return ctx;
 };
 
+
+// Public
+
 module.exports = function(ctx) {
   return {
     asc(sortBy) {
