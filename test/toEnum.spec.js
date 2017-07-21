@@ -2,13 +2,13 @@ const expect = require('chai').expect;
 const toEnum = require('../src/toEnum');
 
 
-describe('toEnum', () => {
+describe.only('toEnum', () => {
   let arr;
   let obj;
 
   beforeEach(() => {
-    arr = ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'];
     obj = {};
+    arr = ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'];
     arr.forEach((key) => (obj[key] = key));
   });
 
@@ -57,5 +57,11 @@ describe('toEnum', () => {
   it('Should throw exception for duplicate values', () => {
     obj.boat = 'CAR';
     expect(() => toEnum(obj)).to.throw(TypeError, 'toEnum: Duplicate values detected');
+  });
+
+  it('Invalid input should return empty enum', () => {
+    const testEnum = toEnum('invalid');
+    expect(testEnum.values()).to.eql([]);
+    expect(testEnum.keys()).to.eql([]);
   });
 });

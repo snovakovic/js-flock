@@ -1,9 +1,25 @@
-const fromArray = function(arr) {
-  const obj = {};
-  arr.forEach((key) => (obj[key] = Symbol(key)));
-  return obj;
+const isPlainObject = require('./internals/isPlainObject');
+
+const castObject = function(args) {
+  if (isPlainObject(args)) {
+    return args;
+  }
+
+  if (Array.isArray(args)) {
+    const obj = {};
+    args.forEach((key) => (obj[key] = Symbol(key)));
+    return obj;
+  }
+
+  return {};
 };
 
+const hardBindFunction = function(obj, key) {
+  let prop = obj[key];
+  if (typeof prop === 'function') {
+    prop = prop.bind(obj);
+  }
+};
 
 /**
  * Convert object or list of strings to enum representation
@@ -12,24 +28,25 @@ const fromArray = function(arr) {
  * @returns {Object} enum representation
  */
 module.exports = function(arg) {
-  const enu = Array.isArray(arg) ? fromArray(arg) : arg;
-  const keys = Object.freeze(Object.keys(enu).filter((key) => typeof enu[key] !== 'function'));
-  const values = Object.freeze(keys.map((key) => enu[key]));
+  const enu = castObject(arg);
+  const keys = Object.keys(enu).filter((key) => typeof enu[key] !== 'function');
+  const values = keys.map((key) => enu[key]);
 
   if (new Set(values).size !== values.length) {
     throw new TypeError('toEnum: Duplicate values detected');
   }
 
-  // Lazy load
+  Object.freeze(keys);
+  Object.freeze(values);
+
+  Object.keys(enu).forEach((key) => hardBindFunction(enu, key));
+
+  // Lazy load state
+
   const state = {
     keySet: undefined,
     valueSet: undefined
   };
-
-  // Hard bind custom enum helpers
-  Object.keys(enu)
-    .filter((key) => typeof enu[key] === 'function')
-    .forEach((key) => (enu[key] = enu[key].bind(enu)));
 
   // Append standard enum helpers
 

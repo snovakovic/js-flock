@@ -1,3 +1,6 @@
+- removed assertion from to enum
+- promisify don't accept mutate and always mutate module
+
 ## [1.4.0] - 2017-07-19
 ### Added
 - deepPreventExtensions
