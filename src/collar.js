@@ -10,8 +10,5 @@ module.exports = function(promise, ttl = 5000) {
   const restraint = new Promise((resolve, reject) =>
     setTimeout(reject, ttl, REJECTION_REASON));
 
-  return Promise.race([
-    restraint,
-    promise
-  ]);
+  return Promise.race([restraint, promise]);
 };
