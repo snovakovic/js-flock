@@ -32,7 +32,6 @@ module.exports = function(arg) {
 
   Object.freeze(keys);
   Object.freeze(values);
-
   Object.keys(enu).forEach((key) => hardBindFunction(enu, key));
 
   // Lazy load state
