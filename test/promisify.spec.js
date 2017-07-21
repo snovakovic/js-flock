@@ -100,15 +100,9 @@ describe('promisify.all', () => {
   beforeEach(() => {
     mdl = {
       name: 'test-module',
-      getName(cb) {
-        cb(undefined, this.name);
-      },
-      success(inp, cb) {
-        cb(undefined, `${inp}-success`);
-      },
-      error(cb) {
-        cb('error');
-      }
+      getName(cb) { cb(undefined, this.name); },
+      success(inp, cb) { cb(undefined, `${inp}-success`); },
+      error(cb) { cb('error'); }
     };
 
     const ob1 = Object.create(mdl);
@@ -144,9 +138,7 @@ describe('promisify.all', () => {
   });
 
   it('Should promisify all except excluded functions', () => {
-    const asyncModule = promisify.all(mdl, {
-      exclude: ['error', 'getName']
-    });
+    const asyncModule = promisify.all(mdl, { exclude: ['error', 'getName'] });
     expect('successAsync' in asyncModule).to.equal(true);
     expect(asyncModule).to.not.include.all.keys(['errorAsync', 'getNameAsync']);
   });
@@ -164,7 +156,6 @@ describe('promisify.all', () => {
   });
 
   it('Should not promisify prototype chain', () => {
-    console.log(proto);
     promisify.all(proto);
     expect(proto).to.include.all.keys(['protoAsync']);
     expect(proto).to.not.include.all.keys(['getNameAsync', 'ob1Async']);
