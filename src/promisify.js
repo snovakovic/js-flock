@@ -44,8 +44,7 @@ module.exports = promisify;
 module.exports.all = (cbModule, options) => {
   assert(isPlainObject(cbModule), `promisify: expected [Object] but got ${getTag(cbModule)}`);
 
-  options = options || {};
-  let { suffix, exclude, include, proto } = options; // eslint-disable-line prefer-const
+  let { suffix, exclude, include, proto } = options || {}; // eslint-disable-line prefer-const
   suffix = typeof suffix === 'string' ? suffix : 'Async';
   exclude = Array.isArray(exclude) ? exclude : undefined;
   include = Array.isArray(include) ? include : undefined;
