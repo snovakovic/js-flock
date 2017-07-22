@@ -80,77 +80,52 @@ return /******/ (function(modules) { // webpackBootstrap
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var reservedWords = new Set(['keys', 'values', 'haveKey', 'exists']);
-
-var assert = function assert(condition, msg) {
-  if (!condition) {
-    throw new TypeError('toEnum: ' + msg);
-  }
-};
-
-var assertKeys = function assertKeys(keys) {
-  assert(keys.length, 'Empty enums are not allowed');
-  assert(keys.every(function (k) {
-    return !reservedWords.has(k.toLowerCase());
-  }), 'Reserved word have been used\n    as key. [keys, values, haveKey, exists] are not allowed as keys');
-};
-
-var assertValues = function assertValues(values) {
-  assert(new Set(values).size === values.length, 'Duplicate values detected');
-  assert(values.every(function (t) {
-    return typeof t === 'string' || typeof t === 'number' || (typeof t === 'undefined' ? 'undefined' : _typeof(t)) === 'symbol';
-  }), 'Only strings, numbers and symbols are allowed as enum values');
-};
-
-var assertType = function assertType(args) {
-  assert(args && (typeof args === 'undefined' ? 'undefined' : _typeof(args)) === 'object', 'Provided value need to be object or array');
+var castObject = function castObject(args) {
   if (Array.isArray(args)) {
-    assert(args.every(function (a) {
-      return typeof a === 'string';
-    }), 'Only strings are allowed in array notation');
+    var obj = {};
+    args.forEach(function (key) {
+      return obj[key] = Symbol(key);
+    });
+    return obj;
+  }
+
+  return (typeof args === 'undefined' ? 'undefined' : _typeof(args)) === 'object' ? Object.assign({}, args) : {};
+};
+
+var hardBindFunction = function hardBindFunction(obj, key) {
+  var prop = obj[key];
+  if (typeof prop === 'function') {
+    prop = prop.bind(obj);
   }
 };
 
-var fromArray = function fromArray(arr) {
-  var obj = {};
-  arr.forEach(function (key) {
-    return obj[key] = Symbol(key);
-  });
-  return obj;
-};
+// Public
 
-/**
- * Convert object or list of strings to enum representation
- *
- * @param {Object, Array} arg Object or array of string from which we will generate enum representation
- * @returns {Object} enum representation
- */
 module.exports = function (arg) {
-  assertType(arg);
-  var enu = Array.isArray(arg) ? fromArray(arg) : arg;
-
-  var keys = Object.freeze(Object.keys(enu).filter(function (key) {
+  var enu = castObject(arg);
+  var keys = Object.keys(enu).filter(function (key) {
     return typeof enu[key] !== 'function';
-  }));
-  assertKeys(keys);
-
-  var values = Object.freeze(keys.map(function (key) {
+  });
+  var values = keys.map(function (key) {
     return enu[key];
-  }));
-  assertValues(values);
+  });
 
-  // Lazy load
+  if (new Set(values).size !== values.length) {
+    throw new TypeError('toEnum: Duplicate values detected');
+  }
+
+  Object.freeze(keys);
+  Object.freeze(values);
+  Object.keys(enu).forEach(function (key) {
+    return hardBindFunction(enu, key);
+  });
+
+  // Lazy load state
+
   var state = {
     keySet: undefined,
     valueSet: undefined
   };
-
-  // Hard bind custom enum helpers
-  Object.keys(enu).filter(function (key) {
-    return typeof enu[key] === 'function';
-  }).forEach(function (key) {
-    return enu[key] = enu[key].bind(enu);
-  });
 
   // Append standard enum helpers
 

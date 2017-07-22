@@ -70,53 +70,23 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 5:
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var isApplied = {
-  freeze: Object.isFrozen,
-  seal: Object.isSealed,
-  preventExtensions: function preventExtensions(prop) {
-    return !Object.isExtensible(prop);
-  }
-};
-
 // Public
 
-module.exports = function deep(action, obj, options) {
-  options = options || {};
-  Object[action](obj);
-
-  for (var key in obj) {
-    var prop = obj[key];
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto === true || obj.hasOwnProperty(key))) {
-      deep(action, prop, options);
-    }
-  }
-
-  return obj;
-};
-
-/***/ }),
-/* 1 */,
-/* 2 */,
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var deep = __webpack_require__(0);
-
-// Public
-
-module.exports = function (obj, options) {
-  return deep('preventExtensions', obj, options);
+module.exports = function (testVar) {
+  return !!(testVar && (typeof testVar === 'undefined' ? 'undefined' : _typeof(testVar)) === 'object' && Object.prototype.toString.call(testVar) === '[object Object]');
 };
 
 /***/ })
-/******/ ]);
+
+/******/ });
 });

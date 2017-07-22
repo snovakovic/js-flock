@@ -10,11 +10,10 @@ describe('deep', () => {
   let proto;
 
   beforeEach(() => {
-    obj = {
-      first: {
-        second: {
-          third: { num: 11, fun() {} }
-        }
+    obj = {};
+    obj.first = {
+      second: {
+        third: { num: 11, fun() {} }
       }
     };
 
@@ -92,7 +91,7 @@ describe('deep', () => {
       expect(Object.isFrozen(ob.set.test)).to.equal(true);
     });
 
-    it('Should pass on readme examples', () => {
+    it('Should validate readme examples', () => {
       const person = {
         fullName: 'test person',
         dob: new Date(),
@@ -103,26 +102,22 @@ describe('deep', () => {
       };
 
       Object.freeze(person);
-
       expect(Object.isFrozen(person)).to.equal(true);
       expect(Object.isFrozen(person.address)).to.equal(false);
-
       deepFreeze(person);
-
       expect(Object.isFrozen(person)).to.equal(true);
       expect(Object.isFrozen(person.address)).to.equal(true);
 
 
       const ob1 = { test: { a: 'a' } };
       const ob2 = Object.create(ob1);
-
       deepFreeze(ob2);
       expect(Object.isFrozen(ob2.test)).to.equal(false);
-
       deepFreeze(ob2, { proto: true });
       expect(Object.isFrozen(ob2.test)).to.equal(true);
     });
   });
+
 
   describe('deepSeal', () => {
     it('Should deep seal nested objects', () => {
@@ -139,6 +134,7 @@ describe('deep', () => {
       expect(Object.isSealed(circ1.circ2.second)).to.equal(true);
     });
   });
+
 
   describe('deepPreventExtensions', () => {
     it('Should deep prevent extension', () => {
