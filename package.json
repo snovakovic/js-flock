@@ -1,6 +1,6 @@
 {
   "name": "js-flock",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "JS utility methods for NODE and Browser.",
   "main": "index.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
@@ -32,6 +32,7 @@
     "es6",
     "es2015",
     "promisify",
+    "promisifyAll",
     "promise",
     "enum",
     "toEnum",
