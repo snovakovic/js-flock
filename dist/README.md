@@ -246,21 +246,7 @@ The promisified method name will be the original method name suffixed with suffi
     exclude: [String], // [default: undefined] List of object keys that will be skipped
     include: [String], // [default: undefined] If provided promisify all will promisify only keys from this list,
   });
-
-  // Resolving cases with duplicate name consider this edge case
-  const test = promisify.all({
-    test: () => {},
-    testAsync: () => {}
-  });
-
-  // pormisify.all will never overwrite existing methods
-  test = {
-    test,
-    testAsyncPromisified, // Async suffix has been added to test but testAsync is already used in that case Promisifed will be appended
-    testAsync,
-    testAsyncAsync // In case function have suffix in the name suffix will be duplicated
-  }
-....
+```
 
 ### collar
 
