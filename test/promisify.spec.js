@@ -8,6 +8,12 @@ const shouldNotBeCalled = () => {
 
 
 describe('promisify', () => {
+  let fun;
+
+  beforeEach(() => {
+    fun = (cb) => cb(undefined);
+  });
+
   it('Should resolve promisified function', (done) => {
     const successFunAsync = promisify((cb) => cb(undefined, 'response'));
     successFunAsync().then((response) => {
@@ -38,10 +44,9 @@ describe('promisify', () => {
   });
 
   it('Should handle multiple params with multiArgs option', (done) => {
-    const fun = (cb) => cb(undefined, 'res1', 2, 'res3');
-    const funAsync = promisify(fun, {
-      multiArgs: true
-    });
+    const testFun = (cb) => cb(undefined, 'res1', 2, 'res3');
+    const funAsync = promisify(testFun, { multiArgs: true });
+
     funAsync().then(([r1, r2, r3]) => {
       expect(r1).to.equal('res1');
       expect(r2).to.equal(2);
@@ -60,18 +65,14 @@ describe('promisify', () => {
   });
 
   it('Should handle function with no params', (done) => {
-    const funAsync = promisify((cb) => cb(undefined));
-    funAsync().then((response) => {
+    promisify(fun)().then((response) => {
       expect(response).to.equal(undefined);
       done();
     }).catch(shouldNotBeCalled);
   });
 
   it('Should handle function with no params and multiArgs option', (done) => {
-    const fun = (cb) => cb(undefined);
-    const funAsync = promisify(fun, {
-      multiArgs: true
-    });
+    const funAsync = promisify(fun, { multiArgs: true });
     funAsync().then(([res1, res2]) => {
       expect(res1).to.equal(undefined);
       expect(res2).to.equal(undefined);
@@ -80,15 +81,39 @@ describe('promisify', () => {
   });
 
   it('Should handle function that throws error', (done) => {
-    const errorFunAsync = promisify(() => {
-      throw Error('Error have happened in function');
-    });
+    const errorFunAsync = promisify(() => { throw Error(); });
     errorFunAsync()
       .then(shouldNotBeCalled)
       .catch((err) => {
         expect(err).to.be.an('error');
         done();
       });
+  });
+
+  it('Should work with truthy values for multyArgs', (done) => {
+    const funAsync1 = promisify(fun, { multiArgs: 33 });
+    const funAsync2 = promisify(fun, { multiArgs: null });
+    Promise.all([
+      funAsync1()
+        .then((args) => { expect(args).to.be.an('array'); })
+        .catch(shouldNotBeCalled),
+      funAsync2()
+        .then((args) => { expect(args).to.not.be.an('array'); })
+        .catch(shouldNotBeCalled)
+    ]).then(() => done());
+  });
+
+  it('Should throw type error if function not provided', () => {
+    const error = 'promisify: expected [Function] but got';
+    expect(() => promisify(new Map())).to.throw(TypeError, `${error} [object Map]`);
+    expect(() => promisify(undefined)).to.throw(TypeError, `${error} [object Undefined]`);
+  });
+
+  it('Should not break on invalid options', () => {
+    expect(promisify(fun, undefined)()).to.be.a('promise');
+    expect(promisify(fun, [])()).to.be.a('promise');
+    expect(promisify(fun, null)()).to.be.a('promise');
+    expect(promisify(fun, 33)()).to.be.a('promise');
   });
 });
 
@@ -167,6 +192,11 @@ describe('promisify.all', () => {
     expect(proto).to.include.all.keys(asyncKeys);
   });
 
+  it('Should not override prototype', () => {
+    promisify.all(proto, { proto: 33 }); // Should behave truthi
+    expect(proto.hasOwnProperty('protoAsync')).to.equal(true);
+  });
+
   it('Should skip already promisified functions', () => {
     promisify.all(mdl);
     promisify.all(mdl);
@@ -187,5 +217,33 @@ describe('promisify.all', () => {
       expect(val).to.be.equal('testAsync');
       done();
     }));
+  });
+
+  it('Should use default suffix if invalid suffix is provided', () => {
+    promisify.all(mdl, { suffix: 33 });
+    expect('getNameAsync' in mdl).to.equal(true);
+  });
+
+  it('Should throw TypeError if plain object is not provided', () => {
+    const error = 'promisify: expected [Object] but got';
+    expect(() => promisify.all(33)).to.throw(TypeError, `${error} [object Number]`);
+    expect(() => promisify.all(null)).to.throw(TypeError, `${error} [object Null]`);
+    expect(() => promisify.all([])).to.throw(TypeError, `${error} [object Array]`);
+  });
+
+  it('Should not modify options object', () => {
+    const baseOpt = { suffix: 1, exclude: 2, include: 3, proto: 4, multiArgs: 5 };
+    const options = Object.assign({}, baseOpt);
+    promisify.all(mdl, Object.assign({}, options));
+    expect(options).to.be.eql(baseOpt);
+  });
+
+  it('should not break on invalid exclude/include', () => {
+    const p1 = promisify.all({ test: () => {} }, { exclude: 33 });
+    const p2 = promisify.all({ test: () => {} }, { exclude: [null, undefined, 33] });
+    const p3 = promisify.all({ test: () => {} }, { include: [null, undefined, 33] });
+    expect(p1).to.have.any.key('testAsync');
+    expect(p2).to.have.any.key('testAsync');
+    expect(p3).to.not.have.key('testAsync');
   });
 });
