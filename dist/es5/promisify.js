@@ -70,18 +70,24 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
-/******/ ({
+/******/ ([
+/* 0 */,
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 6:
-/***/ (function(module, exports) {
+var assert = __webpack_require__(6);
+var getTag = __webpack_require__(7);
+var isPlainObject = __webpack_require__(8);
 
-var promisified = function promisified(fn, args) {
+var promisified = function promisified(fn, args, options) {
   var _this = this;
-
-  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
   return new Promise(function (resolve, reject) {
     args.push(function (err) {
@@ -90,18 +96,14 @@ var promisified = function promisified(fn, args) {
       }
 
       if (err) return reject(err);
-      return options.multiArgs ? resolve(result) : resolve(result[0]);
+      return options && options.multiArgs ? resolve(result) : resolve(result[0]);
     });
 
     fn.apply(_this, args);
   });
 };
 
-var shouldPromisify = function shouldPromisify(key, cbModule, _ref) {
-  var exclude = _ref.exclude,
-      include = _ref.include,
-      proto = _ref.proto;
-
+var shouldPromisify = function shouldPromisify(key, cbModule, exclude, include, proto) {
   return typeof cbModule[key] === 'function' && cbModule[key].__promisified__ !== true && (proto === true || cbModule.hasOwnProperty(key)) && (!include || include.some(function (k) {
     return k === key;
   })) && (!exclude || exclude.every(function (k) {
@@ -109,17 +111,13 @@ var shouldPromisify = function shouldPromisify(key, cbModule, _ref) {
   }));
 };
 
-var getKey = function getKey(cbModule, key) {
-  var suffix = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'Async';
-
+var getKey = function getKey(cbModule, key, suffix) {
   var asyncKey = '' + key + suffix;
-  if (asyncKey in cbModule) {
-    return getKey(cbModule, asyncKey, 'Promisified');
-  }
-  return asyncKey;
+  return asyncKey in cbModule ? getKey(cbModule, asyncKey, 'Promisified') : asyncKey;
 };
 
 var promisify = function promisify(fn, options) {
+  assert(typeof fn === 'function', 'promisify: expected [Function] but got ' + getTag(fn));
   return function () {
     for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
@@ -133,12 +131,23 @@ var promisify = function promisify(fn, options) {
 
 module.exports = promisify;
 
-module.exports.all = function (cbModule) {
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+module.exports.all = function (cbModule, options) {
+  assert(isPlainObject(cbModule), 'promisify: expected [Object] but got ' + getTag(cbModule));
+
+  var _ref = options || {},
+      suffix = _ref.suffix,
+      exclude = _ref.exclude,
+      include = _ref.include,
+      proto = _ref.proto; // eslint-disable-line prefer-const
+
+
+  suffix = typeof suffix === 'string' ? suffix : 'Async';
+  exclude = Array.isArray(exclude) ? exclude : undefined;
+  include = Array.isArray(include) ? include : undefined;
 
   for (var key in cbModule) {
-    if (shouldPromisify(key, cbModule, options)) {
-      var asyncKey = getKey(cbModule, key, options.suffix);
+    if (shouldPromisify(key, cbModule, exclude, include, proto)) {
+      var asyncKey = getKey(cbModule, key, suffix);
       cbModule[asyncKey] = promisify(cbModule[key], options);
       cbModule[asyncKey].__promisified__ = true;
     }
@@ -147,7 +156,40 @@ module.exports.all = function (cbModule) {
   return cbModule;
 };
 
-/***/ })
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
 
-/******/ });
+// Public
+
+module.exports = function (boolExpr, message) {
+  if (!boolExpr) {
+    throw new TypeError(message);
+  }
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+// Public
+
+module.exports = function (input) {
+  return Object.prototype.toString.call(input);
+};
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+// Public
+
+module.exports = function (testVar) {
+    return !!(testVar && (typeof testVar === 'undefined' ? 'undefined' : _typeof(testVar)) === 'object' && Object.prototype.toString.call(testVar) === '[object Object]');
+};
+
+/***/ })
+/******/ ]);
 });

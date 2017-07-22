@@ -1,9 +1,11 @@
-- removed assertion from to enum
-- toEnum does not muteate input
-- promisify don't accept mutate and always mutate module
-- promisify.all does not mutate input options object
+## [2.0.0] - 2017-07-22
+### Changed
+- Removed assertions of all inputs from toEnum
+- toEnum does not mutate input anymore
+- Added option to deep (freeze, seal, preventExtensions) object prototype
+- promisify.all don't accept mutate anymore and always mutate module (breaking change)
+- promisify.all added option to promisify prototype chain
 - removed documentation from code
-- isPlainPbject
 
 ## [1.4.0] - 2017-07-19
 ### Added

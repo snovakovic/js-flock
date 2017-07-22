@@ -41,6 +41,7 @@ and can be loaded in browser as CommonJs, AMD or as global var.
 - [sort](#sort)
 - [singular](#singular)
 - [promisify](#promisify)
+- [promisify.all](#promisify.all)
 - [collar](#collar)
 - [deepFreeze](#deepfreeze)
 - [deepSeal](#deepseal)
@@ -181,13 +182,14 @@ Undefined and null values are always sorted to bottom of list no matter if order
 
 ### promisify
 
-Promisify error first callback function
+Promisify error first callback function. Instead of taking a callback, the returned function
+will return a promise whose fate is decided by the callback behavior of the given node function.
+Promisify returns native Promise (requires Promise polyfill on older browser)
 
 ```javascript
   const promisify = require('js-flock/promisify');
   const readFile = require("fs").readFile;
-
-  const readFileAsync = promisify(readFile); // Promise version of read file
+  const readFileAsync = promisify(readFile);
 
   // Native version of read file
   readFile('test.txt', 'utf8', (err, data) => {
@@ -202,18 +204,63 @@ Promisify error first callback function
     .then((data) => console.log(data))
     .catch((err) => console.log(err));
 ```
-Promise resolve can return single parameter only.
-In order to resolve callbacks that are called with multiple parameters we can pass { multiArgs: true } option to promisify. When multiArgs are provided promise is always resolved with array even if callback is called with no arguments.
+
+If callback function is called with multiple success values, the fulfillment value will be the
+first fulfillment item.
+
+Setting multiArgs options to true means the resulting promise will always fulfill with
+an array of the callback's success value(s). This is needed because promises only support a
+single success value while some callback API's have multiple success value.
 
 ```javascript
   const fun = (cb) => cb(undefined, 'res1', 'res2');
   const funAsync = promisify(fun, { multiArgs: true });
 
-  funAsync().then(([r1, r2]) => {
-    // r1 - res1
-    // r2 - res2
-  });
+  funAsync().then(([r1, r2]) => { /* r1 === res1, r2 === res2 */ });
 ```
+
+### promisify.all
+
+Promisifies the entire object by going through the object's properties and creating
+an async equivalent of each function on the object.
+Promisify.all mutates input object by adding promisified versions to object.
+It will never overwrite existing properties of object.
+
+By default promisify.all does not loop over object prototype which can be change by providing
+{ proto: true } option.
+
+The promisified method name will be the original method name suffixed with suffix (default = 'Async').
+
+```javascript
+  const promisify = require('js-flock/promisify');
+  const fs = promisify.all(require("fs"));
+
+  fs.readFileAsync('test.txt', 'utf8') // Function appended by promisify.all
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err));
+
+  const withOptions = promisify.all(test, {
+    suffix: String, // [default: 'Async'] Suffix will be appended to original method name
+    multyArgs: Boolean, // [default: false] Promise will resolve with array of values if set to true. (check promisify for more details),
+    proto: Boolean, // [default: false] Promisify object prototype chain if set to true.
+    exclude: [String], // [default: undefined] List of object keys that will be skipped
+    include: [String], // [default: undefined] If provided promisify all will promisify only keys from this list,
+  });
+
+  // Resolving cases with duplicate name consider this edge case
+  const test = promisify.all({
+    test: () => {},
+    testAsync: () => {}
+  });
+
+  // pormisify.all will never overwrite existing methods
+  test = {
+    test,
+    testAsyncPromisified, // Async suffix has been added to test but testAsync is already used in that case Promisifed will be appended
+    testAsync,
+    testAsyncAsync // In case function have suffix in the name suffix will be duplicated
+  }
+....
 
 ### collar
 
