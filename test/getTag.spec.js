@@ -1,14 +1,8 @@
 const expect = require('chai').expect;
 const getTag = require('../src/internals/getTag');
 
-// const dataViewTag = '[object DataView]'
-// const mapTag = '[object Map]'
-// const objectTag = '[object Object]'
-// const promiseTag = '[object Promise]'
-// const setTag = '[object Set]'
-// const weakMapTag = '[object WeakMap]'
 
-describe.only('getTag', () => {
+describe('getTag', () => {
   it('Should return correct tag', () => {
     expect(getTag({})).to.equal('[object Object]');
     expect(getTag([])).to.equal('[object Array]');
