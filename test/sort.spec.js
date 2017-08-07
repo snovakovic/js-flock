@@ -73,4 +73,40 @@ describe('sort', () => {
     expect(persons[1].name).to.equal('In the middle');
     expect(persons[2].name).to.equal('last');
   });
+
+  it('Should sort on multiple properties', () => {
+    const testArr = [{
+      name: 'aa',
+      lastName: 'aa',
+      age: 10
+    }, {
+      name: 'aa',
+      lastName: 'cc',
+      age: 9
+    }, {
+      name: 'aa',
+      lastName: 'cc',
+      age: 8
+    }, {
+      name: 'aa',
+      lastName: 'bb',
+      age: 7
+    }, {
+      name: 'bb',
+      lastName: 'aa',
+      age: 6
+    }];
+
+    sort(testArr).asc([
+      (p) => p.name,
+      (p) => p.lastName,
+      (p) => p.age
+    ]);
+
+    expect(testArr[0].age).to.equal(10);
+    expect(testArr[1].age).to.equal(7);
+    expect(testArr[2].age).to.equal(8);
+    expect(testArr[3].age).to.equal(9);
+    expect(testArr[4].age).to.equal(6);
+  });
 });
