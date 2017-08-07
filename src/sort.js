@@ -1,19 +1,19 @@
-const sorter = function(direction, sortBy, subSort, a, b) {
+const sorter = function(direction, sortBy, subsequentSort, a, b) {
   const valA = sortBy(a);
   const valB = sortBy(b);
 
   if (valA === valB) {
-    if (subSort && subSort.length) {
-      const cloneSubSort = subSort.slice();
-      return sorter(direction, cloneSubSort.shift(), cloneSubSort, a, b);
+    if (subsequentSort && subsequentSort.length) {
+      const subsequent = subsequentSort.slice();
+      return sorter(direction, subsequent.shift(), subsequent, a, b);
     }
     return 0;
   }
 
   if (valA == null) return 1;
   if (valB == null) return -1;
-
   if (valA < valB) return direction;
+
   return -direction;
 };
 
