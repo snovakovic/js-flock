@@ -107,6 +107,16 @@ module.exports = function deep(action, obj, options) {
 /* 1 */
 /***/ (function(module, exports) {
 
+// Public
+
+module.exports = function (input) {
+  return Object.prototype.toString.call(input);
+};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
 var REJECTION_REASON = Object.freeze({
   isStrangled: true,
   message: 'Promise have timed out'
@@ -125,7 +135,7 @@ module.exports = function (promise) {
 };
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
@@ -137,7 +147,7 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
@@ -149,7 +159,7 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
@@ -161,11 +171,11 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assert = __webpack_require__(6);
-var getTag = __webpack_require__(7);
+var assert = __webpack_require__(7);
+var getTag = __webpack_require__(1);
 var isPlainObject = __webpack_require__(8);
 
 var promisified = function promisified(fn, args, options) {
@@ -239,7 +249,7 @@ module.exports.all = function (cbModule, options) {
 };
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 // Public
@@ -248,16 +258,6 @@ module.exports = function (boolExpr, message) {
   if (!boolExpr) {
     throw new TypeError(message);
   }
-};
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-// Public
-
-module.exports = function (input) {
-  return Object.prototype.toString.call(input);
 };
 
 /***/ }),
@@ -300,16 +300,26 @@ module.exports = function (fn) {
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-var sorter = function sorter(direction, sortBy, a, b) {
-  a = sortBy(a);
-  b = sortBy(b);
+var getTag = __webpack_require__(1);
 
-  if (a == null) return 1;
-  if (b == null) return -1;
-  if (a === b) return 0;
-  if (a < b) return direction;
+var sorter = function sorter(direction, sortBy, subsequentSort, a, b) {
+  var valA = sortBy(a);
+  var valB = sortBy(b);
+
+  if (valA === valB) {
+    if (subsequentSort.length) {
+      var subsequent = subsequentSort.slice();
+      return sorter(direction, subsequent.shift(), subsequent, a, b);
+    }
+    return 0;
+  }
+
+  if (valA == null) return 1;
+  if (valB == null) return -1;
+  if (valA < valB) return direction;
+
   return -direction;
 };
 
@@ -320,12 +330,22 @@ var emptySortBy = function emptySortBy(a) {
   return a;
 };
 
-var sort = function sort(ctx) {
-  var sortBy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : emptySortBy;
-  var _sorter = arguments[2];
+var assertSortBy = function assertSortBy(sortBy) {
+  var invalidSortBy = sortBy.filter(function (s) {
+    return typeof s !== 'function';
+  });
+  if (invalidSortBy.length) {
+    throw new TypeError('sort: expected [Function] but got ' + getTag(invalidSortBy[0]));
+  }
+};
+
+var sort = function sort(ctx, _sorter) {
+  var sortBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : emptySortBy;
 
   if (Array.isArray(ctx)) {
-    return ctx.sort(_sorter.bind(null, sortBy));
+    sortBy = Array.isArray(sortBy) ? sortBy : [sortBy];
+    assertSortBy(sortBy);
+    return ctx.sort(_sorter.bind(null, sortBy.shift(), sortBy));
   }
   return ctx;
 };
@@ -335,10 +355,10 @@ var sort = function sort(ctx) {
 module.exports = function (ctx) {
   return {
     asc: function asc(sortBy) {
-      return sort(ctx, sortBy, ascSorter);
+      return sort(ctx, ascSorter, sortBy);
     },
     desc: function desc(sortBy) {
-      return sort(ctx, sortBy, descSorter);
+      return sort(ctx, descSorter, sortBy);
     }
   };
 };
@@ -422,11 +442,11 @@ module.exports = function (arg) {
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports.collar = __webpack_require__(1);
-exports.deepFreeze = __webpack_require__(2);
-exports.deepPreventExtensions = __webpack_require__(3);
-exports.deepSeal = __webpack_require__(4);
-exports.promisify = __webpack_require__(5);
+exports.collar = __webpack_require__(2);
+exports.deepFreeze = __webpack_require__(3);
+exports.deepPreventExtensions = __webpack_require__(4);
+exports.deepSeal = __webpack_require__(5);
+exports.promisify = __webpack_require__(6);
 exports.singular = __webpack_require__(9);
 exports.sort = __webpack_require__(10);
 exports.toEnum = __webpack_require__(11);

@@ -1,3 +1,7 @@
+## [2.1.0] - 2017-08-07
+### Added
+- Option to sort by multiple properties
+
 ## [2.0.0] - 2017-07-22
 ### Changed
 - Removed assertions of all inputs from toEnum

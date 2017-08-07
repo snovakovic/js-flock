@@ -70,20 +70,30 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */,
-/* 1 */,
+/* 1 */
+/***/ (function(module, exports) {
+
+// Public
+
+module.exports = function (input) {
+  return Object.prototype.toString.call(input);
+};
+
+/***/ }),
 /* 2 */,
 /* 3 */,
 /* 4 */,
-/* 5 */
+/* 5 */,
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assert = __webpack_require__(6);
-var getTag = __webpack_require__(7);
+var assert = __webpack_require__(7);
+var getTag = __webpack_require__(1);
 var isPlainObject = __webpack_require__(8);
 
 var promisified = function promisified(fn, args, options) {
@@ -157,7 +167,7 @@ module.exports.all = function (cbModule, options) {
 };
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 // Public
@@ -166,16 +176,6 @@ module.exports = function (boolExpr, message) {
   if (!boolExpr) {
     throw new TypeError(message);
   }
-};
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-// Public
-
-module.exports = function (input) {
-  return Object.prototype.toString.call(input);
 };
 
 /***/ }),

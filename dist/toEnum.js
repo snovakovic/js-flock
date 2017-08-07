@@ -15,7 +15,6 @@ const hardBindFunction = function(obj, key) {
   }
 };
 
-
 // Public
 
 module.exports = function(arg) {

@@ -75,17 +75,38 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
-/***/ 10:
+/***/ 1:
 /***/ (function(module, exports) {
 
-var sorter = function sorter(direction, sortBy, a, b) {
-  a = sortBy(a);
-  b = sortBy(b);
+// Public
 
-  if (a == null) return 1;
-  if (b == null) return -1;
-  if (a === b) return 0;
-  if (a < b) return direction;
+module.exports = function (input) {
+  return Object.prototype.toString.call(input);
+};
+
+/***/ }),
+
+/***/ 10:
+/***/ (function(module, exports, __webpack_require__) {
+
+var getTag = __webpack_require__(1);
+
+var sorter = function sorter(direction, sortBy, subsequentSort, a, b) {
+  var valA = sortBy(a);
+  var valB = sortBy(b);
+
+  if (valA === valB) {
+    if (subsequentSort.length) {
+      var subsequent = subsequentSort.slice();
+      return sorter(direction, subsequent.shift(), subsequent, a, b);
+    }
+    return 0;
+  }
+
+  if (valA == null) return 1;
+  if (valB == null) return -1;
+  if (valA < valB) return direction;
+
   return -direction;
 };
 
@@ -96,12 +117,22 @@ var emptySortBy = function emptySortBy(a) {
   return a;
 };
 
-var sort = function sort(ctx) {
-  var sortBy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : emptySortBy;
-  var _sorter = arguments[2];
+var assertSortBy = function assertSortBy(sortBy) {
+  var invalidSortBy = sortBy.filter(function (s) {
+    return typeof s !== 'function';
+  });
+  if (invalidSortBy.length) {
+    throw new TypeError('sort: expected [Function] but got ' + getTag(invalidSortBy[0]));
+  }
+};
+
+var sort = function sort(ctx, _sorter) {
+  var sortBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : emptySortBy;
 
   if (Array.isArray(ctx)) {
-    return ctx.sort(_sorter.bind(null, sortBy));
+    sortBy = Array.isArray(sortBy) ? sortBy : [sortBy];
+    assertSortBy(sortBy);
+    return ctx.sort(_sorter.bind(null, sortBy.shift(), sortBy));
   }
   return ctx;
 };
@@ -111,10 +142,10 @@ var sort = function sort(ctx) {
 module.exports = function (ctx) {
   return {
     asc: function asc(sortBy) {
-      return sort(ctx, sortBy, ascSorter);
+      return sort(ctx, ascSorter, sortBy);
     },
     desc: function desc(sortBy) {
-      return sort(ctx, sortBy, descSorter);
+      return sort(ctx, descSorter, sortBy);
     }
   };
 };
