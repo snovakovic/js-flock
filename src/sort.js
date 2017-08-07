@@ -2,16 +2,16 @@ const sorter = function(direction, sortBy, subSort, a, b) {
   const valA = sortBy(a);
   const valB = sortBy(b);
 
-  if (valA == null) return 1;
-  if (valB == null) return -1;
   if (valA === valB) {
-    // Sort by additional properties if provided
     if (subSort && subSort.length) {
       const cloneSubSort = subSort.slice();
       return sorter(direction, cloneSubSort.shift(), cloneSubSort, a, b);
     }
     return 0;
   }
+
+  if (valA == null) return 1;
+  if (valB == null) return -1;
 
   if (valA < valB) return direction;
   return -direction;

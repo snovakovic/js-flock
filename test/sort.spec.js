@@ -81,16 +81,16 @@ describe('sort', () => {
       age: 10
     }, {
       name: 'aa',
-      lastName: 'cc',
-      age: 9
-    }, {
-      name: 'aa',
-      lastName: 'cc',
+      lastName: undefined,
       age: 8
     }, {
       name: 'aa',
+      lastName: undefined,
+      age: 9
+    }, {
+      name: 'aa',
       lastName: 'bb',
-      age: 7
+      age: 11
     }, {
       name: 'bb',
       lastName: 'aa',
@@ -104,7 +104,7 @@ describe('sort', () => {
     ]);
 
     expect(testArr[0].age).to.equal(10);
-    expect(testArr[1].age).to.equal(7);
+    expect(testArr[1].age).to.equal(11);
     expect(testArr[2].age).to.equal(8);
     expect(testArr[3].age).to.equal(9);
     expect(testArr[4].age).to.equal(6);
