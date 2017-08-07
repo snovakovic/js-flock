@@ -73,4 +73,49 @@ describe('sort', () => {
     expect(persons[1].name).to.equal('In the middle');
     expect(persons[2].name).to.equal('last');
   });
+
+  it('Should throw error for invalid sorters', () => {
+    const error = 'sort: expected [Function] but got';
+    expect(() => sort(persons).asc('name')).to.throw(TypeError, `${error} [object String]`);
+    expect(() => sort(persons).asc(null)).to.throw(TypeError, `${error} [object Null]`);
+    expect(() => sort(persons).asc([33])).to.throw(TypeError, `${error} [object Number]`);
+    expect(() => sort(persons).asc([(p) => p.name(), undefined]))
+      .to.throw(TypeError, `${error} [object Undefined]`);
+  });
+
+  it('Should sort on multiple properties', () => {
+    const testArr = [{
+      name: 'aa',
+      lastName: 'aa',
+      age: 10
+    }, {
+      name: 'aa',
+      lastName: undefined,
+      age: 8
+    }, {
+      name: 'aa',
+      lastName: undefined,
+      age: 9
+    }, {
+      name: 'aa',
+      lastName: 'bb',
+      age: 11
+    }, {
+      name: 'bb',
+      lastName: 'aa',
+      age: 6
+    }];
+
+    sort(testArr).asc([
+      (p) => p.name,
+      (p) => p.lastName,
+      (p) => p.age
+    ]);
+
+    expect(testArr[0].age).to.equal(10);
+    expect(testArr[1].age).to.equal(11);
+    expect(testArr[2].age).to.equal(8);
+    expect(testArr[3].age).to.equal(9);
+    expect(testArr[4].age).to.equal(6);
+  });
 });

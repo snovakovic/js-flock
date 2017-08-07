@@ -3,7 +3,6 @@ const REJECTION_REASON = Object.freeze({
   message: 'Promise have timed out'
 });
 
-
 // Public
 
 module.exports = function(promise, ttl = 5000) {
