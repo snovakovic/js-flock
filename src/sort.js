@@ -25,14 +25,17 @@ const descSorter = sorter.bind(null, 1);
 
 const emptySortBy = (a) => a;
 
-const sort = function(ctx, sortBy = emptySortBy, _sorter) {
+const assertSortBy = function(sortBy) {
+  const invalidSortBy = sortBy.filter((s) => typeof s !== 'function');
+  if (invalidSortBy.length) {
+    throw new TypeError(`sort: expected [Function] but got ${getTag(invalidSortBy[0])}`);
+  }
+};
+
+const sort = function(ctx, _sorter, sortBy = emptySortBy) {
   if (Array.isArray(ctx)) {
     sortBy = Array.isArray(sortBy) ? sortBy : [sortBy];
-    const invalidSorter = sortBy.filter((s) => typeof s !== 'function');
-    if (invalidSorter.length) {
-      throw new TypeError(`sort: expected [Function] but got ${getTag(invalidSorter[0])}`);
-    }
-
+    assertSortBy(sortBy);
     return ctx.sort(_sorter.bind(null, sortBy.shift(), sortBy));
   }
   return ctx;
@@ -43,10 +46,10 @@ const sort = function(ctx, sortBy = emptySortBy, _sorter) {
 module.exports = function(ctx) {
   return {
     asc(sortBy) {
-      return sort(ctx, sortBy, ascSorter);
+      return sort(ctx, ascSorter, sortBy);
     },
     desc(sortBy) {
-      return sort(ctx, sortBy, descSorter);
+      return sort(ctx, descSorter, sortBy);
     }
   };
 };
