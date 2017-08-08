@@ -1,6 +1,6 @@
 {
   "name": "js-flock",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "JS utility methods for NODE and Browser.",
   "main": "index.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
