@@ -21,7 +21,7 @@ describe('singular', () => {
       test();
       expect(noCalls).to.equal(2);
       done();
-    }, 1);
+    }, 5);
   });
 
   it('Should resolve function with arguments', (done) => {
@@ -42,7 +42,7 @@ describe('singular', () => {
       test(12);
       expect(total).to.equal(15);
       done();
-    }, 1);
+    }, 5);
   });
 
   it('Should preserve this', () => {
