@@ -318,13 +318,13 @@ var sorter = function sorter(direction, sortBy, subsequentSort, a, b) {
 
   if (valA == null) return 1;
   if (valB == null) return -1;
-  if (valA < valB) return direction;
+  if (valA < valB) return -direction;
 
-  return -direction;
+  return direction;
 };
 
-var ascSorter = sorter.bind(null, -1);
-var descSorter = sorter.bind(null, 1);
+var ascSorter = sorter.bind(null, 1);
+var descSorter = sorter.bind(null, -1);
 
 var emptySortBy = function emptySortBy(a) {
   return a;

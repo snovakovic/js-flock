@@ -15,13 +15,13 @@ const sorter = function(direction, sortBy, subsequentSort, a, b) {
 
   if (valA == null) return 1;
   if (valB == null) return -1;
-  if (valA < valB) return direction;
+  if (valA < valB) return -direction;
 
-  return -direction;
+  return direction;
 };
 
-const ascSorter = sorter.bind(null, -1);
-const descSorter = sorter.bind(null, 1);
+const ascSorter = sorter.bind(null, 1);
+const descSorter = sorter.bind(null, -1);
 
 const emptySortBy = (a) => a;
 
