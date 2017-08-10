@@ -19,7 +19,7 @@
     "build": "rm -rf ./dist && webpack --config ./webpack.config.js",
     "publish": "node publish",
     "test:integration": "node test/integration/index.js",
-    "test": "istanbul cover --include-all-sources --config ./config/test/istanbul.yml _mocha -- --opts ./config/test/mocha.opts",
+    "test": "istanbul cover --include-all-sources --config ./test/config/istanbul.yml _mocha -- --opts ./test/config/mocha.opts",
     "codacy:coverage": "npm test && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
   },
   "repository": {
