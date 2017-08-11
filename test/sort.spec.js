@@ -67,7 +67,7 @@ describe('sort', () => {
     expect(sort({ name: 'test' }).desc()).to.eql({ name: 'test' });
   });
 
-  it('Should sort dates correctly', () => {
+  it.only('Should sort dates correctly', () => {
     sort(persons).asc((p) => p.dob);
     expect(persons[0].name).to.equal('FIRST');
     expect(persons[1].name).to.equal('In the middle');
