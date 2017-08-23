@@ -12,6 +12,7 @@ const flatArray = require('./implementations/flatArray.js');
 
 const libraries = [
   'jsFlock',
+  'latestFlock',
   'native',
   'lodash',
   'underscore',
@@ -50,6 +51,9 @@ function getRowValue(name, run) {
 
 function addRow(libName, result, table) {
   const value = getRowValue.bind(null, `${libName}Results`);
+  if (libName === 'jsFlock') libName = Chalk.blue(libName);
+  if (libName === 'latestFlock') libName = Chalk.green(libName);
+
   table.push([
     libName === 'jsFlock' ? Chalk.blue(libName) : libName,
     ...result.map((r) => value(r))

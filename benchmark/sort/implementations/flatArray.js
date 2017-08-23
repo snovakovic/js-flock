@@ -1,5 +1,6 @@
 
 const jsFlock = require('js-flock');
+const latestFlockSort = require('../../../src/sort.js');
 const sortArr = require('sort-arr');
 const arraySort = require('array-sort');
 const lodash = require('lodash');
@@ -11,6 +12,7 @@ const runner = require('./../runner');
 // Define implementations
 
 const flockImplementation = (arr) => jsFlock.sort(arr).asc();
+const latestFlockImplementation = (arr) => latestFlockSort(arr).asc();
 const lodashImplementation = (arr) => lodash.sortBy(arr);
 const underscoreImplementation = (arr) => underscore.sortBy(arr);
 const sortArrImplementation = (arr) => sortArr(arr);
@@ -38,6 +40,7 @@ module.exports.run = function({ size, noRuns, randomizer = Math.random }) {
   const run = runner.bind(undefined, testArr, controlArr, noRuns);
 
   const jsFlockResults = run(flockImplementation);
+  const latestFlockResults = run(latestFlockImplementation);
   const lodashResults = run(lodashImplementation);
   const underscoreResults = run(underscoreImplementation);
   const nativeResults = run(nativeImplementation);
@@ -47,6 +50,7 @@ module.exports.run = function({ size, noRuns, randomizer = Math.random }) {
 
   return {
     jsFlockResults,
+    latestFlockResults,
     lodashResults,
     underscoreResults,
     nativeResults,
