@@ -40,7 +40,7 @@ function getRowValue(name, run) {
     return Chalk.red('NOT SUPPORTED');
   }
 
-  const flock = run.flockResults.average;
+  const flock = run.flock.average;
   const lib = run[name].average;
   let comparison = '';
   if (flock !== lib) {
@@ -55,7 +55,7 @@ function getRowValue(name, run) {
 }
 
 function addRow(libName, result, table) {
-  const value = getRowValue.bind(null, `${libName}Results`);
+  const value = getRowValue.bind(null, libName);
 
   if (libName === 'flock') libName = Chalk.blue(libName);
   table.push([libName, ...result.map((r) => value(r))]);
