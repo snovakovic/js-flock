@@ -89,17 +89,17 @@ console.log(`
 `);
 
 
-console.info('\n Benchmark 1: Flat object high randomize values \n');
+console.info('\n Benchmark 1: Flat object high randomization \n');
 run(flatObject);
 
-console.info('\n Benchmark 2: Flat object low randomize values \n');
+console.info('\n Benchmark 2: Flat object low randomization \n');
 run(flatObject, () => getRandomInt(1, 5));
 
-console.log('\n Benchmark 3: Flat array high randomize values');
+console.log('\n Benchmark 3: Flat array high randomization');
 run(flatArray);
 
-console.log('\n Benchmark 4: Deep nested object properties high randomize values \n');
+console.log('\n Benchmark 4: Deep nested properties high randomization \n');
 run(deepObject);
 
-console.log('\n Benchmark 5: Multi property sort high randomize values \n');
+console.log('\n Benchmark 5: Multi property sort low randomization \n');
 run(multiProperty);
