@@ -85,7 +85,7 @@ console.info('\n --------------- SORT BENCHMARK ---------------');
 console.log(`
   * Measurements are in milliseconds. Smaller is better(faster).
   * Native is native Array.prototype.sort used as a guideline.
-  * Numbers in brackets are comparison to js-flock sort \n
+  * Numbers in brackets are comparison to js-flock (red indicate library is slower then flock) \n
 `);
 
 
