@@ -75,12 +75,9 @@ describe('sort', () => {
   });
 
   it('Should throw error for invalid sorters', () => {
-    const error = 'sort: expected [Function] but got';
-    expect(() => sort(persons).asc('name')).to.throw(TypeError, `${error} [object String]`);
-    expect(() => sort(persons).asc(null)).to.throw(TypeError, `${error} [object Null]`);
-    expect(() => sort(persons).asc([33])).to.throw(TypeError, `${error} [object Number]`);
-    expect(() => sort(persons).asc([(p) => p.name(), undefined]))
-      .to.throw(TypeError, `${error} [object Undefined]`);
+    const error = 'sortBy is not a function';
+    expect(() => sort(persons).asc('name')).to.throw(Error, error);
+    expect(() => sort(persons).asc([33])).to.throw(Error, error);
   });
 
   it('Should sort on multiple properties', () => {

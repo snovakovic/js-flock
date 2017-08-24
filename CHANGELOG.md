@@ -1,3 +1,6 @@
+### DEPRECATED
+From version 1.2.3 changelog can be tracked through github releases/tags
+
 ## [2.1.0] - 2017-08-07
 ### Added
 - Sort by multiple properties
