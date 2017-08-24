@@ -3,7 +3,7 @@ const latestFlockSort = require('../../../src/sort.js');
 const sortArray = require('sort-array');
 const arraySort = require('array-sort');
 const lodash = require('lodash');
-const underscore = require('underscore');
+
 
 const runner = require('./../runner');
 
@@ -13,7 +13,6 @@ const runner = require('./../runner');
 const flockImplementation = (arr) => jsFlock.sort(arr).asc((p) => p.level1.level2.amount);
 const latestFlockImplementation = (arr) => latestFlockSort(arr).asc((p) => p.level1.level2.amount);
 const lodashImplementation = (arr) => lodash.sortBy(arr, [(p) => p.level1.level2.amount]);
-const underscoreImplementation = (arr) => underscore.sortBy(arr, (p) => p.level1.level2.amount);
 const sortArrayImplementation = (arr) => sortArray(arr, 'level1.level2.amount');
 const arraySortImplementation = (arr) => arraySort(arr, 'level1.level2.amount');
 const nativeImplementation = (arr) =>
@@ -52,7 +51,6 @@ module.exports.run = function({
   const jsFlockResults = run(flockImplementation);
   const latestFlockResults = run(latestFlockImplementation);
   const lodashResults = run(lodashImplementation);
-  const underscoreResults = run(underscoreImplementation);
   const nativeResults = run(nativeImplementation);
   const sortArrayResults = run(sortArrayImplementation);
   const arraySortResults = run(arraySortImplementation);
@@ -64,7 +62,6 @@ module.exports.run = function({
     jsFlockResults,
     latestFlockResults,
     lodashResults,
-    underscoreResults,
     nativeResults,
     sortArrResults,
     sortArrayResults,

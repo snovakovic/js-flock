@@ -15,9 +15,7 @@ const libraries = [
   'latestFlock',
   'native',
   'lodash',
-  'underscore',
   'arraySort',
-  'sortArr',
   'sortArray'
 ];
 

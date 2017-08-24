@@ -9,9 +9,7 @@
     "cli-table2": "^0.2.0",
     "js-flock": "^2.1.2",
     "lodash": "^4.17.4",
-    "sort-arr": "0.0.2",
-    "sort-array": "^2.0.0",
-    "underscore": "^1.8.3"
+    "sort-array": "^2.0.0"
   },
   "devDependencies": {},
   "scripts": {
