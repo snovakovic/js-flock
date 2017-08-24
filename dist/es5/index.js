@@ -107,16 +107,6 @@ module.exports = function deep(action, obj, options) {
 /* 1 */
 /***/ (function(module, exports) {
 
-// Public
-
-module.exports = function (input) {
-  return Object.prototype.toString.call(input);
-};
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
 var REJECTION_REASON = Object.freeze({
   isStrangled: true,
   message: 'Promise have timed out'
@@ -135,7 +125,7 @@ module.exports = function (promise) {
 };
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
@@ -147,7 +137,7 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
@@ -159,7 +149,7 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
@@ -171,11 +161,11 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assert = __webpack_require__(7);
-var getTag = __webpack_require__(1);
+var assert = __webpack_require__(6);
+var getTag = __webpack_require__(7);
 var isPlainObject = __webpack_require__(8);
 
 var promisified = function promisified(fn, args, options) {
@@ -249,7 +239,7 @@ module.exports.all = function (cbModule, options) {
 };
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports) {
 
 // Public
@@ -258,6 +248,16 @@ module.exports = function (boolExpr, message) {
   if (!boolExpr) {
     throw new TypeError(message);
   }
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+// Public
+
+module.exports = function (input) {
+  return Object.prototype.toString.call(input);
 };
 
 /***/ }),
@@ -300,18 +300,19 @@ module.exports = function (fn) {
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var getTag = __webpack_require__(1);
+var sorter = function sorter(direction, sortBy, thenBy) {
+  var depth = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+  var a = arguments[4];
+  var b = arguments[5];
 
-var sorter = function sorter(direction, sortBy, subsequentSort, a, b) {
   var valA = sortBy(a);
   var valB = sortBy(b);
 
   if (valA === valB) {
-    if (subsequentSort.length) {
-      var subsequent = subsequentSort.slice();
-      return sorter(direction, subsequent.shift(), subsequent, a, b);
+    if (thenBy && thenBy.length > depth) {
+      return sorter(direction, thenBy[depth], thenBy, depth + 1, a, b);
     }
     return 0;
   }
@@ -330,23 +331,13 @@ var emptySortBy = function emptySortBy(a) {
   return a;
 };
 
-var assertSortBy = function assertSortBy(sortBy) {
-  var invalidSortBy = sortBy.filter(function (s) {
-    return typeof s !== 'function';
-  });
-  if (invalidSortBy.length) {
-    throw new TypeError('sort: expected [Function] but got ' + getTag(invalidSortBy[0]));
-  }
-};
-
 var sort = function sort(ctx, _sorter) {
   var sortBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : emptySortBy;
 
   if (Array.isArray(ctx)) {
-    sortBy = Array.isArray(sortBy) ? sortBy : [sortBy];
-    assertSortBy(sortBy);
-    return ctx.sort(_sorter.bind(null, sortBy.shift(), sortBy));
+    return Array.isArray(sortBy) ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0)) : ctx.sort(_sorter.bind(undefined, sortBy, undefined, 0));
   }
+
   return ctx;
 };
 
@@ -442,11 +433,11 @@ module.exports = function (arg) {
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports.collar = __webpack_require__(2);
-exports.deepFreeze = __webpack_require__(3);
-exports.deepPreventExtensions = __webpack_require__(4);
-exports.deepSeal = __webpack_require__(5);
-exports.promisify = __webpack_require__(6);
+exports.collar = __webpack_require__(1);
+exports.deepFreeze = __webpack_require__(2);
+exports.deepPreventExtensions = __webpack_require__(3);
+exports.deepSeal = __webpack_require__(4);
+exports.promisify = __webpack_require__(5);
 exports.singular = __webpack_require__(9);
 exports.sort = __webpack_require__(10);
 exports.toEnum = __webpack_require__(11);
