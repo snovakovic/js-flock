@@ -26,7 +26,7 @@ const implementations = {
 
 // Measure times
 
-module.exports.run = function({ size, noRuns, randomizer = Math.random }) {
+module.exports.run = function({ size, noRuns, flockOnly, randomizer = Math.random }) {
   const testArr = [];
   for (let i = 0; i < size; i++) {
     testArr.push({
@@ -38,5 +38,5 @@ module.exports.run = function({ size, noRuns, randomizer = Math.random }) {
   }
 
   const controlArr = implementations.flock(testArr.slice(0));
-  return base.run(implementations, testArr, controlArr, noRuns);
+  return base.run(implementations, testArr, controlArr, noRuns, flockOnly);
 };

@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 const Chalk = require('chalk');
+const minimist = require('minimist');
 const Table = require('cli-table2');
 const log = require('single-line-log').stdout;
 
@@ -11,13 +12,23 @@ const multiProperty = require('./implementations/multiProperty.js');
 const flatArray = require('./implementations/flatArray.js');
 
 
-const libraries = ['flock', 'latestFlock', 'native', 'lodash', 'arraySort', 'sortArray'];
+const argv = minimist((process.argv.slice(2)));
+const flockOnly = Boolean(argv.flock);
+
+const libraries = ['flock'];
+
+if (flockOnly) {
+  libraries.push('latestFlock');
+} else {
+  libraries.push('lodash', 'arraySort', 'sortArray', 'native');
+}
+
 
 const runConfiguration = [
-  { size: 100, noRuns: 100 },
-  { size: 1000, noRuns: 50 },
-  { size: 10000, noRuns: 25 },
-  { size: 100000, noRuns: 5 }
+  { size: 100, noRuns: 100, flockOnly },
+  { size: 1000, noRuns: 50, flockOnly },
+  { size: 10000, noRuns: 25, flockOnly },
+  { size: 100000, noRuns: 5, flockOnly }
 ];
 
 const headerItems = [Chalk.hex('f49b42')('Library')];
@@ -39,15 +50,14 @@ function getRowValue(name, run) {
     comparison = `(${comparison})`;
   }
 
-  return `${run[name].average.toFixed(4)}ms ${comparison}`;
+  const result = `${run[name].average.toFixed(4)}ms ${comparison}`;
+  return name === 'flockResults' ? Chalk.blue(result) : result;
 }
 
 function addRow(libName, result, table) {
   const value = getRowValue.bind(null, `${libName}Results`);
 
   if (libName === 'flock') libName = Chalk.blue(libName);
-  if (libName === 'latestFlock') libName = Chalk.yellow(libName);
-
   table.push([libName, ...result.map((r) => value(r))]);
 }
 
