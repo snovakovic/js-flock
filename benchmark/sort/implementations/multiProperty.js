@@ -31,7 +31,7 @@ module.exports.run = function({ size, noRuns, flockOnly }) {
   for (let i = 0; i < size; i++) {
     testArr.push({
       name: 'test',
-      am1: getRandomInt(1, 50),
+      am1: getRandomInt(1, 20),
       am2: Math.random()
     });
   }
