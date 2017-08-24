@@ -302,11 +302,7 @@ module.exports = function (fn) {
 /* 10 */
 /***/ (function(module, exports) {
 
-var sorter = function sorter(direction, sortBy, thenBy) {
-  var depth = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-  var a = arguments[4];
-  var b = arguments[5];
-
+var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
   var valA = sortBy(a);
   var valB = sortBy(b);
 

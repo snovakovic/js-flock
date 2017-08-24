@@ -1,4 +1,4 @@
-const sorter = function(direction, sortBy, thenBy, depth = 0, a, b) {
+const sorter = function(direction, sortBy, thenBy, depth, a, b) {
   const valA = sortBy(a);
   const valB = sortBy(b);
 
