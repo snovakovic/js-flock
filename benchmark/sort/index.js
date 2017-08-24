@@ -51,7 +51,7 @@ function getRowValue(name, run) {
   }
 
   const result = `${run[name].average.toFixed(4)}ms ${comparison}`;
-  return name === 'flockResults' ? Chalk.blue(result) : result;
+  return name === 'flock' ? Chalk.blue(result) : result;
 }
 
 function addRow(libName, result, table) {
@@ -89,17 +89,17 @@ console.log(`
 `);
 
 
-console.info('\n Benchmark 1: Flat object full random values \n');
+console.info('\n Benchmark 1: Flat object high randomize values \n');
 run(flatObject);
 
-console.info('\n Benchmark 2: Flat object repetitive values \n');
+console.info('\n Benchmark 2: Flat object low randomize values \n');
 run(flatObject, () => getRandomInt(1, 5));
 
-console.log('\n Benchmark 3: Flat array');
+console.log('\n Benchmark 3: Flat array high randomize values');
 run(flatArray);
 
-console.log('\n Benchmark 4: Deep nested object properties object full random values \n');
+console.log('\n Benchmark 4: Deep nested object properties high randomize values \n');
 run(deepObject);
 
-console.log('\n Benchmark 5: Multi property sort \n');
+console.log('\n Benchmark 5: Multi property sort high randomize values \n');
 run(multiProperty);
