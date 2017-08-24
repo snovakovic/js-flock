@@ -5,26 +5,25 @@ const sortArray = require('sort-array');
 const arraySort = require('array-sort');
 const lodash = require('lodash');
 
-const runner = require('./../runner');
+const base = require('./base');
 
 
-// Define implementations
+const implementations = {
+  flock: (arr) => jsFlock.sort(arr).asc((p) => p.amount),
+  latestFlock: (arr) => latestFlockSort(arr).asc((p) => p.amount),
+  lodash: (arr) => lodash.sortBy(arr, [(p) => p.amount]),
+  sortArray: (arr) => sortArray(arr, 'amount'),
+  arraySort: (arr) => arraySort(arr, 'amount'),
+  native: (arr) =>
+    arr.sort((a, b) => {
+      if (a.amount == null) return 1;
+      if (b.amount == null) return -1;
 
-const flockImplementation = (arr) => jsFlock.sort(arr).asc((p) => p.amount);
-const latestFlockImplementation = (arr) => latestFlockSort(arr).asc((p) => p.amount);
-const lodashImplementation = (arr) => lodash.sortBy(arr, [(p) => p.amount]);
-const sortArrayImplementation = (arr) => sortArray(arr, 'amount');
-const arraySortImplementation = (arr) => arraySort(arr, 'amount');
-const nativeImplementation = (arr) =>
-  arr.sort((a, b) => {
-    if (a.amount == null) return 1;
-    if (b.amount == null) return -1;
-
-    if (a.amount === b.amount) return 0;
-    if (a.amount < b.amount) return -1;
-    return 1;
-  });
-
+      if (a.amount === b.amount) return 0;
+      if (a.amount < b.amount) return -1;
+      return 1;
+    })
+};
 
 // Measure times
 
@@ -37,22 +36,6 @@ module.exports.run = function({ size, noRuns, randomizer = Math.random }) {
     });
   }
 
-  const controlArr = nativeImplementation(testArr.slice(0));
-  const run = runner.bind(undefined, testArr, controlArr, noRuns);
-
-  const jsFlockResults = run(flockImplementation);
-  const latestFlockResults = run(latestFlockImplementation);
-  const lodashResults = run(lodashImplementation);
-  const nativeResults = run(nativeImplementation);
-  const sortArrayResults = run(sortArrayImplementation);
-  const arraySortResults = run(arraySortImplementation);
-
-  return {
-    jsFlockResults,
-    latestFlockResults,
-    lodashResults,
-    nativeResults,
-    sortArrayResults,
-    arraySortResults
-  };
+  const controlArr = implementations.flock(testArr.slice(0));
+  return base.run(implementations, testArr, controlArr, noRuns);
 };

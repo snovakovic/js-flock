@@ -11,13 +11,13 @@ const multiProperty = require('./implementations/multiProperty.js');
 const flatArray = require('./implementations/flatArray.js');
 
 
-const libraries = ['jsFlock', 'latestFlock', 'native', 'lodash', 'arraySort', 'sortArray'];
+const libraries = ['flock', 'latestFlock', 'native', 'lodash', 'arraySort', 'sortArray'];
 
 const runConfiguration = [
   { size: 100, noRuns: 100 },
   { size: 1000, noRuns: 50 },
   { size: 10000, noRuns: 25 },
-  { size: 10000, noRuns: 5 }
+  { size: 100000, noRuns: 5 }
 ];
 
 const headerItems = [Chalk.hex('f49b42')('Library')];
@@ -29,7 +29,7 @@ function getRowValue(name, run) {
     return Chalk.red('NOT SUPPORTED');
   }
 
-  const flock = run.jsFlockResults.average;
+  const flock = run.flockResults.average;
   const lib = run[name].average;
   let comparison = '';
   if (flock !== lib) {
@@ -45,7 +45,7 @@ function getRowValue(name, run) {
 function addRow(libName, result, table) {
   const value = getRowValue.bind(null, `${libName}Results`);
 
-  if (libName === 'jsFlock') libName = Chalk.blue(libName);
+  if (libName === 'flock') libName = Chalk.blue(libName);
   if (libName === 'latestFlock') libName = Chalk.yellow(libName);
 
   table.push([libName, ...result.map((r) => value(r))]);
