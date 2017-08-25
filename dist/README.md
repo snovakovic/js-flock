@@ -8,8 +8,8 @@
 
 [![NPM Package](https://nodei.co/npm/js-flock.png)](https://www.npmjs.com/package/js-flock)
 
-
 JS utility methods for NODE and Browser.
+
 
 ### Including library
 
@@ -34,11 +34,10 @@ and can be loaded in browser as CommonJs, AMD or as global var.
   import singular from 'js-flock/es5/singular';
 ```
 
-
 ### Methods:
 
-- [toEnum](#toenum)
 - [sort](#sort)
+- [toEnum](#toenum)
 - [singular](#singular)
 - [promisify](#promisify)
 - [promisify.all](#promisify.all)
@@ -46,6 +45,41 @@ and can be loaded in browser as CommonJs, AMD or as global var.
 - [deepFreeze](#deepfreeze)
 - [deepSeal](#deepseal)
 - [deepPreventExtensions](#deepPreventExtensions)
+
+
+### sort
+
+Fast sorting that **outperform lodash** sorting by **~2x** (in some cases it's more then **5x**).
+For more information about performance take a look at the benchmark result
+[here](https://www.npmjs.com/package/fast-sort).
+
+* Sorting array of objects (supports comparing by nested object properties)
+* Sorting flat arrays
+* Sorting by multiple properties
+* Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
+* Mutates input array in a same way as native [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) does.
+
+```javascript
+  import sort from 'js-flock/sort';
+
+  sort([1,4,2]).asc(); // sort array in ascending order [1, 2, 4]
+  sort([1,4,2]).desc(); // sort array in descending order [4, 2, 1]
+
+  // Sort persons [Object] ascending by lowercase firstName
+  sort(persons).asc((p) => p.firstName.toLowerCase());
+
+  // Sort persons by multiple properties
+  sort(persons).desc([
+    (p) => p.firstName, // Sort by first name
+    (p) => p.lastName, // Persons that have same firstName will be sorted by lastName
+    (p) => p.dob // Persons that have same firstName and lastName will be sorted by dob
+  ]);
+
+  // Sorting values that are not sortable will return same value back
+  sort(null).asc(); // => null
+  sort(33).desc(); // => 33
+```
+
 
 ### toEnum
 
@@ -99,36 +133,6 @@ Enum representation is immutable (frozen)
 
 ```
 
-### sort
-
-Small wrapper around sort to make sorting more readable and easier to write.
-
-* Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
-* Supports sorting by multiple properties
-* Mutates input array in a same way as native [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
-
-
-```javascript
-  import sort from 'js-flock/sort';
-
-  sort([1,4,2]).asc(); // sort array in ascending order [1, 2, 4]
-  sort([1,4,2]).desc(); // sort array in descending order [4, 2, 1]
-
-  // Sort persons [Object] ascending by lowercase firstName
-  sort(persons).asc((p) => p.firstName.toLowerCase());
-
-  // Sort persons by multiple properties
-  sort(persons).desc([
-    (p) => p.firstName, // Sort by first name
-    (p) => p.lastName, // Persons that have same firstName will be sorted by lastName
-    (p) => p.dob // Persons that have same firstName and lastName will be sorted by dob
-  ]);
-
-  // Sorting values that are not sortable will return same value back
-  sort(null).asc(); // => null
-  sort(33).desc(); // => 33
-```
-
 
 ### singular
 
@@ -169,6 +173,7 @@ Small wrapper around sort to make sorting more readable and easier to write.
   };
 ```
 
+
 ### promisify
 
 Promisify error first callback function. Instead of taking a callback, the returned function
@@ -208,6 +213,7 @@ single success value while some callback API's have multiple success value.
   funAsync().then(([r1, r2]) => { /* r1 === res1, r2 === res2 */ });
 ```
 
+
 ### promisify.all
 
 Promisifies the entire object by going through the object's properties and creating
@@ -237,6 +243,7 @@ The promisified method name will be the original method name suffixed with suffi
   });
 ```
 
+
 ### collar
 
 Set maximum waiting time for promise to resolve.
@@ -264,6 +271,7 @@ Reject promise if it's not resolved in that time
     }
   });
 ```
+
 
 ### deepFreeze
 
@@ -307,10 +315,12 @@ By providing { proto: true } option we instruct deepFreeze to iterate over all e
   Object.isFrozen(ob2.test); // true
 ```
 
+
 ### deepSeal
 
 Recursively apply [Object.seal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal).
 For example check [deepFreeze](#deepfreeze)
+
 
 ### deepPreventExtensions
 
