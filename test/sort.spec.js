@@ -57,6 +57,9 @@ describe('sort', () => {
     expect(persons[0].address.code).to.equal(3);
     expect(persons[1].address.code).to.equal(1);
     expect(persons[2].address.code).to.equal(undefined);
+
+    const sorted = sort([1, undefined, 3, null, 2]).desc();
+    expect(sorted).to.eql([3, 2, 1, null, undefined]);
   });
 
   it('Should ignore values that are not sortable', () => {

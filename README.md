@@ -49,7 +49,7 @@ and can be loaded in browser as CommonJs, AMD or as global var.
 
 ### sort
 
-Fast sorting that **outperform lodash** sorting by **~2x** (in some cases it's more then **5x**).
+Fast array sorting that **outperforms lodash sorting by **~2x** (in some cases it's more then **5x**).
 For more information about performance take a look at the benchmark result
 [here](https://www.npmjs.com/package/fast-sort).
 
