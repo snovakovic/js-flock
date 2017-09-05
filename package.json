@@ -1,7 +1,7 @@
 {
   "name": "js-flock",
   "version": "2.1.7",
-  "description": "JS utility methods for NODE and Browser.",
+  "description": "JS Utility Methods for NODE and Browser.",
   "main": "index.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
   "contributors": [
@@ -39,7 +39,10 @@
     "toEnum",
     "deepFreeze",
     "deepSeal",
-    "sort"
+    "sort",
+    "sortBy",
+    "order",
+    "orderBy"
   ],
   "devDependencies": {
     "babel-core": "^6.26.0",
