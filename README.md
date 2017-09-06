@@ -37,6 +37,7 @@ and can be loaded in browser as CommonJs, AMD or as global var.
 ### Methods:
 
 - [sort](#sort)
+- [last](#last)
 - [toEnum](#toenum)
 - [singular](#singular)
 - [promisify](#promisify)
@@ -62,8 +63,8 @@ For more information about performance take a look at the benchmark result
 ```javascript
   import sort from 'js-flock/sort';
 
-  sort([1,4,2]).asc(); // sort array in ascending order [1, 2, 4]
-  sort([1,4,2]).desc(); // sort array in descending order [4, 2, 1]
+  sort([1, 4, 2]).asc(); // => [1, 2, 4]
+  sort([1, 4, 2]).desc(); // => [4, 2, 1]
 
   // Sort persons [Object] ascending by lowercase firstName
   sort(persons).asc((p) => p.firstName.toLowerCase());
@@ -78,6 +79,23 @@ For more information about performance take a look at the benchmark result
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
   sort(33).desc(); // => 33
+```
+
+### last
+
+Get the last element of array. If condition is provided get the last element of the
+array that meets provided condition or undefined if no elements meets condition.
+
+```javascript
+  import last from 'js-flock/last';
+
+  last([1, 4, 2]); // => 2
+
+  const persons = [{ id: 1, name: 'john'}, { id: 2, name: 'john'}, { id: 3, name: 'doe'}]
+
+  last(persons) // =>  { id: 3, name: 'doe'}
+  last(persons, (p) => p.name === 'john') // => { id: 2, name: 'john'}
+  last(persons, (p) => p.name === 'no-name') // => undefined
 ```
 
 
