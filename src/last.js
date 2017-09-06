@@ -4,14 +4,11 @@ const isFunction = require('./internals/isFunction');
 // Public
 
 module.exports = function(arr, condition) {
-  if (!arr || !arr.length) {
-    return undefined;
-  }
+  let length = Array.isArray(arr) ? arr.length : 0;
 
-  let length = arr.length;
-  if (!isFunction(condition)) {
-    return arr[length - 1];
-  }
+  if (!length) return undefined;
+
+  if (!isFunction(condition)) return arr[length - 1];
 
   while (--length) {
     if (condition(arr[length])) return arr[length];
