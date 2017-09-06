@@ -11,8 +11,8 @@ function run(err) {
     return;
   }
 
-  const modules = ['collar', 'deepFreeze', 'deepSeal', 'deepPreventExtensions', 'promisify',
-    'singular', 'sort', 'toEnum'];
+  const modules = ['collar', 'deepFreeze', 'deepSeal', 'deepPreventExtensions', 'last',
+    'promisify', 'singular', 'sort', 'toEnum'];
 
   const jsFlock = require('js-flock');
   const jsFLockES5 = require('js-flock/es5');
@@ -28,8 +28,9 @@ function run(err) {
   // single modules load
   const collar = require('js-flock/collar');
   const deepFreeze = require('js-flock/deepFreeze');
-  const deepSeal = require('js-flock/deepSeal');
   const deepPreventExtensions = require('js-flock/deepPreventExtensions');
+  const deepSeal = require('js-flock/deepSeal');
+  const last = require('js-flock/last');
   const promisify = require('js-flock/promisify');
   const singular = require('js-flock/singular');
   const sort = require('js-flock/sort');
@@ -59,7 +60,7 @@ function run(err) {
 
   // singular
   let singularCounter = 0;
-  const sin = singular(() => (singularCounter += 1));
+  const sin = singular(() => { singularCounter += 1; });
   sin();
   sin();
   assert.equal(singularCounter, 1);
@@ -80,6 +81,10 @@ function run(err) {
   // sort
   assert.deepEqual(sort([1, 4, 3]).asc(), [1, 3, 4]);
   console.log('sort: SUCCESS');
+
+  // last
+  assert.equal(last([1, 4, 3]), 3);
+  console.log('last: SUCCESS');
 }
 
 exec('npm uninstall js-flock && npm install --no-save js-flock', run);
