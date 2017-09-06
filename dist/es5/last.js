@@ -70,54 +70,58 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */,
+/* 1 */
 /***/ (function(module, exports) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var isApplied = {
-  freeze: Object.isFrozen,
-  seal: Object.isSealed,
-  preventExtensions: function preventExtensions(prop) {
-    return !Object.isExtensible(prop);
-  }
-};
 
 // Public
 
-module.exports = function deep(action, obj, options) {
-  options = options || {};
-  Object[action](obj);
-
-  for (var key in obj) {
-    var prop = obj[key];
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
-      deep(action, prop, options);
-    }
-  }
-
-  return obj;
+module.exports = function (input) {
+  return Object.prototype.toString.call(input);
 };
 
 /***/ }),
-
-/***/ 5:
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var deep = __webpack_require__(0);
+var isFunction = __webpack_require__(7);
 
 // Public
 
-module.exports = function (obj, options) {
-  return deep('seal', obj, options);
+module.exports = function (arr, condition) {
+  var length = Array.isArray(arr) ? arr.length : 0;
+
+  if (!length) return undefined;
+
+  if (!isFunction(condition)) return arr[length - 1];
+
+  while (--length) {
+    if (condition(arr[length])) return arr[length];
+  }
+
+  return undefined;
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var getTag = __webpack_require__(1);
+
+// Public
+
+module.exports = function (testVar) {
+  return !!(testVar && getTag(testVar) === '[object Function]');
 };
 
 /***/ })
-
-/******/ });
+/******/ ]);
 });

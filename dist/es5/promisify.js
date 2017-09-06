@@ -70,21 +70,33 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */,
-/* 1 */,
+/* 1 */
+/***/ (function(module, exports) {
+
+// Public
+
+module.exports = function (input) {
+  return Object.prototype.toString.call(input);
+};
+
+/***/ }),
 /* 2 */,
 /* 3 */,
 /* 4 */,
-/* 5 */
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assert = __webpack_require__(6);
-var getTag = __webpack_require__(7);
-var isPlainObject = __webpack_require__(8);
+var assert = __webpack_require__(9);
+var getTag = __webpack_require__(1);
+var isPlainObject = __webpack_require__(10);
 
 var promisified = function promisified(fn, args, options) {
   var _this = this;
@@ -157,7 +169,7 @@ module.exports.all = function (cbModule, options) {
 };
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports) {
 
 // Public
@@ -169,25 +181,15 @@ module.exports = function (boolExpr, message) {
 };
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports) {
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
 
-// Public
-
-module.exports = function (input) {
-  return Object.prototype.toString.call(input);
-};
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var getTag = __webpack_require__(1);
 
 // Public
 
 module.exports = function (testVar) {
-    return !!(testVar && (typeof testVar === 'undefined' ? 'undefined' : _typeof(testVar)) === 'object' && Object.prototype.toString.call(testVar) === '[object Object]');
+  return !!(testVar && getTag(testVar) === '[object Object]');
 };
 
 /***/ })

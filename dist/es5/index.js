@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -107,6 +107,16 @@ module.exports = function deep(action, obj, options) {
 /* 1 */
 /***/ (function(module, exports) {
 
+// Public
+
+module.exports = function (input) {
+  return Object.prototype.toString.call(input);
+};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
 var REJECTION_REASON = Object.freeze({
   isStrangled: true,
   message: 'Promise have timed out'
@@ -125,7 +135,7 @@ module.exports = function (promise) {
 };
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
@@ -137,7 +147,7 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
@@ -149,7 +159,7 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var deep = __webpack_require__(0);
@@ -161,12 +171,46 @@ module.exports = function (obj, options) {
 };
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assert = __webpack_require__(6);
-var getTag = __webpack_require__(7);
-var isPlainObject = __webpack_require__(8);
+var isFunction = __webpack_require__(7);
+
+// Public
+
+module.exports = function (arr, condition) {
+  var length = Array.isArray(arr) ? arr.length : 0;
+
+  if (!length) return undefined;
+
+  if (!isFunction(condition)) return arr[length - 1];
+
+  while (--length) {
+    if (condition(arr[length])) return arr[length];
+  }
+
+  return undefined;
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var getTag = __webpack_require__(1);
+
+// Public
+
+module.exports = function (testVar) {
+  return !!(testVar && getTag(testVar) === '[object Function]');
+};
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var assert = __webpack_require__(9);
+var getTag = __webpack_require__(1);
+var isPlainObject = __webpack_require__(10);
 
 var promisified = function promisified(fn, args, options) {
   var _this = this;
@@ -239,7 +283,7 @@ module.exports.all = function (cbModule, options) {
 };
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports) {
 
 // Public
@@ -251,29 +295,19 @@ module.exports = function (boolExpr, message) {
 };
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports) {
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
 
-// Public
-
-module.exports = function (input) {
-  return Object.prototype.toString.call(input);
-};
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var getTag = __webpack_require__(1);
 
 // Public
 
 module.exports = function (testVar) {
-    return !!(testVar && (typeof testVar === 'undefined' ? 'undefined' : _typeof(testVar)) === 'object' && Object.prototype.toString.call(testVar) === '[object Object]');
+  return !!(testVar && getTag(testVar) === '[object Object]');
 };
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports) {
 
 // Public
@@ -299,7 +333,7 @@ module.exports = function (fn) {
 };
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports) {
 
 var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
@@ -351,7 +385,7 @@ module.exports = function (ctx) {
 };
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -426,17 +460,18 @@ module.exports = function (arg) {
 };
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports.collar = __webpack_require__(1);
-exports.deepFreeze = __webpack_require__(2);
-exports.deepPreventExtensions = __webpack_require__(3);
-exports.deepSeal = __webpack_require__(4);
-exports.promisify = __webpack_require__(5);
-exports.singular = __webpack_require__(9);
-exports.sort = __webpack_require__(10);
-exports.toEnum = __webpack_require__(11);
+exports.collar = __webpack_require__(2);
+exports.deepFreeze = __webpack_require__(3);
+exports.deepPreventExtensions = __webpack_require__(4);
+exports.deepSeal = __webpack_require__(5);
+exports.last = __webpack_require__(6);
+exports.promisify = __webpack_require__(8);
+exports.singular = __webpack_require__(11);
+exports.sort = __webpack_require__(12);
+exports.toEnum = __webpack_require__(13);
 
 /***/ })
 /******/ ]);
