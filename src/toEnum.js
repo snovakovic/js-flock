@@ -22,7 +22,7 @@ const hardBindFunction = function(obj, key) {
 
 module.exports = function(arg) {
   const enu = castObject(arg);
-  const keys = Object.keys(enu).filter((key) => typeof enu[key] !== 'function');
+  const keys = Object.keys(enu).filter((key) => !isFunction(enu[key]));
   const values = keys.map((key) => enu[key]);
 
   if (new Set(values).size !== values.length) {

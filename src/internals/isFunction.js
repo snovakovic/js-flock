@@ -1,3 +1,3 @@
 // Public
 
-module.exports = (testVar) => !!(testVar && typeof testVar === 'function');
+module.exports = (testVar) => typeof testVar === 'function';
