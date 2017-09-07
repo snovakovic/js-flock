@@ -1,3 +1,6 @@
+const isFunction = require('./internals/isFunction');
+
+
 const castObject = function(args) {
   if (Array.isArray(args)) {
     const obj = {};
@@ -10,7 +13,7 @@ const castObject = function(args) {
 
 const hardBindFunction = function(obj, key) {
   let prop = obj[key];
-  if (typeof prop === 'function') {
+  if (isFunction(prop)) {
     prop = prop.bind(obj);
   }
 };
