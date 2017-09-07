@@ -33,11 +33,7 @@ const sort = function(ctx, _sorter, sortBy = emptySortBy) {
 
 module.exports = function(ctx) {
   return {
-    asc(sortBy) {
-      return sort(ctx, ascSorter, sortBy);
-    },
-    desc(sortBy) {
-      return sort(ctx, descSorter, sortBy);
-    }
+    asc: (sortBy) => sort(ctx, ascSorter, sortBy),
+    desc: (sortBy) => sort(ctx, descSorter, sortBy)
   };
 };
