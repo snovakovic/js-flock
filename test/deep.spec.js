@@ -12,9 +12,7 @@ describe('deep', () => {
   beforeEach(() => {
     obj = {};
     obj.first = {
-      second: {
-        third: { num: 11, fun() {} }
-      }
+      second: { third: { num: 11, fun() {} } }
     };
 
     circ1 = { first: { test: 1 } };
@@ -77,7 +75,6 @@ describe('deep', () => {
       arr.test = { isFrozen: { is: false } };
       const set = new Set([{ isFrozen: { is: false } }]);
       set.test = { isFrozen: { is: false } };
-
       const ob = { arr, fun, set };
 
       deepFreeze(ob);
@@ -107,7 +104,6 @@ describe('deep', () => {
       deepFreeze(person);
       expect(Object.isFrozen(person)).to.equal(true);
       expect(Object.isFrozen(person.address)).to.equal(true);
-
 
       const ob1 = { test: { a: 'a' } };
       const ob2 = Object.create(ob1);
