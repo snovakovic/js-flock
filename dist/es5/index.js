@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -172,9 +172,7 @@ module.exports = function (obj, options) {
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isFunction = __webpack_require__(7);
+/***/ (function(module, exports) {
 
 // Public
 
@@ -182,8 +180,7 @@ module.exports = function (arr, condition) {
   var length = Array.isArray(arr) ? arr.length : 0;
 
   if (!length) return undefined;
-
-  if (!isFunction(condition)) return arr[length - 1];
+  if (typeof condition !== 'function') return arr[length - 1];
 
   while (--length) {
     if (condition(arr[length])) return arr[length];
@@ -196,21 +193,13 @@ module.exports = function (arr, condition) {
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var assert = __webpack_require__(8);
 var getTag = __webpack_require__(1);
+var isPlainObject = __webpack_require__(9);
 
-// Public
-
-module.exports = function (testVar) {
-  return !!(testVar && getTag(testVar) === '[object Function]');
+var getExpectationMessage = function getExpectationMessage(expectation, actual) {
+  return 'promisify: expected [' + expectation + '] but got ' + getTag(actual) + ']';
 };
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var assert = __webpack_require__(9);
-var getTag = __webpack_require__(1);
-var isPlainObject = __webpack_require__(10);
 
 var promisified = function promisified(fn, args, options) {
   var _this = this;
@@ -222,7 +211,7 @@ var promisified = function promisified(fn, args, options) {
       }
 
       if (err) return reject(err);
-      return options && options.multiArgs ? resolve(result) : resolve(result[0]);
+      return resolve(options && options.multiArgs ? result : result[0]);
     });
 
     fn.apply(_this, args);
@@ -243,7 +232,7 @@ var getKey = function getKey(cbModule, key, suffix) {
 };
 
 var promisify = function promisify(fn, options) {
-  assert(typeof fn === 'function', 'promisify: expected [Function] but got ' + getTag(fn));
+  assert(typeof fn === 'function', getExpectationMessage('Function', fn));
   return function () {
     for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
@@ -258,7 +247,7 @@ var promisify = function promisify(fn, options) {
 module.exports = promisify;
 
 module.exports.all = function (cbModule, options) {
-  assert(isPlainObject(cbModule), 'promisify: expected [Object] but got ' + getTag(cbModule));
+  assert(isPlainObject(cbModule), getExpectationMessage('Object', cbModule));
 
   var _ref = options || {},
       suffix = _ref.suffix,
@@ -283,7 +272,7 @@ module.exports.all = function (cbModule, options) {
 };
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports) {
 
 // Public
@@ -295,7 +284,7 @@ module.exports = function (boolExpr, message) {
 };
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getTag = __webpack_require__(1);
@@ -307,7 +296,7 @@ module.exports = function (testVar) {
 };
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports) {
 
 // Public
@@ -315,7 +304,7 @@ module.exports = function (testVar) {
 module.exports = function (fn) {
   var inProgress = false;
   var done = function done() {
-    return inProgress = false;
+    inProgress = false;
   };
 
   return function () {
@@ -333,7 +322,7 @@ module.exports = function (fn) {
 };
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
@@ -364,9 +353,7 @@ var emptySortBy = function emptySortBy(a) {
 var sort = function sort(ctx, _sorter) {
   var sortBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : emptySortBy;
 
-  if (!Array.isArray(ctx)) {
-    return ctx;
-  }
+  if (!Array.isArray(ctx)) return ctx;
 
   return Array.isArray(sortBy) ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0)) : ctx.sort(_sorter.bind(undefined, sortBy, undefined, 0));
 };
@@ -385,7 +372,7 @@ module.exports = function (ctx) {
 };
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -394,7 +381,7 @@ var castObject = function castObject(args) {
   if (Array.isArray(args)) {
     var obj = {};
     args.forEach(function (key) {
-      return obj[key] = Symbol(key);
+      obj[key] = Symbol(key);
     });
     return obj;
   }
@@ -460,7 +447,7 @@ module.exports = function (arg) {
 };
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.collar = __webpack_require__(2);
@@ -468,10 +455,10 @@ exports.deepFreeze = __webpack_require__(3);
 exports.deepPreventExtensions = __webpack_require__(4);
 exports.deepSeal = __webpack_require__(5);
 exports.last = __webpack_require__(6);
-exports.promisify = __webpack_require__(8);
-exports.singular = __webpack_require__(11);
-exports.sort = __webpack_require__(12);
-exports.toEnum = __webpack_require__(13);
+exports.promisify = __webpack_require__(7);
+exports.singular = __webpack_require__(10);
+exports.sort = __webpack_require__(11);
+exports.toEnum = __webpack_require__(12);
 
 /***/ })
 /******/ ]);

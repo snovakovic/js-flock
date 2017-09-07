@@ -73,26 +73,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */,
-/* 1 */
+/******/ ({
+
+/***/ 6:
 /***/ (function(module, exports) {
-
-// Public
-
-module.exports = function (input) {
-  return Object.prototype.toString.call(input);
-};
-
-/***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isFunction = __webpack_require__(7);
 
 // Public
 
@@ -100,8 +84,7 @@ module.exports = function (arr, condition) {
   var length = Array.isArray(arr) ? arr.length : 0;
 
   if (!length) return undefined;
-
-  if (!isFunction(condition)) return arr[length - 1];
+  if (typeof condition !== 'function') return arr[length - 1];
 
   while (--length) {
     if (condition(arr[length])) return arr[length];
@@ -110,18 +93,7 @@ module.exports = function (arr, condition) {
   return undefined;
 };
 
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var getTag = __webpack_require__(1);
-
-// Public
-
-module.exports = function (testVar) {
-  return !!(testVar && getTag(testVar) === '[object Function]');
-};
-
 /***/ })
-/******/ ]);
+
+/******/ });
 });

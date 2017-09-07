@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -90,13 +90,16 @@ module.exports = function (input) {
 /* 4 */,
 /* 5 */,
 /* 6 */,
-/* 7 */,
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assert = __webpack_require__(9);
+var assert = __webpack_require__(8);
 var getTag = __webpack_require__(1);
-var isPlainObject = __webpack_require__(10);
+var isPlainObject = __webpack_require__(9);
+
+var getExpectationMessage = function getExpectationMessage(expectation, actual) {
+  return 'promisify: expected [' + expectation + '] but got ' + getTag(actual) + ']';
+};
 
 var promisified = function promisified(fn, args, options) {
   var _this = this;
@@ -108,7 +111,7 @@ var promisified = function promisified(fn, args, options) {
       }
 
       if (err) return reject(err);
-      return options && options.multiArgs ? resolve(result) : resolve(result[0]);
+      return resolve(options && options.multiArgs ? result : result[0]);
     });
 
     fn.apply(_this, args);
@@ -129,7 +132,7 @@ var getKey = function getKey(cbModule, key, suffix) {
 };
 
 var promisify = function promisify(fn, options) {
-  assert(typeof fn === 'function', 'promisify: expected [Function] but got ' + getTag(fn));
+  assert(typeof fn === 'function', getExpectationMessage('Function', fn));
   return function () {
     for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
@@ -144,7 +147,7 @@ var promisify = function promisify(fn, options) {
 module.exports = promisify;
 
 module.exports.all = function (cbModule, options) {
-  assert(isPlainObject(cbModule), 'promisify: expected [Object] but got ' + getTag(cbModule));
+  assert(isPlainObject(cbModule), getExpectationMessage('Object', cbModule));
 
   var _ref = options || {},
       suffix = _ref.suffix,
@@ -169,7 +172,7 @@ module.exports.all = function (cbModule, options) {
 };
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports) {
 
 // Public
@@ -181,7 +184,7 @@ module.exports = function (boolExpr, message) {
 };
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getTag = __webpack_require__(1);
