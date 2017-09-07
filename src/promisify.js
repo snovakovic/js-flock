@@ -10,9 +10,7 @@ const promisified = function(fn, args, options) {
   return new Promise((resolve, reject) => {
     args.push((err, ...result) => {
       if (err) return reject(err);
-      return (options && options.multiArgs)
-        ? resolve(result)
-        : resolve(result[0]);
+      return resolve((options && options.multiArgs) ? result : result[0]);
     });
 
     fn.apply(this, args);
