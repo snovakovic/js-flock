@@ -1,6 +1,3 @@
-const isFunction = require('./isFunction');
-
-
 const isApplied = {
   freeze: Object.isFrozen,
   seal: Object.isSealed,
@@ -17,7 +14,7 @@ module.exports = function deep(action, obj, options) {
   for (const key in obj) {
     const prop = obj[key];
     if (prop &&
-      (typeof prop === 'object' || isFunction(prop)) &&
+      (typeof prop === 'object' || typeof prop === 'function') &&
       !isApplied[action](prop) &&
       (options.proto || obj.hasOwnProperty(key))) {
       deep(action, prop, options);

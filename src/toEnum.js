@@ -1,6 +1,3 @@
-const isFunction = require('./internals/isFunction');
-
-
 const castObject = function(args) {
   if (Array.isArray(args)) {
     const obj = {};
@@ -13,7 +10,7 @@ const castObject = function(args) {
 
 const hardBindFunction = function(obj, key) {
   let prop = obj[key];
-  if (isFunction(prop)) {
+  if (typeof prop === 'function') {
     prop = prop.bind(obj);
   }
 };
@@ -22,7 +19,7 @@ const hardBindFunction = function(obj, key) {
 
 module.exports = function(arg) {
   const enu = castObject(arg);
-  const keys = Object.keys(enu).filter((key) => !isFunction(enu[key]));
+  const keys = Object.keys(enu).filter((key) => typeof enu[key] !== 'function');
   const values = keys.map((key) => enu[key]);
 
   if (new Set(values).size !== values.length) {
