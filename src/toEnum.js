@@ -1,7 +1,7 @@
 const castObject = function(args) {
   if (Array.isArray(args)) {
     const obj = {};
-    args.forEach((key) => (obj[key] = Symbol(key)));
+    args.forEach((key) => { obj[key] = Symbol(key); });
     return obj;
   }
 

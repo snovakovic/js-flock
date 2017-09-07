@@ -9,7 +9,7 @@ describe('toEnum', () => {
   beforeEach(() => {
     obj = {};
     arr = ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'];
-    arr.forEach((key) => (obj[key] = key));
+    arr.forEach((key) => { obj[key] = key; });
   });
 
   it('Should convert normal object to Enum representation', () => {
