@@ -1,6 +1,7 @@
 const assert = require('./internals/assert');
 const getTag = require('./internals/getTag');
 const isPlainObject = require('./internals/isPlainObject');
+const isFunction = require('./internals/isFunction');
 
 
 const getExpectationMessage = (expectation, actual) =>
@@ -18,7 +19,7 @@ const promisified = function(fn, args, options) {
 };
 
 const shouldPromisify = function(key, cbModule, exclude, include, proto) {
-  return typeof cbModule[key] === 'function' &&
+  return isFunction(cbModule[key]) &&
     cbModule[key].__promisified__ !== true &&
     (proto === true || cbModule.hasOwnProperty(key)) &&
     (!include || include.some((k) => k === key)) &&
@@ -33,7 +34,7 @@ const getKey = function(cbModule, key, suffix) {
 };
 
 const promisify = function(fn, options) {
-  assert(typeof fn === 'function', getExpectationMessage('Function', fn));
+  assert(isFunction(fn), getExpectationMessage('Function', fn));
   return function(...args) {
     return promisified.call(this, fn, args, options);
   };
