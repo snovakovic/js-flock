@@ -28,21 +28,22 @@
     "url": "git+https://github.com/snovakovic/js-flock.git"
   },
   "keywords": [
-    "utility",
-    "helpers",
-    "es6",
-    "es2015",
-    "promisify",
-    "promisifyAll",
-    "promise",
-    "enum",
-    "toEnum",
     "deepFreeze",
     "deepSeal",
+    "enum",
+    "es2015",
+    "es6",
+    "helpers",
+    "last",
+    "order",
+    "orderBy",
+    "promise",
+    "promisify",
+    "promisifyAll",
     "sort",
     "sortBy",
-    "order",
-    "orderBy"
+    "toEnum",
+    "utility"
   ],
   "devDependencies": {
     "babel-core": "^6.26.0",
