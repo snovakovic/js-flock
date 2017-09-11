@@ -1,7 +1,7 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(factory());
+	(global.collar = global.collar || {}, global.collar.js = factory());
 }(this, (function () { 'use strict';
 
 var REJECTION_REASON = Object.freeze({
@@ -11,7 +11,7 @@ var REJECTION_REASON = Object.freeze({
 
 // Public
 
-module.exports = function (promise) {
+var collar = function collar(promise) {
   var ttl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5000;
 
   var restraint = new Promise(function (resolve, reject) {
@@ -20,5 +20,7 @@ module.exports = function (promise) {
 
   return Promise.race([restraint, promise]);
 };
+
+return collar;
 
 })));

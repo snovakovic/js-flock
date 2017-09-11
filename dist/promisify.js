@@ -37,12 +37,7 @@ const promisify = function(fn, options) {
   };
 };
 
-
-// Public
-
-module.exports = promisify;
-
-module.exports.all = (cbModule, options) => {
+promisify.all = (cbModule, options) => {
   assert(isPlainObject(cbModule), getExpectationMessage('Object', cbModule));
 
   let { suffix, exclude, include, proto } = options || {}; // eslint-disable-line prefer-const
@@ -60,3 +55,8 @@ module.exports.all = (cbModule, options) => {
 
   return cbModule;
 };
+
+
+// Public
+
+module.exports = promisify;

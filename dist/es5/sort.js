@@ -1,7 +1,7 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(factory());
+	(global.sort = global.sort || {}, global.sort.js = factory());
 }(this, (function () { 'use strict';
 
 var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
@@ -39,7 +39,7 @@ var sort = function sort(ctx, _sorter) {
 
 // Public
 
-module.exports = function (ctx) {
+var sort_1 = function sort_1(ctx) {
   return {
     asc: function asc(sortBy) {
       return sort(ctx, ascSorter, sortBy);
@@ -49,5 +49,7 @@ module.exports = function (ctx) {
     }
   };
 };
+
+return sort_1;
 
 })));

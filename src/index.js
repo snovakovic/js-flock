@@ -1,9 +1,12 @@
-exports.collar = require('./collar');
-exports.deepFreeze = require('./deepFreeze');
-exports.deepPreventExtensions = require('./deepPreventExtensions');
-exports.deepSeal = require('./deepSeal');
-exports.last = require('./last');
-exports.promisify = require('./promisify');
-exports.singular = require('./singular');
-exports.sort = require('./sort');
-exports.toEnum = require('./toEnum');
+/* eslint-disable global-require */
+module.exports = {
+  collar: require('./collar'),
+  deepFreeze: require('./deepFreeze'),
+  deepPreventExtensions: require('./deepPreventExtensions'),
+  deepSeal: require('./deepSeal'),
+  last: require('./last'),
+  promisify: require('./promisify'),
+  singular: require('./singular'),
+  sort: require('./sort'),
+  toEnum: require('./toEnum')
+};

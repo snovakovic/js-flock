@@ -1,12 +1,12 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(factory());
+	(global.last = global.last || {}, global.last.js = factory());
 }(this, (function () { 'use strict';
 
 // Public
 
-module.exports = function (arr, condition) {
+var last = function last(arr, condition) {
   var length = Array.isArray(arr) ? arr.length : 0;
 
   if (!length) return undefined;
@@ -18,5 +18,7 @@ module.exports = function (arr, condition) {
 
   return undefined;
 };
+
+return last;
 
 })));
