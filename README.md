@@ -8,30 +8,30 @@
 
 [![NPM Package](https://nodei.co/npm/js-flock.png)](https://www.npmjs.com/package/js-flock)
 
-JS utility methods for NODE and Browser.
+Collection of neat utility modules to bump up your development in NODE and Browser.
 
 
 ### Including library
 
-We can include whole library at once or a module by module. By default unmodified ES6 code is loaded,
-optionally we can load transpiled ES5 code. Transpiled code is wrapped in UMD
-and can be loaded in browser as CommonJs, AMD or as global var.
+We can include whole library at once or a module by module. **By default unmodified ES6 code is loaded**,
+optionally we can include transpiled ES5 code. Transpiled code is wrapped in UMD and can be loaded
+in Browser as CommonJs, AMD or as global var.
 
 ```javascript
-  // Loads whole unmodified ES6 library
+  // Import whole unmodified ES6 library
   import jsFlock from 'js-flock';
 
-  // We can also use node require statement to do same thing
+  // Import library with require
   const jsFlock = require('js-flock');
 
-  // Loads single toEnum module. Ideal for usage in browser
-  import toEnum from 'js-flock/toEnum';
-
-  // Loads transpiled ES5 version of library
+  // Import transpiled ES5 version of library (ideal for usage in Browser)
   import jsFlock from 'js-flock/es5';
 
-  // Loads single transpiled module
-  import singular from 'js-flock/es5/singular';
+  // Import only sort module (unmodified ES6 version).
+  import sort from 'js-flock/sort';
+
+  // Import only toEnum module (transpiled ES5 version)
+  import toEnum from 'js-flock/es5/toEnum';
 ```
 
 ### Methods:
@@ -206,7 +206,8 @@ Promisify returns native Promise (requires Promise polyfill on older browser)
   // Native version of read file
   readFile('test.txt', 'utf8', (err, data) => {
     if (err) {
-      return console.log(err);
+      console.log(err);
+      return;
     }
     console.log(data);
   });
@@ -248,46 +249,39 @@ The promisified method name will be the original method name suffixed with suffi
   const promisify = require('js-flock/promisify');
   const fs = promisify.all(require("fs"));
 
-  fs.readFileAsync('test.txt', 'utf8') // Function appended by promisify.all
+  // New function appended by promisify.all
+  fs.readFileAsync('test.txt', 'utf8')
     .then((data) => console.log(data))
     .catch((err) => console.log(err));
 
   const withOptions = promisify.all(test, {
-    suffix: String, // [default: 'Async'] Suffix will be appended to original method name
-    multyArgs: Boolean, // [default: false] Promise will resolve with array of values if set to true. (check promisify for more details),
-    proto: Boolean, // [default: false] Promisify object prototype chain if set to true.
-    exclude: [String], // [default: undefined] List of object keys that will be skipped
-    include: [String], // [default: undefined] If provided promisify all will promisify only keys from this list,
+    suffix: String, // [default: 'Async'] - Suffix will be appended to original method name
+    multyArgs: Boolean, // [default: false] Promise will resolve with array of values if true
+    proto: Boolean, // [default: false] Promisify object prototype chain if true
+    exclude: [String], // [default: undefined] List of object keys not to promisify
+    include: [String], // [default: undefined] Promisify only provided keys
   });
 ```
 
 
 ### collar
 
-Set maximum waiting time for promise to resolve.
-Reject promise if it's not resolved in that time
+Set maximum waiting time for promise to resolve. Reject promise if it's not resolved in that time
 
 ```javascript
   import collar from 'js-flock/collar';
 
-  const MAX_WAIT_TIME = 500;
+  const MAX_WAITING_TIME = 500;
 
-  // Http request will be rejected if it's not resolved in 0.5 seconds
-  collar(Http.get('test-url'), MAX_WAIT_TIME)
-    .then((response) => console.log(response))
-    .catch((err) => console.log('promise have timed out'));
-
-  // Collar will reject promise chain as one of promises are not resolved in max time
-  collar(Promise.all([
-    new Promise((resolve) => setTimeout(resolve, 50, '1')),
-    new Promise((resolve) => setTimeout(resolve, 1000, '2'))
-  ]), MAX_WAIT_TIME)
-  .then(() => { /* not called as second promise have timed out */  })
-  .catch((err) => { // CollarError = { isStrangled: true, message: 'Promises have timed out' }
-    if (typeof err === 'object' && err.isStrangled) {
-      console.log(err.message); // 'Promises have timed out'
-    }
-  });
+  // Reject HTTP request if it's not resolved in 0.5 seconds
+  collar(Http.get('test-url'), MAX_WAITING_TIME)
+    .then((response) => { /* handle response */  })
+    .catch((err) => {
+      // CollarError = { isStrangled: true, message: 'Promise have timed out' }
+      if (typeof err === 'object' && err.isStrangled) {
+        console.log(err.message);
+      }
+    });
 ```
 
 
@@ -337,10 +331,10 @@ By providing { proto: true } option we instruct deepFreeze to iterate over all e
 ### deepSeal
 
 Recursively apply [Object.seal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal).
-For example check [deepFreeze](#deepfreeze)
+For example of usage reference [deepFreeze](#deepfreeze)
 
 
 ### deepPreventExtensions
 
 Recursively apply [Object.preventExtensions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/preventExtensions).
-For example check [deepFreeze](#deepfreeze)
+For example of usage reference [deepFreeze](#deepfreeze)
