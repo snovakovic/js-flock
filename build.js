@@ -1,4 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
+
+const Path = require('path');
+
 const babel = require('rollup-plugin-babel');
 const eslint = require('rollup-plugin-eslint');
 const Fs = require('node-fs-extra');
@@ -7,8 +10,8 @@ const uglify = require('rollup-plugin-uglify');
 
 
 const options = {
-  src: 'src/',
-  dist: 'build/',
+  src: Path.resolve(__dirname, 'src/'),
+  dist: Path.resolve(__dirname, 'dist/'),
   mandatoryFiles: ['README.md', 'publish.js', '.npmignore']
 };
 
