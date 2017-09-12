@@ -4,6 +4,8 @@
 	(global.deepFreeze = global.deepFreeze || {}, global.deepFreeze.js = factory());
 }(this, (function () { 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var isApplied = {
   freeze: Object.isFrozen,
   seal: Object.isSealed,
@@ -20,7 +22,7 @@ var deep = function deep(action, obj, options) {
 
   for (var key in obj) {
     var prop = obj[key];
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : babelHelpers.typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
       deep(action, prop, options);
     }
   }

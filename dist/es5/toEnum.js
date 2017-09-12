@@ -4,6 +4,8 @@
 	(global.toEnum = global.toEnum || {}, global.toEnum.js = factory());
 }(this, (function () { 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var castObject = function castObject(args) {
   if (Array.isArray(args)) {
     var obj = {};
@@ -13,7 +15,7 @@ var castObject = function castObject(args) {
     return obj;
   }
 
-  return (typeof args === 'undefined' ? 'undefined' : babelHelpers.typeof(args)) === 'object' ? Object.assign({}, args) : {};
+  return (typeof args === 'undefined' ? 'undefined' : _typeof(args)) === 'object' ? Object.assign({}, args) : {};
 };
 
 var hardBindFunction = function hardBindFunction(obj, key) {

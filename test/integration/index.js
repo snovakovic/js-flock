@@ -8,6 +8,7 @@ process.chdir(__dirname); // Enable running from package script
 const assert = require('assert');
 const { exec } = require('child_process');
 
+
 function testModules(modules) {
   // collar
   modules.collar(Promise.resolve('test'), 5)
@@ -106,4 +107,5 @@ function run(err) {
   console.log('----- DONE -----');
 }
 
-exec('npm uninstall js-flock && npm install --no-save js-flock', run);
+run();
+//exec('npm uninstall js-flock && npm install --no-save js-flock', run);

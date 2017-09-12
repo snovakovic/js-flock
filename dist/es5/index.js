@@ -21,6 +21,8 @@ var collar = function collar(promise) {
   return Promise.race([restraint, promise]);
 };
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var isApplied = {
   freeze: Object.isFrozen,
   seal: Object.isSealed,
@@ -37,7 +39,7 @@ var deep = function deep(action, obj, options) {
 
   for (var key in obj) {
     var prop = obj[key];
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : babelHelpers.typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
       deep(action, prop, options);
     }
   }
@@ -246,6 +248,8 @@ var sort_1 = function sort_1(ctx) {
   };
 };
 
+var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var castObject = function castObject(args) {
   if (Array.isArray(args)) {
     var obj = {};
@@ -255,7 +259,7 @@ var castObject = function castObject(args) {
     return obj;
   }
 
-  return (typeof args === 'undefined' ? 'undefined' : babelHelpers.typeof(args)) === 'object' ? Object.assign({}, args) : {};
+  return (typeof args === 'undefined' ? 'undefined' : _typeof$1(args)) === 'object' ? Object.assign({}, args) : {};
 };
 
 var hardBindFunction = function hardBindFunction(obj, key) {
