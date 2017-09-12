@@ -14,7 +14,7 @@ const uglify = require('rollup-plugin-uglify');
 const options = {
   src: Path.resolve(__dirname, 'src/'),
   dist: Path.resolve(__dirname, 'dist/'),
-  mandatoryFiles: ['README.md', 'publish.js', '.npmignore']
+  mandatoryFiles: ['README.md', 'publish.js', '.npmignore', 'package.json']
 };
 
 const plugins = [
@@ -45,7 +45,7 @@ Fs.copy(options.src, options.dist);
 
 // Copy all other required files to dist
 
-options.mandatoryFiles.forEach((fileName) => Fs.copy(fileName, `${options.dist}fileName`));
+options.mandatoryFiles.forEach((fileName) => Fs.copySync(fileName, `${options.dist}/${fileName}`));
 
 
 // Transpile all source code with rollup
