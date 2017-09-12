@@ -56,10 +56,9 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
   if (idx >= modules.length) return;
 
   const fileName = modules[idx];
+  const moduleName = fileName === 'index.js' ? 'js-flock' : fileName;
   const input = `${options.src}/${fileName}`;
   const format = 'umd';
-
-  const moduleName = fileName === 'index.js' ? 'js-flock' : fileName;
 
   const build = Rollup.rollup({ input, plugins })
     .then((bundle) =>
@@ -74,7 +73,6 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
     Rollup.rollup({
       input,
       plugins: [...plugins, uglify({})]
-
     }).then((bundle) => {
       bundle.write({
         moduleName,
