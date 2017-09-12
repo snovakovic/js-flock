@@ -1,81 +1,25 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define("js-flock", [], factory);
-	else if(typeof exports === 'object')
-		exports["js-flock"] = factory();
-	else
-		root["js-flock"] = factory();
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports) {
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global['js-flock'] = factory());
+}(this, (function () { 'use strict';
+
+var REJECTION_REASON = Object.freeze({
+  isStrangled: true,
+  message: 'Promise have timed out'
+});
+
+// Public
+
+var collar = function collar(promise) {
+  var ttl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5000;
+
+  var restraint = new Promise(function (resolve, reject) {
+    return setTimeout(reject, ttl, REJECTION_REASON);
+  });
+
+  return Promise.race([restraint, promise]);
+};
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -89,7 +33,7 @@ var isApplied = {
 
 // Public
 
-module.exports = function deep(action, obj, options) {
+var deep = function deep(action, obj, options) {
   options = options || {};
   Object[action](obj);
 
@@ -103,80 +47,27 @@ module.exports = function deep(action, obj, options) {
   return obj;
 };
 
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
 // Public
 
-module.exports = function (input) {
-  return Object.prototype.toString.call(input);
-};
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-var REJECTION_REASON = Object.freeze({
-  isStrangled: true,
-  message: 'Promise have timed out'
-});
-
-// Public
-
-module.exports = function (promise) {
-  var ttl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5000;
-
-  var restraint = new Promise(function (resolve, reject) {
-    return setTimeout(reject, ttl, REJECTION_REASON);
-  });
-
-  return Promise.race([restraint, promise]);
-};
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var deep = __webpack_require__(0);
-
-// Public
-
-module.exports = function (obj, options) {
+var deepFreeze = function deepFreeze(obj, options) {
   return deep('freeze', obj, options);
 };
 
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var deep = __webpack_require__(0);
-
 // Public
 
-module.exports = function (obj, options) {
+var deepPreventExtensions = function deepPreventExtensions(obj, options) {
   return deep('preventExtensions', obj, options);
 };
 
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var deep = __webpack_require__(0);
-
 // Public
 
-module.exports = function (obj, options) {
+var deepSeal = function deepSeal(obj, options) {
   return deep('seal', obj, options);
 };
 
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
 // Public
 
-module.exports = function (arr, condition) {
+var last = function last(arr, condition) {
   var length = Array.isArray(arr) ? arr.length : 0;
 
   if (!length) return undefined;
@@ -189,119 +80,109 @@ module.exports = function (arr, condition) {
   return undefined;
 };
 
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var assert = __webpack_require__(8);
-var getTag = __webpack_require__(1);
-var isPlainObject = __webpack_require__(9);
-
-var getExpectationMessage = function getExpectationMessage(expectation, actual) {
-  return 'promisify: expected [' + expectation + '] but got ' + getTag(actual) + ']';
-};
-
-var promisified = function promisified(fn, args, options) {
-  var _this = this;
-
-  return new Promise(function (resolve, reject) {
-    args.push(function (err) {
-      for (var _len = arguments.length, result = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        result[_key - 1] = arguments[_key];
-      }
-
-      if (err) return reject(err);
-      return resolve(options && options.multiArgs ? result : result[0]);
-    });
-
-    fn.apply(_this, args);
-  });
-};
-
-var shouldPromisify = function shouldPromisify(key, cbModule, exclude, include, proto) {
-  return typeof cbModule[key] === 'function' && cbModule[key].__promisified__ !== true && (proto === true || cbModule.hasOwnProperty(key)) && (!include || include.some(function (k) {
-    return k === key;
-  })) && (!exclude || exclude.every(function (k) {
-    return k !== key;
-  }));
-};
-
-var getKey = function getKey(cbModule, key, suffix) {
-  var asyncKey = '' + key + suffix;
-  return asyncKey in cbModule ? getKey(cbModule, asyncKey, 'Promisified') : asyncKey;
-};
-
-var promisify = function promisify(fn, options) {
-  assert(typeof fn === 'function', getExpectationMessage('Function', fn));
-  return function () {
-    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
-    }
-
-    return promisified.call(this, fn, args, options);
-  };
-};
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
 
 // Public
 
-module.exports = promisify;
-
-module.exports.all = function (cbModule, options) {
-  assert(isPlainObject(cbModule), getExpectationMessage('Object', cbModule));
-
-  var _ref = options || {},
-      suffix = _ref.suffix,
-      exclude = _ref.exclude,
-      include = _ref.include,
-      proto = _ref.proto; // eslint-disable-line prefer-const
-
-
-  suffix = typeof suffix === 'string' ? suffix : 'Async';
-  exclude = Array.isArray(exclude) ? exclude : undefined;
-  include = Array.isArray(include) ? include : undefined;
-
-  for (var key in cbModule) {
-    if (shouldPromisify(key, cbModule, exclude, include, proto)) {
-      var asyncKey = getKey(cbModule, key, suffix);
-      cbModule[asyncKey] = promisify(cbModule[key], options);
-      cbModule[asyncKey].__promisified__ = true;
-    }
-  }
-
-  return cbModule;
-};
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-// Public
-
-module.exports = function (boolExpr, message) {
+var assert = function assert(boolExpr, message) {
   if (!boolExpr) {
     throw new TypeError(message);
   }
 };
 
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
+// Public
 
-var getTag = __webpack_require__(1);
+var getTag = function getTag(input) {
+  return Object.prototype.toString.call(input);
+};
 
 // Public
 
-module.exports = function (testVar) {
+var isPlainObject = function isPlainObject(testVar) {
   return !!(testVar && getTag(testVar) === '[object Object]');
 };
 
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
+var promisify_1 = createCommonjsModule(function (module) {
+  var getExpectationMessage = function getExpectationMessage(expectation, actual) {
+    return 'promisify: expected [' + expectation + '] but got ' + getTag(actual) + ']';
+  };
+
+  var promisified = function promisified(fn, args, options) {
+    var _this = this;
+
+    return new Promise(function (resolve, reject) {
+      args.push(function (err) {
+        for (var _len = arguments.length, result = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          result[_key - 1] = arguments[_key];
+        }
+
+        if (err) return reject(err);
+        return resolve(options && options.multiArgs ? result : result[0]);
+      });
+
+      fn.apply(_this, args);
+    });
+  };
+
+  var shouldPromisify = function shouldPromisify(key, cbModule, exclude, include, proto) {
+    return typeof cbModule[key] === 'function' && cbModule[key].__promisified__ !== true && (proto === true || cbModule.hasOwnProperty(key)) && (!include || include.some(function (k) {
+      return k === key;
+    })) && (!exclude || exclude.every(function (k) {
+      return k !== key;
+    }));
+  };
+
+  var getKey = function getKey(cbModule, key, suffix) {
+    var asyncKey = '' + key + suffix;
+    return asyncKey in cbModule ? getKey(cbModule, asyncKey, 'Promisified') : asyncKey;
+  };
+
+  var promisify = function promisify(fn, options) {
+    assert(typeof fn === 'function', getExpectationMessage('Function', fn));
+    return function () {
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      return promisified.call(this, fn, args, options);
+    };
+  };
+
+  promisify.all = function (cbModule, options) {
+    assert(isPlainObject(cbModule), getExpectationMessage('Object', cbModule));
+
+    var _ref = options || {},
+        suffix = _ref.suffix,
+        exclude = _ref.exclude,
+        include = _ref.include,
+        proto = _ref.proto; // eslint-disable-line prefer-const
+
+
+    suffix = typeof suffix === 'string' ? suffix : 'Async';
+    exclude = Array.isArray(exclude) ? exclude : undefined;
+    include = Array.isArray(include) ? include : undefined;
+
+    for (var key in cbModule) {
+      if (shouldPromisify(key, cbModule, exclude, include, proto)) {
+        var asyncKey = getKey(cbModule, key, suffix);
+        cbModule[asyncKey] = promisify(cbModule[key], options);
+        cbModule[asyncKey].__promisified__ = true;
+      }
+    }
+
+    return cbModule;
+  };
+
+  // Public
+
+  module.exports = promisify;
+});
 
 // Public
 
-module.exports = function (fn) {
+var singular = function singular(fn) {
   var inProgress = false;
   var done = function done() {
     inProgress = false;
@@ -320,10 +201,6 @@ module.exports = function (fn) {
     }
   };
 };
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
 
 var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
   var valA = sortBy(a);
@@ -360,7 +237,7 @@ var sort = function sort(ctx, _sorter) {
 
 // Public
 
-module.exports = function (ctx) {
+var sort_1 = function sort_1(ctx) {
   return {
     asc: function asc(sortBy) {
       return sort(ctx, ascSorter, sortBy);
@@ -371,11 +248,7 @@ module.exports = function (ctx) {
   };
 };
 
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var castObject = function castObject(args) {
   if (Array.isArray(args)) {
@@ -386,7 +259,7 @@ var castObject = function castObject(args) {
     return obj;
   }
 
-  return (typeof args === 'undefined' ? 'undefined' : _typeof(args)) === 'object' ? Object.assign({}, args) : {};
+  return (typeof args === 'undefined' ? 'undefined' : _typeof$1(args)) === 'object' ? Object.assign({}, args) : {};
 };
 
 var hardBindFunction = function hardBindFunction(obj, key) {
@@ -398,7 +271,7 @@ var hardBindFunction = function hardBindFunction(obj, key) {
 
 // Public
 
-module.exports = function (arg) {
+var toEnum = function toEnum(arg) {
   var enu = castObject(arg);
   var keys = Object.keys(enu).filter(function (key) {
     return typeof enu[key] !== 'function';
@@ -446,20 +319,19 @@ module.exports = function (arg) {
   return Object.freeze(enu);
 };
 
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
+/* eslint-disable global-require */
+var src = {
+  collar: collar,
+  deepFreeze: deepFreeze,
+  deepPreventExtensions: deepPreventExtensions,
+  deepSeal: deepSeal,
+  last: last,
+  promisify: promisify_1,
+  singular: singular,
+  sort: sort_1,
+  toEnum: toEnum
+};
 
-exports.collar = __webpack_require__(2);
-exports.deepFreeze = __webpack_require__(3);
-exports.deepPreventExtensions = __webpack_require__(4);
-exports.deepSeal = __webpack_require__(5);
-exports.last = __webpack_require__(6);
-exports.promisify = __webpack_require__(7);
-exports.singular = __webpack_require__(10);
-exports.sort = __webpack_require__(11);
-exports.toEnum = __webpack_require__(12);
+return src;
 
-/***/ })
-/******/ ]);
-});
+})));
