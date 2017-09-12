@@ -107,5 +107,4 @@ function run(err) {
   console.log('----- DONE -----');
 }
 
-run();
-//exec('npm uninstall js-flock && npm install --no-save js-flock', run);
+exec('npm uninstall js-flock && npm install --no-save js-flock', run);
