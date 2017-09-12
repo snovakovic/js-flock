@@ -1,9 +1,63 @@
 /* eslint-disable no-console, global-require, import/no-extraneous-dependencies, import/no-dynamic-require */
 
+const Fs = require('fs');
+const Path = require('path');
+
 process.chdir(__dirname); // Enable running from package script
 
 const assert = require('assert');
-const exec = require('child_process').exec;
+const { exec } = require('child_process');
+
+function testModules(modules) {
+  // collar
+  modules.collar(Promise.resolve('test'), 5)
+    .then((response) => {
+      assert.equal(response, 'test');
+      console.log('collar: SUCCESS');
+    });
+
+  // deepFreeze
+  const frozen = modules.deepFreeze({ a: 1 });
+  assert.equal(Object.isFrozen(frozen), true);
+  console.log('deepFreeze: SUCCESS');
+
+  // deepSeal
+  const sealed = modules.deepSeal({ a: 1 });
+  assert.equal(Object.isSealed(sealed), true);
+  console.log('deepSeal: SUCCESS');
+
+  // deepSeal
+  const notExtensible = modules.deepPreventExtensions({ a: 1 });
+  assert.equal(Object.isExtensible(notExtensible), false);
+  console.log('deepPreventExtensions: SUCCESS');
+
+  // singular
+  let singularCounter = 0;
+  const sin = modules.singular(() => { singularCounter += 1; });
+  sin(); sin();
+  assert.equal(singularCounter, 1);
+  console.log('singular: SUCCESS');
+
+  // promisify
+  const promisified = modules.promisify((cb) => { cb(undefined, 10); });
+  promisified().then((data) => {
+    assert.equal(data, 10);
+    console.log('promisify: SUCCESS');
+  });
+
+  // toEnum
+  const testEnum = modules.toEnum({ TEST: 'TEST' });
+  assert.equal(testEnum.TEST, 'TEST');
+  console.log('toEnum: SUCCESS');
+
+  // sort
+  assert.deepEqual(modules.sort([1, 4, 3]).asc(), [1, 3, 4]);
+  console.log('sort: SUCCESS');
+
+  // last
+  assert.equal(modules.last([1, 4, 3]), 3);
+  console.log('last: SUCCESS');
+}
 
 function run(err) {
   if (err) {
@@ -11,80 +65,45 @@ function run(err) {
     return;
   }
 
-  const modules = ['collar', 'deepFreeze', 'deepSeal', 'deepPreventExtensions', 'last',
-    'promisify', 'singular', 'sort', 'toEnum'];
+  // Dynamically load all modules from src directory
+  const sourcePats = Path.resolve(__dirname, '../../src/');
+  const modules = Fs.readdirSync(sourcePats)
+    .filter((file) => file.includes('.js'))
+    .map((fileName) => fileName.replace('.js', ''));
 
   const jsFlock = require('js-flock');
-  const jsFLockES5 = require('js-flock/es5');
+  const jsFLockEs5 = require('js-flock/es5');
+  const jsFLockEs5Min = require('js-flock/es5/index.min.js');
 
-  // Full library load
-  modules.forEach((name) => assert.equal(name in jsFlock, true));
-  modules.forEach((name) => assert.equal(name in jsFLockES5, true));
+  const es6Modules = {};
+  const es5Modules = {};
+  const es5MinModules = {};
 
-  // ES5 Library single modules
-  modules.forEach((name) => assert.equal(typeof require(`js-flock/es5/${name}`), 'function'));
-  modules.forEach((name) => assert.equal(typeof require(`js-flock/es5/${name}.min`), 'function'));
-
-  // single modules load
-  const collar = require('js-flock/collar');
-  const deepFreeze = require('js-flock/deepFreeze');
-  const deepPreventExtensions = require('js-flock/deepPreventExtensions');
-  const deepSeal = require('js-flock/deepSeal');
-  const last = require('js-flock/last');
-  const promisify = require('js-flock/promisify');
-  const singular = require('js-flock/singular');
-  const sort = require('js-flock/sort');
-  const toEnum = require('js-flock/toEnum');
-
-  // collar
-  collar(Promise.resolve('test'), 5)
-    .then((response) => {
-      assert.equal(response, 'test');
-      console.log('collar: SUCCESS');
-    });
-
-  // deepFreeze
-  const frozen = deepFreeze({ a: 1 });
-  assert.equal(Object.isFrozen(frozen), true);
-  console.log('deepFreeze: SUCCESS');
-
-  // deepSeal
-  const sealed = deepSeal({ a: 1 });
-  assert.equal(Object.isSealed(sealed), true);
-  console.log('deepSeal: SUCCESS');
-
-  // deepSeal
-  const notExtensible = deepPreventExtensions({ a: 1 });
-  assert.equal(Object.isExtensible(notExtensible), false);
-  console.log('deepPreventExtensions: SUCCESS');
-
-  // singular
-  let singularCounter = 0;
-  const sin = singular(() => { singularCounter += 1; });
-  sin();
-  sin();
-  assert.equal(singularCounter, 1);
-  console.log('singular: SUCCESS');
-
-  // promisify
-  const promisified = promisify((cb) => { cb(undefined, 10); });
-  promisified().then((data) => {
-    assert.equal(data, 10);
-    console.log('promisify: SUCCESS');
+  modules.forEach((name) => {
+    es6Modules[name] = require(`js-flock/${name}`);
+    es5Modules[name] = require(`js-flock/es5/${name}`);
+    es5MinModules[name] = require(`js-flock/es5/${name}.min.js`);
   });
 
-  // toEnum
-  const testEnum = toEnum({ TEST: 'TEST' });
-  assert.equal(testEnum.TEST, 'TEST');
-  console.log('toEnum: SUCCESS');
+  console.log('\n --- jsFlock full lib test-----\n ');
+  testModules(jsFlock);
 
-  // sort
-  assert.deepEqual(sort([1, 4, 3]).asc(), [1, 3, 4]);
-  console.log('sort: SUCCESS');
+  console.log('\n --- jsFLockEs5 full lib test-----\n ');
+  testModules(jsFLockEs5);
 
-  // last
-  assert.equal(last([1, 4, 3]), 3);
-  console.log('last: SUCCESS');
+  console.log('\n --- jsFLockEs5Min full lib test-----\n ');
+  testModules(jsFLockEs5Min);
+
+  console.log('\n --- es6Modules test-----\n ');
+  testModules(es6Modules);
+
+  console.log('\n --- es5Modules test-----\n ');
+  testModules(es5Modules);
+
+  console.log('\n ---es5MinModules full lib test----- \n');
+  testModules(es5MinModules);
+
+  console.log('----- DONE -----');
 }
 
 exec('npm uninstall js-flock && npm install --no-save js-flock', run);
