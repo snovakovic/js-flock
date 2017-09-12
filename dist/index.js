@@ -1,4 +1,5 @@
 /* eslint-disable global-require */
+
 module.exports = {
   collar: require('./collar'),
   deepFreeze: require('./deepFreeze'),
