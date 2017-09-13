@@ -8,8 +8,8 @@
 
 [![NPM Package](https://nodei.co/npm/js-flock.png)](https://www.npmjs.com/package/js-flock)
 
-Collection of neat utility modules for bumping up development in NODE and Browser.
 
+Collection of neat modular utilities for bumping up development in NODE and Browser.
 
 ### Including library
 
