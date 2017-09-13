@@ -1,7 +1,7 @@
 {
   "name": "js-flock",
   "version": "2.3.0",
-  "description": "Collection of neat utility modules to bump up your development.",
+  "description": "Collection of neat utility modules for bumping up development in NODE and Browser",
   "main": "index.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
   "contributors": [
