@@ -1,4 +1,5 @@
-const expect = require('chai').expect;
+const { expect } = require('chai');
+
 const deepFreeze = require('../src/deepFreeze');
 const deepSeal = require('../src/deepSeal');
 const deepPreventExtensions = require('../src/deepPreventExtensions');
