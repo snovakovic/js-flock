@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const Benchmark = require('benchmark');
 const Bluebird = require('bluebird');
 const flockPromisify = require('js-flock/promisify');
