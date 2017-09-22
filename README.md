@@ -233,6 +233,28 @@ single success value while some callback API's have multiple success value.
   funAsync().then(([r1, r2]) => { /* r1 === res1, r2 === res2 */ });
 ```
 
+#### promisify benchmark
+
+Benchmark has been run on:
+
+* 16 GB Ram
+* Intel® Core™ i5-4570 CPU @ 3.20GHz × 4
+* Ubuntu 16.04
+* Node 8.5.0
+
+| Implementation   | ops/sec             |  %          |
+| ---------------- | ------------------- | -----------:|
+| **js-flock**     | 10,742,789 ops/sec  | fastest     |
+| node-util        | 91,949 ops/sec      | 116x slower |
+| bluebird         | 59,821 ops/sec      | 179x slower |
+
+
+To run benchmark on your PC follow steps from below
+
+1) git clone https://github.com/snovakovic/js-flock.git
+2) cd js-flock
+3) npm install
+4) npm run benchmark:promisify
 
 ### promisify.all
 
