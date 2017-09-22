@@ -1,0 +1,17 @@
+{
+  "name": "promisify-benchmark",
+  "version": "1.0.0",
+  "description": "benchmark for js-flock promisify",
+  "main": "index.js",
+  "dependencies": {
+    "benchmark": "^2.1.4",
+    "bluebird": "^3.5.0",
+    "js-flock": "^2.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "stefan.novakovich@gmail.com",
+  "license": "MIT"
+}
