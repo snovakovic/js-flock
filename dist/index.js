@@ -8,5 +8,6 @@ module.exports = {
   promisify: require('./promisify'),
   singular: require('./singular'),
   sort: require('./sort'),
-  toEnum: require('./toEnum')
+  toEnum: require('./toEnum'),
+  waitFor: require('./waitFor')
 };

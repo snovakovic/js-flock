@@ -319,6 +319,23 @@ var toEnum = function toEnum(arg) {
   return Object.freeze(enu);
 };
 
+// Public
+
+var waitFor = function waitFor(fn, options) {
+  assert(typeof fn === 'function', 'waitFor: expected [Function] but got ' + getTag(fn) + ']');
+  var interval = Number(options && options.interval) || 50;
+  var endTime = Date.now() + (Number(options && options.timeout) || 5000);
+
+  return new Promise(function check(resolve, reject) {
+    var result = fn();
+
+    if (result) return resolve(result);
+    if (Date.now() > endTime) return reject(new Error('Timed out!'));
+
+    return setTimeout(check, interval, resolve, reject);
+  });
+};
+
 /* eslint-disable global-require */
 var src = {
   collar: collar,
@@ -329,7 +346,8 @@ var src = {
   promisify: promisify_1,
   singular: singular,
   sort: sort_1,
-  toEnum: toEnum
+  toEnum: toEnum,
+  waitFor: waitFor
 };
 
 return src;
