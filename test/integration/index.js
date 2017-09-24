@@ -22,22 +22,19 @@ function testModules(modules) {
   assert.equal(Object.isFrozen(frozen), true);
   console.log('deepFreeze: SUCCESS');
 
+  // deepPreventExtensions
+  const notExtensible = modules.deepPreventExtensions({ a: 1 });
+  assert.equal(Object.isExtensible(notExtensible), false);
+  console.log('deepPreventExtensions: SUCCESS');
+
   // deepSeal
   const sealed = modules.deepSeal({ a: 1 });
   assert.equal(Object.isSealed(sealed), true);
   console.log('deepSeal: SUCCESS');
 
-  // deepSeal
-  const notExtensible = modules.deepPreventExtensions({ a: 1 });
-  assert.equal(Object.isExtensible(notExtensible), false);
-  console.log('deepPreventExtensions: SUCCESS');
-
-  // singular
-  let singularCounter = 0;
-  const sin = modules.singular(() => { singularCounter += 1; });
-  sin(); sin();
-  assert.equal(singularCounter, 1);
-  console.log('singular: SUCCESS');
+  // last
+  assert.equal(modules.last([1, 4, 3]), 3);
+  console.log('last: SUCCESS');
 
   // promisify
   const promisified = modules.promisify((cb) => { cb(undefined, 10); });
@@ -46,18 +43,30 @@ function testModules(modules) {
     console.log('promisify: SUCCESS');
   });
 
-  // toEnum
-  const testEnum = modules.toEnum({ TEST: 'TEST' });
-  assert.equal(testEnum.TEST, 'TEST');
-  console.log('toEnum: SUCCESS');
+  // singular
+  let singularCounter = 0;
+  const sin = modules.singular(() => { singularCounter += 1; });
+  sin(); sin();
+  assert.equal(singularCounter, 1);
+  console.log('singular: SUCCESS');
 
   // sort
   assert.deepEqual(modules.sort([1, 4, 3]).asc(), [1, 3, 4]);
   console.log('sort: SUCCESS');
 
-  // last
-  assert.equal(modules.last([1, 4, 3]), 3);
-  console.log('last: SUCCESS');
+  // toEnum
+  const testEnum = modules.toEnum({ TEST: 'TEST' });
+  assert.equal(testEnum.TEST, 'TEST');
+  console.log('toEnum: SUCCESS');
+
+  // waitFor
+  let waitCondition = false;
+  setTimeout(() => { waitCondition = true; }, 5);
+  modules.waitFor(() => waitCondition, { interval: 2 })
+    .then((res) => {
+      assert.equal(res, true);
+      console.log('waitFor: SUCCESS');
+    });
 }
 
 function run(err) {
