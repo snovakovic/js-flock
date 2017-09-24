@@ -1,25 +1,20 @@
+const assert = require('./internals/assert');
+const getTag = require('./internals/getTag');
+
+
 // Public
 
-module.exports = function(fn, timeout, interval) {
-  const endTime = Date.now() + (timeout || 2000);
-  interval = interval || 50;
+module.exports = function(fn, options) {
+  assert(typeof fn === 'function', `waitFor: expected [Function] but got ${getTag(fn)}]`);
+  const interval = Number(options && options.interval) || 50;
+  const endTime = Date.now() + (Number(options && options.timeout) || 5000);
 
   return new Promise(function check(resolve, reject) {
     const result = fn();
-    if (result) {
-      resolve(result);
-    } else if (Date.now() < endTime) {
-      setTimeout(check, interval, resolve, reject);
-    } else {
-      reject(new Error('Timed out!'));
-    }
+
+    if (result) return resolve(result);
+    if (Date.now() > endTime) return reject(new Error('Timed out!'));
+
+    return setTimeout(check, interval, resolve, reject);
   });
 };
-
-// waitFor(() => document.getElementById('lightbox').offsetWidth > 0, 2000, 150)
-//   .then(() => {
-//     // Polling done, now do something else!
-//   })
-//   .catch((err) => {
-//     // Polling timed out, handle the error!
-//   });
