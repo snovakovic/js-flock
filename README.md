@@ -41,13 +41,13 @@ in Browser as CommonJs, AMD or as global var.
 - [last](#last)
 - [toEnum](#toenum)
 - [singular](#singular)
-- [waitFor](#waitFor)
+- [waitFor](#waitfor)
 - [promisify](#promisify)
-- [promisify.all](#promisify.all)
+- [promisify.all](#promisifyall)
 - [collar](#collar)
 - [deepFreeze](#deepfreeze)
 - [deepSeal](#deepseal)
-- [deepPreventExtensions](#deepPreventExtensions)
+- [deepPreventExtensions](#deepPreventextensions)
 
 
 ### sort
