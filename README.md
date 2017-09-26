@@ -47,7 +47,7 @@ in Browser as CommonJs, AMD or as global var.
 - [collar](#collar)
 - [deepFreeze](#deepfreeze)
 - [deepSeal](#deepseal)
-- [deepPreventExtensions](#deepPreventextensions)
+- [deepPreventExtensions](#deeppreventextensions)
 
 
 ### sort
