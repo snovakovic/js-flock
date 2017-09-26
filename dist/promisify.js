@@ -20,7 +20,7 @@ const promisified = function(fn, args, options) {
 const shouldPromisify = function(key, cbModule, exclude, include, proto) {
   return typeof cbModule[key] === 'function' &&
     cbModule[key].__promisified__ !== true &&
-    (proto === true || cbModule.hasOwnProperty(key)) &&
+    (proto === true || Object.prototype.hasOwnProperty.call(cbModule, key)) &&
     (!include || include.some((k) => k === key)) &&
     (!exclude || exclude.every((k) => k !== key));
 };

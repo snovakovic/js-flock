@@ -22,7 +22,7 @@ var deep = function deep(action, obj, options) {
 
   for (var key in obj) {
     var prop = obj[key];
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || obj.hasOwnProperty(key))) {
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || Object.prototype.hasOwnProperty.call(obj, key))) {
       deep(action, prop, options);
     }
   }

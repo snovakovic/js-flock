@@ -51,7 +51,7 @@ var promisify_1 = createCommonjsModule(function (module) {
   };
 
   var shouldPromisify = function shouldPromisify(key, cbModule, exclude, include, proto) {
-    return typeof cbModule[key] === 'function' && cbModule[key].__promisified__ !== true && (proto === true || cbModule.hasOwnProperty(key)) && (!include || include.some(function (k) {
+    return typeof cbModule[key] === 'function' && cbModule[key].__promisified__ !== true && (proto === true || Object.prototype.hasOwnProperty.call(cbModule, key)) && (!include || include.some(function (k) {
       return k === key;
     })) && (!exclude || exclude.every(function (k) {
       return k !== key;
