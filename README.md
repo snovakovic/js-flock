@@ -41,6 +41,7 @@ in Browser as CommonJs, AMD or as global var.
 - [last](#last)
 - [toEnum](#toenum)
 - [singular](#singular)
+- [waitFor](#waitFor)
 - [promisify](#promisify)
 - [promisify.all](#promisify.all)
 - [collar](#collar)
@@ -192,6 +193,32 @@ Enum representation is immutable (frozen)
   };
 ```
 
+
+### waitFor
+
+Wait for task to complete before executing function. This module is useful when there isn't event
+you can hook into to signify that a given task is complete. waitFor returns promise that resolves
+after check function returns truthy value.
+
+```javascript
+  import waitFor from 'js-flock/waitFor';
+
+  const options = {
+    interval: 250, // Repeat check every 250ms. [defaults to 50ms]
+    timeout: 2000, // Timed aut after 1000ms if condition is not meet. [defaults to 5000ms]
+  };
+
+  // Wait for DB connection
+  waitFor(() => Db.connection, options)
+    .then((connection) => { /* connection to DB has been established */})
+    .catch(() => { /* Waiting timed out, handle the error! */ });
+
+  // Wait for DOM element to become accessible
+  waitFor(() => document.getElementById('elId'))
+    .then(($el) => { /* Element is available now we can do manipulation with $el */})
+    .catch(() => { /* Waiting timed out, handle the error! */ });
+
+```
 
 ### promisify
 
