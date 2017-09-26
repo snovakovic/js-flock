@@ -69,6 +69,16 @@ describe('deep', () => {
       expect(Object.isFrozen(proto.proto.test)).to.equal(true);
     });
 
+    it('Should deep freeze object with null prototype', () => {
+      const ob1 = Object.create(null);
+      ob1.test = 'test';
+      ob1.ob2 = Object.create(null);
+
+      deepFreeze(ob1);
+      expect(Object.isFrozen(ob1)).to.equal(true);
+      expect(Object.isFrozen(ob1.ob2)).to.equal(true);
+    });
+
     it('should deep freeze complex object', () => {
       const fun = () => {};
       fun.test = { isFrozen: { is: false } };

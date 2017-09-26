@@ -16,7 +16,7 @@ module.exports = function deep(action, obj, options) {
     if (prop &&
       (typeof prop === 'object' || typeof prop === 'function') &&
       !isApplied[action](prop) &&
-      (options.proto || obj.hasOwnProperty(key))) {
+      (options.proto || Object.prototype.hasOwnProperty.call(obj, key))) {
       deep(action, prop, options);
     }
   }

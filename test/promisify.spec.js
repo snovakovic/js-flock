@@ -163,6 +163,13 @@ describe('promisify.all', () => {
       .catch(shouldNotBeCalled);
   });
 
+  it('Should promisify object without prototype', () => {
+    const test = Object.create(null);
+    test.fn1 = () => {};
+    const async = promisify.all(test);
+    expect(async).to.include.all.keys(['fn1', 'fn1Async']);
+  });
+
   it('Should promisify all except excluded functions', () => {
     const asyncModule = promisify.all(mdl, { exclude: ['error', 'getName'] });
     expect('successAsync' in asyncModule).to.equal(true);
