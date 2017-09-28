@@ -15,25 +15,20 @@ Collection of neat modular utilities for bumping up development in NODE and Brow
 
 ### Including library
 
-We can include whole library at once or a module by module. **By default unmodified ES6 code is loaded**,
-optionally we can include transpiled ES5 code. Transpiled code is wrapped in UMD and can be loaded
-in Browser as CommonJs, AMD or as global var.
+Each method is a separate module, so you can require only the methods that you need or a whole package. **By default unmodified ES6 code is loaded**, optionally we can include transpiled ES5 code that is wrapped in UMD and can be loaded in Browser as CommonJs, AMD or as global var.
 
 ```javascript
-  // Import whole unmodified ES6 library
-  import jsFlock from 'js-flock';
+  // Load individual unmodified ES6 methods (recommended).
+  const sort = require('js-flock/sort');
 
-  // Import library with require
+  // Load individual transpiled ES5 methods (recommended for browser).
+  const sort = require('js-flock/es5/sort');
+
+  // Load whole unmodified ES6 library
   const jsFlock = require('js-flock');
 
-  // Import transpiled ES5 version of library (ideal for usage in Browser)
-  import jsFlock from 'js-flock/es5';
-
-  // Import only sort module (unmodified ES6 version).
-  import sort from 'js-flock/sort';
-
-  // Import only toEnum module (transpiled ES5 version)
-  import toEnum from 'js-flock/es5/toEnum';
+  // Load whole transpiled ES5 library
+  const jsFlock = require('js-flock/es5');
 ```
 
 ### Methods:
@@ -64,7 +59,7 @@ For more information about performance take a look at the benchmark result
 * Mutates input array in a same way as native [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) does.
 
 ```javascript
-  import sort from 'js-flock/sort';
+  const sort = require('js-flock/sort');
 
   sort([1, 4, 2]).asc(); // => [1, 2, 4]
   sort([1, 4, 2]).desc(); // => [4, 2, 1]
@@ -90,7 +85,7 @@ Get the last element of array. If condition is provided get the last element of 
 array that meets provided condition or undefined if no elements meets condition.
 
 ```javascript
-  import last from 'js-flock/last';
+  const last = require('js-flock/last');
 
   last([1, 4, 2]); // => 2
 
@@ -108,7 +103,7 @@ Convert object or list of strings to enum representation.
 Enum representation is immutable (frozen)
 
 ```javascript
-  import toEnum from 'js-flock/toEnum';
+  const toEnum = require('js-flock/toEnum');
 
   const vehicleType = toEnum({
     CAR: 'C',
@@ -168,6 +163,8 @@ Enum representation is immutable (frozen)
 ```
 
 ```javascript
+  const singular = require('js-flock/singular');
+
   export default {
     methods: {
       startConversation: singular(function(done) {
@@ -202,7 +199,7 @@ you can hook into to signify that a given task is complete. waitFor returns prom
 after check function returns truthy value.
 
 ```javascript
-  import waitFor from 'js-flock/waitFor';
+  const waitFor = require('js-flock/waitFor');
 
   const options = {
     interval: 250, // Repeat check every 250ms. [defaults to 50ms]
@@ -327,7 +324,7 @@ To run benchmark on your PC follow steps from below
 Set maximum waiting time for promise to resolve. Reject promise if it's not resolved in that time
 
 ```javascript
-  import collar from 'js-flock/collar';
+  const collar = require('js-flock/collar');
 
   const MAX_WAITING_TIME = 500;
 
@@ -348,7 +345,7 @@ Set maximum waiting time for promise to resolve. Reject promise if it's not reso
 Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
 
 ```javascript
-  import deepFreeze from 'js-flock/deepFreeze';
+  const deepFreeze = require('js-flock/deepFreeze');
 
   const person = {
     fullName: 'test person',
