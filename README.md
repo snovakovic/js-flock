@@ -203,8 +203,8 @@ after check function returns truthy value.
   const waitFor = require('js-flock/waitFor');
 
   const options = {
-    interval: 250, // Repeat check every 250ms. [defaults to 50ms]
-    timeout: 2000, // Timed aut after 1000ms if condition is not meet. [defaults to 5000ms]
+    interval: Number, // [Default: 50ms] - How frequently will check be preformed.
+    timeout: Number, // [Default: 5000ms] - Timeout if function is not resolved by then.
   };
 
   // Wait for DB connection
@@ -373,7 +373,6 @@ Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/Ja
 
 By default deepFreeze do not loop over prototype chain.
 That behaviour can be overridden by providing { proto: true } option.
-By providing { proto: true } option we instruct deepFreeze to iterate over all enumerable properties of the object itself and those the object inherits from its constructor's prototype.
 
 ```javascript
   const ob1 = { test: { a: 'a' } };
