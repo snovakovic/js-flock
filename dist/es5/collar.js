@@ -4,6 +4,8 @@
 	(global.collar = global.collar || {}, global.collar.js = factory());
 }(this, (function () { 'use strict';
 
+// Internals
+
 var REJECTION_REASON = Object.freeze({
   isStrangled: true,
   message: 'Promise have timed out'

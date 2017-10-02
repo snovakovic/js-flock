@@ -1,5 +1,7 @@
-/* eslint-disable global-require */
+// Public
+
 module.exports = {
+  /* eslint-disable global-require */
   collar: require('./collar'),
   deepFreeze: require('./deepFreeze'),
   deepPreventExtensions: require('./deepPreventExtensions'),

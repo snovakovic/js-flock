@@ -4,6 +4,8 @@
 	(global.sort = global.sort || {}, global.sort.js = factory());
 }(this, (function () { 'use strict';
 
+// Internals
+
 var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
   var valA = sortBy(a);
   var valB = sortBy(b);

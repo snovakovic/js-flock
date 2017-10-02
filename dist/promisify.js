@@ -1,10 +1,6 @@
-const assert = require('./internals/assert');
-const getTag = require('./internals/getTag');
-const isPlainObject = require('./internals/isPlainObject');
+const assertType = require('./internals/assertType')('promisify');
 
-
-const getExpectationMessage = (expectation, actual) =>
-  `promisify: expected [${expectation}] but got ${getTag(actual)}]`;
+// Internals
 
 const promisified = function(fn, args, options) {
   return new Promise((resolve, reject) => {
@@ -27,18 +23,21 @@ const shouldPromisify = function(key, cbModule, exclude, include, proto) {
 
 const getKey = function(cbModule, key, suffix) {
   const asyncKey = `${key}${suffix}`;
-  return (asyncKey in cbModule) ? getKey(cbModule, asyncKey, 'Promisified') : asyncKey;
+  return (asyncKey in cbModule)
+    ? getKey(cbModule, asyncKey, 'Promisified')
+    : asyncKey;
 };
 
 const promisify = function(fn, options) {
-  assert(typeof fn === 'function', getExpectationMessage('Function', fn));
+  assertType('Function', fn);
+
   return function(...args) {
     return promisified.call(this, fn, args, options);
   };
 };
 
 promisify.all = (cbModule, options) => {
-  assert(isPlainObject(cbModule), getExpectationMessage('Object', cbModule));
+  assertType('Object', cbModule);
 
   let { suffix, exclude, include, proto } = options || {}; // eslint-disable-line prefer-const
   suffix = typeof suffix === 'string' ? suffix : 'Async';
@@ -55,7 +54,6 @@ promisify.all = (cbModule, options) => {
 
   return cbModule;
 };
-
 
 // Public
 

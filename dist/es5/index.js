@@ -4,6 +4,8 @@
 	(global['js-flock'] = factory());
 }(this, (function () { 'use strict';
 
+// Internals
+
 var REJECTION_REASON = Object.freeze({
   isStrangled: true,
   message: 'Promise have timed out'
@@ -22,6 +24,8 @@ var collar = function collar(promise) {
 };
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+// Internals
 
 var isApplied = {
   freeze: Object.isFrozen,
@@ -86,28 +90,19 @@ function createCommonjsModule(fn, module) {
 
 // Public
 
-var assert = function assert(boolExpr, message) {
-  if (!boolExpr) {
-    throw new TypeError(message);
-  }
-};
-
-// Public
-
-var getTag = function getTag(input) {
-  return Object.prototype.toString.call(input);
-};
-
-// Public
-
-var isPlainObject = function isPlainObject(testVar) {
-  return !!(testVar && getTag(testVar) === '[object Object]');
+var assertType = function assertType(moduleName) {
+  return function (type, val) {
+    var tag = Object.prototype.toString.call(val);
+    if ("[object " + type + "]" !== tag) {
+      throw new TypeError(moduleName + ": expected [" + type + "] but got " + tag + "]");
+    }
+  };
 };
 
 var promisify_1 = createCommonjsModule(function (module) {
-  var getExpectationMessage = function getExpectationMessage(expectation, actual) {
-    return 'promisify: expected [' + expectation + '] but got ' + getTag(actual) + ']';
-  };
+  var assertType$$1 = assertType('promisify');
+
+  // Internals
 
   var promisified = function promisified(fn, args, options) {
     var _this = this;
@@ -140,7 +135,8 @@ var promisify_1 = createCommonjsModule(function (module) {
   };
 
   var promisify = function promisify(fn, options) {
-    assert(typeof fn === 'function', getExpectationMessage('Function', fn));
+    assertType$$1('Function', fn);
+
     return function () {
       for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
         args[_key2] = arguments[_key2];
@@ -151,7 +147,7 @@ var promisify_1 = createCommonjsModule(function (module) {
   };
 
   promisify.all = function (cbModule, options) {
-    assert(isPlainObject(cbModule), getExpectationMessage('Object', cbModule));
+    assertType$$1('Object', cbModule);
 
     var _ref = options || {},
         suffix = _ref.suffix,
@@ -202,6 +198,8 @@ var singular = function singular(fn) {
   };
 };
 
+// Internals
+
 var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
   var valA = sortBy(a);
   var valB = sortBy(b);
@@ -249,6 +247,8 @@ var sort_1 = function sort_1(ctx) {
 };
 
 var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+// Internals
 
 var castObject = function castObject(args) {
   if (Array.isArray(args)) {
@@ -319,10 +319,13 @@ var toEnum = function toEnum(arg) {
   return Object.freeze(enu);
 };
 
+var assertType$2 = assertType('waitFor');
+
 // Public
 
 var waitFor = function waitFor(fn, options) {
-  assert(typeof fn === 'function', 'waitFor: expected [Function] but got ' + getTag(fn) + ']');
+  assertType$2('Function', fn);
+
   var interval = Number(options && options.interval) || 50;
   var endTime = Date.now() + (Number(options && options.timeout) || 5000);
 
@@ -336,8 +339,10 @@ var waitFor = function waitFor(fn, options) {
   });
 };
 
-/* eslint-disable global-require */
+// Public
+
 var src = {
+  /* eslint-disable global-require */
   collar: collar,
   deepFreeze: deepFreeze,
   deepPreventExtensions: deepPreventExtensions,

@@ -1,3 +1,5 @@
+// Internals
+
 const castObject = function(args) {
   if (Array.isArray(args)) {
     const obj = {};

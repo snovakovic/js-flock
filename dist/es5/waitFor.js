@@ -6,22 +6,22 @@
 
 // Public
 
-var assert = function assert(boolExpr, message) {
-  if (!boolExpr) {
-    throw new TypeError(message);
-  }
+var assertType$1 = function assertType(moduleName) {
+  return function (type, val) {
+    var tag = Object.prototype.toString.call(val);
+    if ("[object " + type + "]" !== tag) {
+      throw new TypeError(moduleName + ": expected [" + type + "] but got " + tag + "]");
+    }
+  };
 };
 
-// Public
-
-var getTag = function getTag(input) {
-  return Object.prototype.toString.call(input);
-};
+var assertType = assertType$1('waitFor');
 
 // Public
 
 var waitFor = function waitFor(fn, options) {
-  assert(typeof fn === 'function', 'waitFor: expected [Function] but got ' + getTag(fn) + ']');
+  assertType('Function', fn);
+
   var interval = Number(options && options.interval) || 50;
   var endTime = Date.now() + (Number(options && options.timeout) || 5000);
 
