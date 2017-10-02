@@ -13,9 +13,10 @@
 
 Collection of neat modular utilities for bumping up development in NODE and Browser.
 
-### Including library
+## Including library
 
-Each method is a separate module, so you can require only the methods that you need or a whole package. **By default unmodified ES6 code is loaded**, optionally we can include transpiled ES5 code that is wrapped in UMD and can be loaded in Browser as CommonJs, AMD or as global var.
+Each method is a separate module, so you can require only the methods that you need or a whole package. **By default unmodified ES6 code is loaded**, optionally we can include transpiled ES5 code.
+Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/) and can be loaded in Browser as CommonJs, AMD or as global var.
 
 ```javascript
   // Load individual unmodified ES6 methods (recommended).
@@ -31,7 +32,7 @@ Each method is a separate module, so you can require only the methods that you n
   const jsFlock = require('js-flock/es5');
 ```
 
-### Methods:
+## Methods:
 
 - [sort](#sort)
 - [last](#last)
@@ -218,6 +219,7 @@ after check function returns truthy value.
 
 ```
 
+
 ### promisify
 
 Promisify error first callback function. Instead of taking a callback, the returned function
@@ -288,6 +290,7 @@ The promisified method name will be the original method name suffixed with suffi
     include: [String], // [default: undefined] Promisify only provided keys
   });
 ```
+
 #### promisify benchmark
 
 Benchmark has been run on:
@@ -318,6 +321,7 @@ To run benchmark on your PC follow steps from below
 2) cd js-flock
 3) npm install
 4) npm run benchmark:promisify
+
 
 ### collar
 
