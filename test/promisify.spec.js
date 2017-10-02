@@ -17,6 +17,7 @@ describe('promisify', () => {
 
   it('Should resolve promisified function', (done) => {
     const successFunAsync = promisify((cb) => cb(undefined, 'response'));
+
     successFunAsync().then((response) => {
       expect(response).to.equal('response');
       done();
@@ -25,6 +26,7 @@ describe('promisify', () => {
 
   it('Should reject promisified function', (done) => {
     const errorFunAsync = promisify((cb) => cb('error'));
+
     errorFunAsync()
       .then(shouldNotBeCalled)
       .catch((err) => {
@@ -37,6 +39,7 @@ describe('promisify', () => {
     const successFunAsync = promisify((p1, p2, cb) => {
       setTimeout(() => cb(undefined, [`${p1}-res`, `${p2}-res`]), 50);
     });
+
     successFunAsync('p1', 'p2').then(([response1, response2]) => {
       expect(response1).to.equal('p1-res');
       expect(response2).to.equal('p2-res');
@@ -58,6 +61,7 @@ describe('promisify', () => {
 
   it('Should return single param if multiArgs is not provided', (done) => {
     const funAsync = promisify((cb) => cb(undefined, 'res1', 2));
+
     funAsync().then((r1, r2) => {
       expect(r1).to.equal('res1');
       expect(r2).to.equal(undefined);
@@ -74,6 +78,7 @@ describe('promisify', () => {
 
   it('Should handle function with no params and multiArgs option', (done) => {
     const funAsync = promisify(fun, { multiArgs: true });
+
     funAsync().then(([res1, res2]) => {
       expect(res1).to.equal(undefined);
       expect(res2).to.equal(undefined);

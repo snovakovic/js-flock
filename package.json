@@ -29,6 +29,7 @@
     "url": "git+https://github.com/snovakovic/js-flock.git"
   },
   "keywords": [
+    "deep-freeze",
     "deepFreeze",
     "deepPreventExtensions",
     "deepSeal",
@@ -38,7 +39,9 @@
     "freeze",
     "helpers",
     "last",
+    "lastBy",
     "order",
+    "order-by",
     "orderBy",
     "poll",
     "preventExtensions",
@@ -48,6 +51,8 @@
     "promisifyAll",
     "seal",
     "sort",
+    "sort-array",
+    "sort-by",
     "sortBy",
     "then",
     "thenify",

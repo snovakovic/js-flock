@@ -15,6 +15,7 @@ describe('toEnum', () => {
 
   it('Should convert normal object to Enum representation', () => {
     const testEnum = toEnum(obj);
+
     expect(Object.isFrozen(testEnum)).to.equal(true);
     expect(testEnum.values()).to.eql(arr);
     expect(testEnum.keys()).to.eql(arr);
@@ -26,6 +27,7 @@ describe('toEnum', () => {
 
   it('Should convert arr representation to Enum representation', () => {
     const testEnum = toEnum(arr);
+
     expect(Object.isFrozen(testEnum)).to.equal(true);
     expect(testEnum.CAR).to.be.a('symbol');
     expect(testEnum.TRUCK).to.be.a('symbol');
@@ -36,13 +38,18 @@ describe('toEnum', () => {
     const testEnum = toEnum(arr);
     const values = testEnum.values();
     const keys = testEnum.keys();
+
     keys[0] = 'changed key';
+
     expect(Object.isFrozen(values)).to.equal(true);
     expect(testEnum.keys()).to.eql(arr);
   });
 
   it('Should handle helper functions', () => {
-    obj.canFly = function(type) { return type === this.AIRPLANE || type === this.HELICOPTER; };
+    obj.canFly = function(type) {
+      return type === this.AIRPLANE || type === this.HELICOPTER;
+    };
+
     const testEnum = toEnum(obj);
     expect(testEnum.canFly(testEnum.HELICOPTER)).to.equal(true);
     expect(testEnum.canFly(testEnum.AIRPLANE)).to.equal(true);
@@ -50,6 +57,7 @@ describe('toEnum', () => {
     expect(testEnum.canFly(null)).to.equal(false);
     expect(testEnum.haveKey('canFly')).to.equal(false);
     expect(testEnum.exists('canFly')).to.equal(false);
+
     const values = ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'];
     expect(testEnum.values()).to.eql(values);
     expect(testEnum.keys()).to.eql(values);
@@ -62,6 +70,7 @@ describe('toEnum', () => {
 
   it('Invalid input should return empty enum', () => {
     const testEnum = toEnum('invalid');
+
     expect(testEnum.values()).to.eql([]);
     expect(testEnum.keys()).to.eql([]);
   });
