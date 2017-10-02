@@ -1,5 +1,7 @@
 const assertType = require('./internals/assertType')('promisify');
 
+// Internals
+
 const promisified = function(fn, args, options) {
   return new Promise((resolve, reject) => {
     args.push((err, ...result) => {

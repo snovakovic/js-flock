@@ -1,3 +1,5 @@
+// Internals
+
 const isApplied = {
   freeze: Object.isFrozen,
   seal: Object.isSealed,
