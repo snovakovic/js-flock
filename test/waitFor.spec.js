@@ -42,13 +42,10 @@ describe('waitFor', () => {
 
   it('Should resolve multiple waitFor', (done) => {
     let condition = false;
-
     const p1 = waitFor(() => condition, { interval: 1 })
       .then(() => { expect(condition).to.equal(true); });
-
     const p2 = waitFor(() => condition, { interval: 1 })
       .then(() => { expect(condition).to.equal(true); });
-
     const p3 = waitFor(() => condition === 55)
       .then(() => { expect(condition).to.equal(55); });
 
@@ -60,7 +57,6 @@ describe('waitFor', () => {
 
   it('Should ignore invalid properties', (done) => {
     let condition = false;
-
     const cond = () => condition;
     const resolver = () => { expect(condition).to.equal(true); };
 
@@ -93,6 +89,7 @@ describe('waitFor', () => {
 
   it('Should throw error if function is not provided', () => {
     const error = 'waitFor: expected [Function] but got';
+
     expect(() => waitFor(33).to.throw(TypeError, `${error} [object Number]`));
     expect(() => waitFor(null)).to.throw(TypeError, `${error} [object Null]`);
   });

@@ -27,7 +27,9 @@ const shouldPromisify = function(key, cbModule, exclude, include, proto) {
 
 const getKey = function(cbModule, key, suffix) {
   const asyncKey = `${key}${suffix}`;
-  return (asyncKey in cbModule) ? getKey(cbModule, asyncKey, 'Promisified') : asyncKey;
+  return (asyncKey in cbModule)
+    ? getKey(cbModule, asyncKey, 'Promisified')
+    : asyncKey;
 };
 
 const promisify = function(fn, options) {

@@ -29,6 +29,7 @@ describe('collar', () => {
 
   it('Should resolve collar without timeout provided', (done) => {
     const promise = new Promise((resolve) => setTimeout(resolve, 1, '1'));
+
     collar(promise)
       .then((first) => {
         expect(first).to.equal('1');
@@ -38,6 +39,7 @@ describe('collar', () => {
 
   it('Should strangled promise', (done) => {
     const promise = new Promise((resolve) => setTimeout(resolve, 10, '1'));
+
     collar(promise, 5)
       .then(shouldNotBeCalled)
       .catch((err) => {
