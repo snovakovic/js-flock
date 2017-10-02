@@ -1,11 +1,9 @@
-const assert = require('./internals/assert');
-const getTag = require('./internals/getTag');
-
+const assertType = require('./internals/assertType')('waitFor');
 
 // Public
 
 module.exports = function(fn, options) {
-  assert(typeof fn === 'function', `waitFor: expected [Function] but got ${getTag(fn)}]`);
+  assertType('Function', fn);
   const interval = Number(options && options.interval) || 50;
   const endTime = Date.now() + (Number(options && options.timeout) || 5000);
 

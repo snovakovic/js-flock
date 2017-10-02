@@ -4,7 +4,6 @@ const isApplied = {
   preventExtensions: (prop) => !Object.isExtensible(prop)
 };
 
-
 // Public
 
 module.exports = function deep(action, obj, options) {
