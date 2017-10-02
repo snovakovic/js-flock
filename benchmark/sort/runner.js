@@ -2,7 +2,7 @@ const assert = require('assert');
 
 module.exports = function(arr, controlArr, noRuns, sortImplementation) {
   const times = [];
-  const length = arr.length;
+  const { length } = arr;
   assert.equal(arr.length, controlArr.length, 'control array does not match test array');
 
   for (let i = 0; i < noRuns; i++) {
