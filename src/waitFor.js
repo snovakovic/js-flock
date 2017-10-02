@@ -4,6 +4,7 @@ const assertType = require('./internals/assertType')('waitFor');
 
 module.exports = function(fn, options) {
   assertType('Function', fn);
+
   const interval = Number(options && options.interval) || 50;
   const endTime = Date.now() + (Number(options && options.timeout) || 5000);
 
