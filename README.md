@@ -346,7 +346,7 @@ Set maximum waiting time for promise to resolve. Reject promise if it's not reso
 
 ### deepFreeze
 
-Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
+Recursively apply [Object.freeze](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
 
 ```javascript
   const deepFreeze = require('js-flock/deepFreeze');
