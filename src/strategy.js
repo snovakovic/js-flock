@@ -11,8 +11,10 @@ const emptyStrategy = Object.freeze({
 
 module.exports = class Strategy {
   constructor(options) {
-    this.opt = options || {};
     this.list = [];
+    this.opt = options || {
+      progress: false
+    };
 
     Object.freeze(this);
   }
@@ -36,7 +38,8 @@ module.exports = class Strategy {
   }
 
   get(...condition) {
-    const strategy = this.list.find((str) => (
+    const action = this.opt.progress ? 'filter' : 'find';
+    const strategy = this.list[action]((str) => (
       typeof str.rule === 'function'
         ? str.rule(...condition)
         : condition.length && str.rule === condition[0]

@@ -65,7 +65,35 @@ describe.only('strategy', () => {
     expect(testStrategy.get).to.be.an('function');
   });
 
-  it('Should not break if searching strategy without condition', () => {
+  it('Should not break when searching strategy without condition', () => {
     expect(testStrategy.get().desc).to.equal('Strategy not found');
+  });
+
+  it('Should return list of strategies in advance mode', () => {
+    const multi = new Strategy({ progress: true });
+
+    multi.add(() => { }).rule((a) => a % 2 === 0).desc('Even number strategy');
+    multi.add(() => { }).rule((a) => a % 2 !== 0).desc('Odd number strategy');
+    multi.add(() => { }).rule((a) => a < 10).desc('less then 10 strategy');
+
+    const st4 = multi.get(4);
+    const st5 = multi.get(5);
+    const st13 = multi.get(13);
+
+    expect(st4.length).to.equal(2);
+    expect(st4[0].desc).to.equal('Even number strategy');
+    expect(st4[1].desc).to.equal('less then 10 strategy');
+
+    expect(st5.length).to.equal(2);
+    expect(st5[0].desc).to.equal('Odd number strategy');
+    expect(st5[1].desc).to.equal('less then 10 strategy');
+
+    expect(st13.length).to.equal(1);
+    expect(st13[0].desc).to.equal('Odd number strategy');
+  });
+
+  it('Should return empty array for no strategy found in advance mode', () => {
+    const multi = new Strategy({ progress: true });
+    expect(multi.get('something')).to.eql([]);
   });
 });
