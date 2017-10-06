@@ -69,12 +69,27 @@ describe.only('strategy', () => {
     expect(testStrategy.get().desc).to.equal('Strategy not found');
   });
 
+  it('Should use default strategy if no strategy is found', () => {
+    expect(testStrategy.get('no-strategy').desc).to.equal('Strategy not found');
+    testStrategy.add(() => { }).desc('Default Strategy').default();
+    expect(testStrategy.get('no-strategy').desc).to.equal('Default Strategy');
+  });
+
+  it('Should throw exception for multiple default strategies', () => {
+    testStrategy.add(() => { }).default();
+    expect(() => testStrategy.add(() => { }).default())
+      .to.throw(Error, 'strategy: Multiple defaults are not allowed.');
+  });
+
   it('Should return list of strategies in advance mode', () => {
     const multi = new Strategy({ progress: true });
 
     multi.add(() => { }).rule((a) => a % 2 === 0).desc('Even number strategy');
     multi.add(() => { }).rule((a) => a % 2 !== 0).desc('Odd number strategy');
     multi.add(() => { }).rule((a) => a < 10).desc('less then 10 strategy');
+
+
+    multi.add(() => {}).default();
 
     const st4 = multi.get(4);
     const st5 = multi.get(5);

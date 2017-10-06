@@ -12,6 +12,7 @@ const emptyStrategy = Object.freeze({
 module.exports = class Strategy {
   constructor(options) {
     this.list = [];
+    this.default = {};
     this.opt = options || {
       progress: false
     };
@@ -21,7 +22,7 @@ module.exports = class Strategy {
 
   add(fn) {
     assertType('Function', fn);
-    const strategies = this.list;
+    const self = this;
     const strategy = { exec: fn };
 
     return {
@@ -31,8 +32,14 @@ module.exports = class Strategy {
       },
       rule(rule) {
         strategy.rule = rule;
-        strategies.push(strategy);
+        self.list.push(strategy);
         return this;
+      },
+      default() {
+        if (self.default.strategy) {
+          throw Error('strategy: Multiple defaults are not allowed.');
+        }
+        self.default.strategy = strategy;
       }
     };
   }
@@ -45,6 +52,6 @@ module.exports = class Strategy {
         : condition.length && str.rule === condition[0]
     ));
 
-    return strategy || emptyStrategy;
+    return strategy || this.default.strategy || emptyStrategy;
   }
 };
