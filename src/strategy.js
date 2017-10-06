@@ -7,6 +7,12 @@ const emptyStrategy = Object.freeze({
   desc: 'Strategy not found'
 });
 
+const arrExecute = function(ctx) {
+  if (Array.isArray(this)) {
+    this.forEach((strategy) => strategy.exec(ctx));
+  }
+};
+
 // Public
 
 module.exports = class Strategy {
@@ -51,6 +57,10 @@ module.exports = class Strategy {
         ? str.rule(...condition)
         : condition.length && str.rule === condition[0]
     ));
+
+    if (strategy && strategy.length) {
+      strategy.exec = arrExecute;
+    }
 
     return strategy || this.default.strategy || emptyStrategy;
   }

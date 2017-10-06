@@ -81,7 +81,7 @@ describe.only('strategy', () => {
       .to.throw(Error, 'strategy: Multiple defaults are not allowed.');
   });
 
-  it('Should return list of strategies in advance mode', () => {
+  it('Should return list of strategies in progress mode', () => {
     const multi = new Strategy({ progress: true });
 
     multi.add(() => { }).rule((a) => a % 2 === 0).desc('Even number strategy');
@@ -105,6 +105,21 @@ describe.only('strategy', () => {
 
     expect(st13.length).to.equal(1);
     expect(st13[0].desc).to.equal('Odd number strategy');
+  });
+
+  it('Should execute multiple strategies with exec helper', () => {
+    let sideEffect1;
+    let sideEffect2;
+
+    const multi = new Strategy({ progress: true });
+
+    multi.add(() => { sideEffect1 = 1; }).rule(() => true);
+    multi.add(() => { sideEffect2 = 2; }).rule(() => true);
+
+    multi.get().exec();
+
+    expect(sideEffect1).to.equal(1);
+    expect(sideEffect2).to.equal(2);
   });
 
   it('Should return empty array for no strategy found in advance mode', () => {
