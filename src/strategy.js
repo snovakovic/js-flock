@@ -13,6 +13,8 @@ module.exports = class Strategy {
   constructor(options) {
     this.opt = options || {};
     this.list = [];
+
+    Object.freeze(this);
   }
 
   add(fn) {
