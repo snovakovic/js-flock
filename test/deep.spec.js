@@ -60,13 +60,11 @@ describe('deep', () => {
       expect(Object.isFrozen(obj)).to.equal(true);
     });
 
-    it('Should freeze prototype chain', () => {
-      deepFreeze(proto, { proto: true });
-      expect(Object.isFrozen(proto)).to.equal(true);
-      expect(Object.isFrozen(proto.child)).to.equal(true);
-      expect(Object.isFrozen(proto.ob2Prop)).to.equal(true);
-      expect(Object.isFrozen(proto.proto)).to.equal(true);
-      expect(Object.isFrozen(proto.proto.test)).to.equal(true);
+    it('Should not brake on restricted properties', () => {
+      const fun = function() { };
+      const funPrototype = Object.getPrototypeOf(fun);
+      deepFreeze(funPrototype);
+      expect(Object.isFrozen(funPrototype)).to.equal(true);
     });
 
     it('Should deep freeze object with null prototype', () => {
@@ -100,6 +98,16 @@ describe('deep', () => {
       expect(Object.isFrozen(ob.set.test)).to.equal(true);
     });
 
+    it('Should deep freeze non enumerable properties', () => {
+      Object.defineProperty(obj, 'nonEnumerable', {
+        enumerable: false,
+        value: {}
+      });
+
+      deepFreeze(obj);
+      expect(Object.isFrozen(obj.nonEnumerable)).to.equal(true);
+    });
+
     it('Should validate readme examples', () => {
       const person = {
         fullName: 'test person',
@@ -117,15 +125,6 @@ describe('deep', () => {
       deepFreeze(person);
       expect(Object.isFrozen(person)).to.equal(true);
       expect(Object.isFrozen(person.address)).to.equal(true);
-
-      const ob1 = { test: { a: 'a' } };
-      const ob2 = Object.create(ob1);
-
-      deepFreeze(ob2);
-      expect(Object.isFrozen(ob2.test)).to.equal(false);
-
-      deepFreeze(ob2, { proto: true });
-      expect(Object.isFrozen(ob2.test)).to.equal(true);
     });
   });
 

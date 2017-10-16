@@ -8,19 +8,17 @@ const isApplied = {
 
 // Public
 
-module.exports = function deep(action, obj, options) {
-  options = options || {};
+module.exports = function deep(action, obj) {
   Object[action](obj);
 
-  for (const key in obj) {
-    const prop = obj[key];
+  Object.getOwnPropertyNames( obj ).forEach(( key ) => {
+    const prop = obj !== Function.prototype && obj[key]; // Function.prototype is used to prevent following error on function prototype => TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
     if (prop &&
       (typeof prop === 'object' || typeof prop === 'function') &&
-      !isApplied[action](prop) &&
-      (options.proto || Object.prototype.hasOwnProperty.call(obj, key))) {
-      deep(action, prop, options);
+      !isApplied[action](prop)) {
+      deep(action, prop);
     }
-  }
+  });
 
   return obj;
 };
