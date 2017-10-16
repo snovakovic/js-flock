@@ -19,7 +19,7 @@ describe('collar', () => {
     collar(Promise.all([
       new Promise((resolve) => setTimeout(resolve, 1, '1')),
       new Promise((resolve) => setTimeout(resolve, 3, '2'))
-    ]), 5)
+    ]), 15)
       .then(([first, second]) => {
         expect(first).to.equal('1');
         expect(second).to.equal('2');
