@@ -346,7 +346,7 @@ Set maximum waiting time for promise to resolve. Reject promise if it's not reso
 
 ### deepFreeze
 
-Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
+Recursively apply [Object.freeze](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
 
 ```javascript
   const deepFreeze = require('js-flock/deepFreeze');
@@ -369,20 +369,6 @@ Recursively apply [Object.freez](https://developer.mozilla.org/en-US/docs/Web/Ja
 
   Object.isFrozen(person); // true
   Object.isFrozen(person.address); // true WE HE
-```
-
-By default deepFreeze do not loop over prototype chain.
-That behaviour can be overridden by providing { proto: true } option.
-
-```javascript
-  const ob1 = { test: { a: 'a' } };
-  const ob2 = Object.create(ob1);
-
-  deepFreeze(ob2);
-  Object.isFrozen(ob2.test); // false - because test property is on ob2 prototype
-
-  deepFreeze(ob2, { proto: true });
-  Object.isFrozen(ob2.test); // true
 ```
 
 

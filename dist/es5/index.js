@@ -37,36 +37,35 @@ var isApplied = {
 
 // Public
 
-var deep = function deep(action, obj, options) {
-  options = options || {};
+var deep = function deep(action, obj) {
   Object[action](obj);
 
-  for (var key in obj) {
-    var prop = obj[key];
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop) && (options.proto || Object.prototype.hasOwnProperty.call(obj, key))) {
-      deep(action, prop, options);
+  Object.getOwnPropertyNames(obj).forEach(function (key) {
+    var prop = obj !== Function.prototype && obj[key]; // Function.prototype is used to prevent following error on function prototype => TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop)) {
+      deep(action, prop);
     }
-  }
+  });
 
   return obj;
 };
 
 // Public
 
-var deepFreeze = function deepFreeze(obj, options) {
-  return deep('freeze', obj, options);
+var deepFreeze = function deepFreeze(obj) {
+  return deep('freeze', obj);
 };
 
 // Public
 
-var deepPreventExtensions = function deepPreventExtensions(obj, options) {
-  return deep('preventExtensions', obj, options);
+var deepPreventExtensions = function deepPreventExtensions(obj) {
+  return deep('preventExtensions', obj);
 };
 
 // Public
 
-var deepSeal = function deepSeal(obj, options) {
-  return deep('seal', obj, options);
+var deepSeal = function deepSeal(obj) {
+  return deep('seal', obj);
 };
 
 // Public
