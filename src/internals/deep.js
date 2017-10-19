@@ -15,7 +15,7 @@ module.exports = function deep(action, obj) {
     const prop = obj !== Function.prototype && obj[key]; // Function.prototype is used to prevent following error on function prototype => TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
     if (prop &&
       (typeof prop === 'object' || typeof prop === 'function') &&
-      !isApplied[action](prop)) {
+      !ArrayBuffer.isView(prop) && !isApplied[action](prop)) {
       deep(action, prop);
     }
   });
