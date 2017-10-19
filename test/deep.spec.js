@@ -144,6 +144,14 @@ describe('deep', () => {
       deepFreeze(obj);
       expect(Object.isFrozen(obj)).to.equal(true);
     });
+
+    it('Should deep freeze childs of already frozen object', () => {
+      Object.freeze(obj.first);
+
+      deepFreeze(obj);
+      expect(Object.isFrozen(obj.first.second)).to.equal(true);
+      expect(Object.isFrozen(obj.first.second.third)).to.equal(true);
+    });
   });
 
 
