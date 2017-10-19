@@ -137,7 +137,7 @@ describe('deep', () => {
       expect(Object.isFrozen(obj[sim].key)).to.be.equal(true);
     });
 
-    it.only('Should not break for TypedArray properties', () => {
+    it('Should not break for TypedArray properties', () => {
       obj.typedArray = new Uint32Array(4);
       obj.buffer = Buffer.from('TEST');
 
