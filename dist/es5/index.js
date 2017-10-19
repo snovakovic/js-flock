@@ -42,7 +42,7 @@ var deep = function deep(action, obj) {
 
   Reflect.ownKeys(obj).forEach(function (key) {
     var prop = obj !== Function.prototype && obj[key]; // Function.prototype is used to prevent following error on function prototype => TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !isApplied[action](prop)) {
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !ArrayBuffer.isView(prop) && !isApplied[action](prop)) {
       deep(action, prop);
     }
   });
