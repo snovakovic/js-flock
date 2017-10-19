@@ -126,6 +126,16 @@ describe('deep', () => {
       expect(Object.isFrozen(person)).to.equal(true);
       expect(Object.isFrozen(person.address)).to.equal(true);
     });
+
+    it('Should freeze object with Symbol property', () => {
+      const sim = Symbol('test');
+      obj[sim] = {
+        key: { test: 1 }
+      };
+
+      deepFreeze(obj);
+      expect(Object.isFrozen(obj[sim].key)).to.be.equal(true);
+    });
   });
 
 
