@@ -1,6 +1,8 @@
 // Public
 
 module.exports = function deep(action, obj, processed = new Set()) {
+  const root = processed.size === 0;
+
   Object[action](obj);
 
   processed.add(obj); // Prevent circular reference
@@ -14,6 +16,10 @@ module.exports = function deep(action, obj, processed = new Set()) {
         deep(action, prop, processed);
       }
     });
+  }
+
+  if (root) {
+    processed.clear();
   }
 
   return obj;
