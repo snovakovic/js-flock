@@ -51,13 +51,13 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 
 Fast array sorting that **outperforms lodash sort by ~2x** (in some cases it's more then **5x**).
 For more information about performance take a look at the benchmark result
-[here](https://www.npmjs.com/package/fast-sort).
+[here](https://www.npmjs.com/package/fast-sort). Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
 
 * Sorting array of objects (supports comparing by nested object properties)
 * Sorting flat arrays
 * Sorting by multiple properties
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
-* Mutates input array in a same way as native [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) does.
 
 ```javascript
   const sort = require('js-flock/sort');
