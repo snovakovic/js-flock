@@ -10,8 +10,8 @@
  *
  * @example
  * isNativeObject({}); \\ => false
- * isNativeObject(Object); \\ => true
- * isNativeObject(Number); \\ => true
+ * isNativeObject(Object.prototype); \\ => true
+ * isNativeObject(Number.prototype); \\ => true
  */
 module.exports = function(obj) {
   return !!(obj &&
