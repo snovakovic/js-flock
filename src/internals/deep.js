@@ -12,7 +12,7 @@ module.exports = function deep(action, obj, options, processed = new Set()) {
       const prop = obj[key];
       if (prop &&
         (typeof prop === 'object' || typeof prop === 'function') &&
-        !ArrayBuffer.isView(prop) && !processed.has(prop)) { // Prevent issue with freezing buffer
+        !ArrayBuffer.isView(prop) && !processed.has(prop)) { // Prevent issue with freezing buffers
         deep(action, prop, options, processed);
       }
     });
