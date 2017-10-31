@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const toEnum = require('../src/toEnum');
+const toEnum = require('../../src/toEnum');
 
 
 describe('toEnum', () => {

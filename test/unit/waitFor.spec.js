@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const waitFor = require('../src/waitFor');
+const waitFor = require('../../src/waitFor');
 
 
 describe('waitFor', () => {

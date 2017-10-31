@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const sort = require('../src/sort');
+const sort = require('../../src/sort');
 
 
 describe('sort', () => {

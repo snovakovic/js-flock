@@ -1,8 +1,8 @@
 const { expect } = require('chai');
 
-const deepFreeze = require('../src/deepFreeze');
-const deepSeal = require('../src/deepSeal');
-const deepPreventExtensions = require('../src/deepPreventExtensions');
+const deepFreeze = require('../../src/deepFreeze');
+const deepSeal = require('../../src/deepSeal');
+const deepPreventExtensions = require('../../src/deepPreventExtensions');
 
 describe('deep', () => {
   let obj;
