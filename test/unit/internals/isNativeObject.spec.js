@@ -2,7 +2,7 @@ const { expect } = require('chai');
 
 const isNativeObject = require('../../../src/internals/isNativeObject');
 
-describe.only('isNativeObject', () => {
+describe('isNativeObject', () => {
   it('Should return false for non objects', () => {
     expect(isNativeObject(null)).to.equal(false);
     expect(isNativeObject(undefined)).to.equal(false);
@@ -23,7 +23,7 @@ describe.only('isNativeObject', () => {
     expect(isNativeObject(String('Sta je ovo'))).to.equal(false);
   });
 
-  it.only('Should return true for native objects', () => {
+  it('Should return true for native objects', () => {
     expect(isNativeObject(Object.prototype)).to.equal(true);
     expect(isNativeObject(Number.prototype)).to.equal(true);
     expect(isNativeObject(Array.prototype)).to.equal(true);

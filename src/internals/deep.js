@@ -1,6 +1,8 @@
+const isNativeObject = require('./isNativeObject');
+
 // Public
 
-module.exports = function deep(action, obj, processed = new Set()) {
+module.exports = function deep(action, obj, options, processed = new Set()) {
   Object[action](obj);
 
   processed.add(obj); // Prevent circular reference
@@ -10,10 +12,16 @@ module.exports = function deep(action, obj, processed = new Set()) {
       const prop = obj[key];
       if (prop &&
         (typeof prop === 'object' || typeof prop === 'function') &&
-        !ArrayBuffer.isView(prop) && !processed.has(prop)) {
-        deep(action, prop, processed);
+        !ArrayBuffer.isView(prop) && !processed.has(prop)) { // Prevent issue with freezing buffer
+        deep(action, prop, options, processed);
       }
     });
+  }
+
+  // Freeze object prototype is specified
+  if (options && typeof options === 'object' && options.proto) {
+    const proto = Object.getPrototypeOf(obj);
+    !isNativeObject(proto) && deep(action, proto, options, processed);
   }
 
   return obj;

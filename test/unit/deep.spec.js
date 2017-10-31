@@ -152,6 +152,24 @@ describe('deep', () => {
       expect(Object.isFrozen(obj.first.second)).to.equal(true);
       expect(Object.isFrozen(obj.first.second.third)).to.equal(true);
     });
+
+    it('Should not freeze object prototype', () => {
+      deepFreeze(proto);
+      expect(Object.isFrozen(proto)).to.equal(true);
+      expect(Object.isFrozen(Object.getPrototypeOf(proto))).to.equal(false);
+    });
+
+    it('Should freeze object prototype', () => {
+      deepFreeze(proto, { proto: true });
+      const proto1 = Object.getPrototypeOf(proto);
+      const proto2 = Object.getPrototypeOf(proto1);
+      const nativeProto = Object.getPrototypeOf(proto2);
+
+      expect(Object.isFrozen(proto)).to.equal(true);
+      expect(Object.isFrozen(proto1)).to.equal(true);
+      expect(Object.isFrozen(proto2)).to.equal(true);
+      expect(Object.isFrozen(nativeProto)).to.equal(false);
+    });
   });
 
 

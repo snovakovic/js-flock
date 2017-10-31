@@ -2,7 +2,7 @@
 
 /**
  * A way to detect if object is native or user defined
- * Warning! Detection is not bulletproof and can be easily tricked (on purpose).
+ * Warning! Detection is not bulletproof and can be easily tricked.
  * In real word scenarios there should not be fake positives
  *
  * @param {any} obj - preform isNativeObject check on provided value
