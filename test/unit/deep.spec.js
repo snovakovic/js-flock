@@ -125,6 +125,16 @@ describe('deep', () => {
       deepFreeze(person);
       expect(Object.isFrozen(person)).to.equal(true);
       expect(Object.isFrozen(person.address)).to.equal(true);
+
+      const ob1 = { test: { a: 'a' } };
+      const ob2 = Object.create(ob1);
+
+      deepFreeze(ob2, { proto: true });
+
+      expect(Object.isFrozen(ob2.test)).to.equal(true);
+      expect(Object.isFrozen(Object.getPrototypeOf(ob2))).to.equal(true);
+      expect(Object.isFrozen(ob1)).to.equal(true);
+      expect(Object.isFrozen(Object.getPrototypeOf(ob1))).to.equal(false);
     });
 
     it('Should freeze object with Symbol property', () => {
