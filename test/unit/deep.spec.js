@@ -1,8 +1,8 @@
 const { expect } = require('chai');
 
-const deepFreeze = require('../src/deepFreeze');
-const deepSeal = require('../src/deepSeal');
-const deepPreventExtensions = require('../src/deepPreventExtensions');
+const deepFreeze = require('../../src/deepFreeze');
+const deepSeal = require('../../src/deepSeal');
+const deepPreventExtensions = require('../../src/deepPreventExtensions');
 
 describe('deep', () => {
   let obj;
@@ -125,6 +125,16 @@ describe('deep', () => {
       deepFreeze(person);
       expect(Object.isFrozen(person)).to.equal(true);
       expect(Object.isFrozen(person.address)).to.equal(true);
+
+      const ob1 = { test: { a: 'a' } };
+      const ob2 = Object.create(ob1);
+
+      deepFreeze(ob2, { proto: true });
+
+      expect(Object.isFrozen(ob2.test)).to.equal(true);
+      expect(Object.isFrozen(Object.getPrototypeOf(ob2))).to.equal(true);
+      expect(Object.isFrozen(ob1)).to.equal(true);
+      expect(Object.isFrozen(Object.getPrototypeOf(ob1))).to.equal(false);
     });
 
     it('Should freeze object with Symbol property', () => {
@@ -151,6 +161,24 @@ describe('deep', () => {
       deepFreeze(obj);
       expect(Object.isFrozen(obj.first.second)).to.equal(true);
       expect(Object.isFrozen(obj.first.second.third)).to.equal(true);
+    });
+
+    it('Should not freeze object prototype', () => {
+      deepFreeze(proto);
+      expect(Object.isFrozen(proto)).to.equal(true);
+      expect(Object.isFrozen(Object.getPrototypeOf(proto))).to.equal(false);
+    });
+
+    it('Should freeze object prototype', () => {
+      deepFreeze(proto, { proto: true });
+      const proto1 = Object.getPrototypeOf(proto);
+      const proto2 = Object.getPrototypeOf(proto1);
+      const nativeProto = Object.getPrototypeOf(proto2);
+
+      expect(Object.isFrozen(proto)).to.equal(true);
+      expect(Object.isFrozen(proto1)).to.equal(true);
+      expect(Object.isFrozen(proto2)).to.equal(true);
+      expect(Object.isFrozen(nativeProto)).to.equal(false);
     });
   });
 

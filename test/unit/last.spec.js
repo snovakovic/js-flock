@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const last = require('../src/last');
+const last = require('../../src/last');
 
 
 describe('last', () => {

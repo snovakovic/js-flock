@@ -2,4 +2,12 @@ const deep = require('./internals/deep');
 
 // Public
 
+/**
+ * Recursively apply Object.freeze on an object and all of the object properties that are either object or function.
+ *
+ * @param {Object} obj - The object we want to freeze
+ * @param {Object} [options]
+ * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
+ * @returns {Object} Returns initial object with applied Object.freeze
+ */
 module.exports = (obj) => deep('freeze', obj);

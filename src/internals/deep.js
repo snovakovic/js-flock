@@ -1,6 +1,18 @@
+const isNativeObject = require('./isNativeObject');
+
 // Public
 
-module.exports = function deep(action, obj, processed = new Set()) {
+/**
+ * Recursively apply provided operation on object and all of the object properties that are either object or function.
+ *
+ * @param {string='freeze', 'seal', 'preventExtensions'} action - The action to be applied on object and his properties
+ * @param {Object} obj - The object we want to modify
+ * @param {Object} [options]
+ * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
+ * @param {Set} [processed=new Set()] - Used internally to prevent circular references
+ * @returns {Object} Returns initial object which now have applied actions on him
+ */
+module.exports = function deep(action, obj, options, processed = new Set()) {
   Object[action](obj);
 
   processed.add(obj); // Prevent circular reference
@@ -10,10 +22,16 @@ module.exports = function deep(action, obj, processed = new Set()) {
       const prop = obj[key];
       if (prop &&
         (typeof prop === 'object' || typeof prop === 'function') &&
-        !ArrayBuffer.isView(prop) && !processed.has(prop)) {
-        deep(action, prop, processed);
+        !ArrayBuffer.isView(prop) && !processed.has(prop)) { // Prevent issue with freezing buffers
+        deep(action, prop, options, processed);
       }
     });
+  }
+
+  // Freeze object prototype if specified
+  if (options && typeof options === 'object' && options.proto) {
+    const proto = Object.getPrototypeOf(obj);
+    !isNativeObject(proto) && deep(action, proto, options, processed);
   }
 
   return obj;

@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const promisify = require('../src/promisify');
+const promisify = require('../../src/promisify');
 
 
 const shouldNotBeCalled = () => {

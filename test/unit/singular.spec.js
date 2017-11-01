@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const singular = require('../src/singular');
+const singular = require('../../src/singular');
 
 
 describe('singular', () => {

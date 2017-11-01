@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const collar = require('../src/collar');
+const collar = require('../../src/collar');
 
 
 const shouldNotBeCalled = () => { throw Error('This should not be called'); };
