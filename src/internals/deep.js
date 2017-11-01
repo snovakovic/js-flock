@@ -28,7 +28,7 @@ module.exports = function deep(action, obj, options, processed = new Set()) {
     });
   }
 
-  // Freeze object prototype is specified
+  // Freeze object prototype if specified
   if (options && typeof options === 'object' && options.proto) {
     const proto = Object.getPrototypeOf(obj);
     !isNativeObject(proto) && deep(action, proto, options, processed);
