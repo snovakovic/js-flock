@@ -3,12 +3,7 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
-    mocha: true
-  },
-  globals: {
-    expect: true,
-    sinon: true,
+    es6: true
   },
   rules: {
     'comma-dangle': ['error', 'never'],
