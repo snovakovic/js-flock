@@ -3,12 +3,13 @@ const isNativeObject = require('./internals/isNativeObject');
 
 // Internals
 
+/**
+ * @const {Symbol} - Symbol to be applied on promisified functions to avoid multiple promisify of same function
+ */
 const PROMISIFIED_SYMBOL = Symbol('promisified');
 
 /**
- * Promisify error first callback function.
- * Instead of taking a callback, the returned function will return a promise
- * whose fate is decided by the callback behavior of the given node function
+ * Promisified resolver for error first callback function.
  *
  * @param {Function} fn - Error first callback function we want to promisify
  * @param {Object} [options]
@@ -27,7 +28,7 @@ const promisified = function(fn, args, options) {
 };
 
 /**
- * Detect should we apply promisify to object property
+ * Check does we need to apply promisify
  *
  * @param {Object} prop - Object property we want to test
  * @param {string[]} [exclude=undefined] - List of object keys not to promisify
@@ -43,20 +44,20 @@ const shouldPromisify = function(prop, exclude, include) {
 };
 
 /**
- * Get the name for the new promisified function to be appended on object.
+ * Get the name of the new promisified function.
  * Name is original function name appended with suffix
- * In case new name is occupied 'Promisified' is added to new name in recursion
+ * In case new name is occupied 'Promisified' will be appended in recursion
  *
- * @param {Object} obj - Object where we want to append new function
+ * @param {Object} obj - Object where new function will be appended
  * @param {string} key - Original function name
  * @param {string} suffix - Suffix to be appended to function
  *
  * @returns {string} - New name that does not exist in object
  */
-const getKey = function(obj, key, suffix) {
+const getAsyncKey = function(obj, key, suffix) {
   const asyncKey = `${key}${suffix}`;
   return (asyncKey in obj)
-    ? getKey(obj, asyncKey, 'Promisified')
+    ? getAsyncKey(obj, asyncKey, 'Promisified')
     : asyncKey;
 };
 
@@ -108,7 +109,7 @@ promisify.all = (obj, options) => {
 
   Object.getOwnPropertyNames(obj).forEach((key) => {
     if (shouldPromisify(obj[key], exclude, include, proto)) {
-      const asyncKey = getKey(obj, key, suffix);
+      const asyncKey = getAsyncKey(obj, key, suffix);
       obj[asyncKey] = promisify(obj[key], options);
       obj[asyncKey][PROMISIFIED_SYMBOL] = true;
     }
