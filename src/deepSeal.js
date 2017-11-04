@@ -8,6 +8,7 @@ const deep = require('./internals/deep');
  * @param {Object} obj - The object we want to seal
  * @param {Object} [options]
  * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
- * @returns {Object} Returns initial object with applied Object.seal
+ *
+ * @returns {Object} Initial object with applied Object.seal
  */
 module.exports = (obj, options) => deep('seal', obj, options);
