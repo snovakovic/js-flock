@@ -62,7 +62,9 @@ var deep = function deep(action, obj, options) {
   // Freeze object prototype if specified
   if (options && (typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object' && options.proto) {
     var proto = Object.getPrototypeOf(obj);
-    !isNativeObject(proto) && deep(action, proto, options, processed);
+    if (proto && !isNativeObject(proto)) {
+      deep(action, proto, options, processed);
+    }
   }
 
   return obj;

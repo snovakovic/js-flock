@@ -81,7 +81,9 @@ var deep = function deep(action, obj, options) {
   // Freeze object prototype if specified
   if (options && (typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object' && options.proto) {
     var proto = Object.getPrototypeOf(obj);
-    !isNativeObject(proto) && deep(action, proto, options, processed);
+    if (proto && !isNativeObject(proto)) {
+      deep(action, proto, options, processed);
+    }
   }
 
   return obj;
@@ -156,6 +158,8 @@ var promisify_1 = createCommonjsModule(function (module) {
 
   // Internals
 
+  var PROMISIFIED_SYMBOL = Symbol('promisified');
+
   var promisified = function promisified(fn, args, options) {
     var _this = this;
 
@@ -174,7 +178,7 @@ var promisify_1 = createCommonjsModule(function (module) {
   };
 
   var shouldPromisify = function shouldPromisify(key, cbModule, exclude, include, proto) {
-    return typeof cbModule[key] === 'function' && cbModule[key].__promisified__ !== true && (proto === true || Object.prototype.hasOwnProperty.call(cbModule, key)) && (!include || include.some(function (k) {
+    return typeof cbModule[key] === 'function' && cbModule[key][PROMISIFIED_SYMBOL] !== true && (proto === true || Object.prototype.hasOwnProperty.call(cbModule, key)) && (!include || include.some(function (k) {
       return k === key;
     })) && (!exclude || exclude.every(function (k) {
       return k !== key;
@@ -216,7 +220,7 @@ var promisify_1 = createCommonjsModule(function (module) {
       if (shouldPromisify(key, cbModule, exclude, include, proto)) {
         var asyncKey = getKey(cbModule, key, suffix);
         cbModule[asyncKey] = promisify(cbModule[key], options);
-        cbModule[asyncKey].__promisified__ = true;
+        cbModule[asyncKey][PROMISIFIED_SYMBOL] = true;
       }
     }
 
