@@ -1,4 +1,4 @@
-// Internals
+// >>> INTERNALS <<<
 
 const castObject = function(args) {
   if (Array.isArray(args)) {

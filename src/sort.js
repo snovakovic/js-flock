@@ -1,4 +1,4 @@
-// Internals
+// >>> INTERNALS <<<
 
 const sorter = function(direction, sortBy, thenBy, depth, a, b) {
   const valA = sortBy(a);

@@ -1,4 +1,4 @@
-// Internals
+// >>> INTERNALS <<<
 
 const REJECTION_REASON = Object.freeze({
   isStrangled: true,
