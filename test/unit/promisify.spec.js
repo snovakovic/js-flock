@@ -207,7 +207,7 @@ describe('promisify.all', () => {
   });
 
   it('Should not override prototype', () => {
-    promisify.all(proto, { proto: 33 }); // Should behave truthi
+    promisify.all(proto, { proto: 33 });
     expect(proto.hasOwnProperty('protoAsync')).to.equal(true);
   });
 

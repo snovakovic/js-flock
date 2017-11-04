@@ -5,6 +5,16 @@ const isNativeObject = require('./internals/isNativeObject');
 
 const PROMISIFIED_SYMBOL = Symbol('promisified');
 
+/**
+ * Promisify error first callback function.
+ * Instead of taking a callback, the returned function will return a promise
+ * whose fate is decided by the callback behavior of the given node function
+ *
+ * @param {Function} fn - Error first callback function we want to promisify
+ * @param {Object} [options]
+ * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
+ * @returns {Function} - Promisified version of error first callback function
+ */
 const promisified = function(fn, args, options) {
   return new Promise((resolve, reject) => {
     args.push((err, ...result) => {
@@ -16,6 +26,15 @@ const promisified = function(fn, args, options) {
   });
 };
 
+/**
+ * Detect should we apply promisify to object property
+ *
+ * @param {Object} prop - Object property we want to test
+ * @param {string[]} [exclude=undefined] - List of object keys not to promisify
+ * @param {string[]} [include=undefined] - Promisify only provided keys
+ *
+ * @returns {boolean}
+ */
 const shouldPromisify = function(prop, exclude, include) {
   return typeof prop === 'function' &&
     prop[PROMISIFIED_SYMBOL] !== true &&
@@ -23,6 +42,17 @@ const shouldPromisify = function(prop, exclude, include) {
     (!exclude || exclude.every((k) => k !== prop.name));
 };
 
+/**
+ * Get the name for the new promisified function to be appended on object.
+ * Name is original function name appended with suffix
+ * In case new name is occupied 'Promisified' is added to new name in recursion
+ *
+ * @param {Object} obj - Object where we want to append new function
+ * @param {string} key - Original function name
+ * @param {string} suffix - Suffix to be appended to function
+ *
+ * @returns {string} - New name that does not exist in object
+ */
 const getKey = function(obj, key, suffix) {
   const asyncKey = `${key}${suffix}`;
   return (asyncKey in obj)
@@ -30,6 +60,21 @@ const getKey = function(obj, key, suffix) {
     : asyncKey;
 };
 
+/**
+ * Promisify error first callback function.
+ * Instead of taking a callback, the returned function will return a promise
+ * whose fate is decided by the callback behavior of the given node function
+ *
+ * @param {Function} fn - Error first callback function we want to promisify
+ * @param {Object} [options]
+ * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
+ *
+ * @returns {Function} - Promisified version of error first callback function
+ *
+ * @example
+ * const async = promisify((cb) => cb(null, 'res1'));
+ * async().then((response) => { console.log(response) });
+ */
 const promisify = function(fn, options) {
   assertType('Function', fn);
 
@@ -38,6 +83,20 @@ const promisify = function(fn, options) {
   };
 };
 
+/**
+ * Promisify the entire object by going through the object's properties
+ * and creating an async equivalent of each function on the object.
+ *
+ * @param {Object} obj - The object we want to promisify
+ * @param {Object} [options]
+ * @param {string} [options.suffix='Async'] - Suffix will be appended to original method name
+ * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
+ * @param {boolean} [options.proto=false] - Promisify object prototype chain if true
+ * @param {string[]} [options.exclude=undefined] - List of object keys not to promisify
+ * @param {string[]} [options.include=undefined] - Promisify only provided keys
+ *
+ * @returns {Object} - Initial obj with appended promisified functions on him
+ */
 promisify.all = (obj, options) => {
   assertType('Object', obj);
 

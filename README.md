@@ -263,7 +263,7 @@ single success value while some callback API's have multiple success value.
 
 ### promisify.all
 
-Promisifies the entire object by going through the object's properties and creating
+Promisify the entire object by going through the object's properties and creating
 an async equivalent of each function on the object.
 Promisify.all mutates input object by adding promisified versions to object.
 It will never overwrite existing properties of object.
