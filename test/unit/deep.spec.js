@@ -77,7 +77,7 @@ describe('deep', () => {
       expect(Object.isFrozen(ob1.ob2)).to.equal(true);
     });
 
-    it('should deep freeze complex object', () => {
+    it('Should deep freeze complex object', () => {
       const fun = () => {};
       const arr = [{ prop: { prop2: 1 } }];
       const set = new Set([{ prop: { prop2: 1 } }]);
@@ -155,7 +155,7 @@ describe('deep', () => {
       expect(Object.isFrozen(obj)).to.equal(true);
     });
 
-    it('Should deep freeze childs of already frozen object', () => {
+    it('Should deep freeze children of already frozen object', () => {
       Object.freeze(obj.first);
 
       deepFreeze(obj);
