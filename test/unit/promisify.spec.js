@@ -171,7 +171,7 @@ describe('promisify.all', () => {
   it('Should promisify object without prototype', () => {
     const test = Object.create(null);
     test.fn1 = () => {};
-    const async = promisify.all(test);
+    const async = promisify.all(test, { proto: true });
     expect(async).to.include.all.keys(['fn1', 'fn1Async']);
   });
 

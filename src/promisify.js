@@ -118,7 +118,7 @@ promisify.all = (obj, options) => {
   // Promisify object prototype if specified
   if (proto) {
     const prototype = Object.getPrototypeOf(obj);
-    if (proto && !isNativeObject(prototype)) {
+    if (prototype && !isNativeObject(prototype)) {
       promisify.all(prototype, options);
     }
   }
