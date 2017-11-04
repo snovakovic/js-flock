@@ -16,17 +16,17 @@ const promisified = function(fn, args, options) {
   });
 };
 
-const shouldPromisify = function(prop, key, exclude, include) {
+const shouldPromisify = function(prop, exclude, include) {
   return typeof prop === 'function' &&
     prop[PROMISIFIED_SYMBOL] !== true &&
-    (!include || include.some((k) => k === key)) &&
-    (!exclude || exclude.every((k) => k !== key));
+    (!include || include.some((k) => k === prop.name)) &&
+    (!exclude || exclude.every((k) => k !== prop.name));
 };
 
-const getKey = function(cbModule, key, suffix) {
+const getKey = function(obj, key, suffix) {
   const asyncKey = `${key}${suffix}`;
-  return (asyncKey in cbModule)
-    ? getKey(cbModule, asyncKey, 'Promisified')
+  return (asyncKey in obj)
+    ? getKey(obj, asyncKey, 'Promisified')
     : asyncKey;
 };
 
@@ -38,31 +38,32 @@ const promisify = function(fn, options) {
   };
 };
 
-promisify.all = (cbModule, options) => {
-  assertType('Object', cbModule);
+promisify.all = (obj, options) => {
+  assertType('Object', obj);
 
+  // Apply default options if not provided
   let { suffix, exclude, include, proto } = options || {}; // eslint-disable-line prefer-const
   suffix = typeof suffix === 'string' ? suffix : 'Async';
   exclude = Array.isArray(exclude) ? exclude : undefined;
   include = Array.isArray(include) ? include : undefined;
 
-  Object.getOwnPropertyNames(cbModule).forEach((key) => {
-    if (shouldPromisify(cbModule[key], key, exclude, include, proto)) {
-      const asyncKey = getKey(cbModule, key, suffix);
-      cbModule[asyncKey] = promisify(cbModule[key], options);
-      cbModule[asyncKey][PROMISIFIED_SYMBOL] = true;
+  Object.getOwnPropertyNames(obj).forEach((key) => {
+    if (shouldPromisify(obj[key], exclude, include, proto)) {
+      const asyncKey = getKey(obj, key, suffix);
+      obj[asyncKey] = promisify(obj[key], options);
+      obj[asyncKey][PROMISIFIED_SYMBOL] = true;
     }
   });
 
   // Promisify object prototype if specified
   if (proto) {
-    const prototype = Object.getPrototypeOf(cbModule);
+    const prototype = Object.getPrototypeOf(obj);
     if (proto && !isNativeObject(prototype)) {
       promisify.all(prototype, options);
     }
   }
 
-  return cbModule;
+  return obj;
 };
 
 // Public
