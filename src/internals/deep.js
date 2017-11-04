@@ -13,20 +13,23 @@ const isNativeObject = require('./isNativeObject');
  * @returns {Object} Returns initial object which now have applied actions on him
  */
 module.exports = function deep(action, obj, options, processed = new Set()) {
+  // Prevent circular reference
+  if (processed.has(obj)) return obj;
+
   Object[action](obj);
+  processed.add(obj);
 
-  processed.add(obj); // Prevent circular reference
+  // Prevent TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
+  if (obj === Function.prototype) return obj;
 
-  if (obj !== Function.prototype) { // Prevent TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
-    Reflect.ownKeys(obj).forEach((key) => {
-      const prop = obj[key];
-      if (prop &&
-        (typeof prop === 'object' || typeof prop === 'function') &&
-        !ArrayBuffer.isView(prop) && !processed.has(prop)) { // Prevent issue with freezing buffers
-        deep(action, prop, options, processed);
-      }
-    });
-  }
+  Reflect.ownKeys(obj).forEach((key) => {
+    const prop = obj[key];
+    if (prop &&
+      (typeof prop === 'object' || typeof prop === 'function') &&
+      !ArrayBuffer.isView(prop)) { // Prevent issue with freezing buffers
+      deep(action, prop, options, processed);
+    }
+  });
 
   // Freeze object prototype if specified
   if (options && typeof options === 'object' && options.proto) {
