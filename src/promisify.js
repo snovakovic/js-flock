@@ -126,6 +126,6 @@ promisify.all = (obj, options) => {
   return obj;
 };
 
-// Public
+// >>> PUBLIC <<<
 
 module.exports = promisify;

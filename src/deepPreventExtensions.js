@@ -1,6 +1,6 @@
 const deep = require('./internals/deep');
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * Recursively apply Object.preventExtensions on an object and all of the object properties that are either object or function.

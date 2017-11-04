@@ -1,6 +1,6 @@
 const deep = require('./internals/deep');
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * Recursively apply Object.freeze on an object and all of the object properties that are either object or function.

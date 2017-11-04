@@ -30,7 +30,7 @@ const sort = function(direction, ctx, sortBy = emptySortBy) {
   return ctx.sort(_sorter);
 };
 
-// Public
+// >>> PUBLIC <<<
 
 module.exports = function(ctx) {
   return {

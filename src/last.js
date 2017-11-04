@@ -1,4 +1,4 @@
-// Public
+// >>> PUBLIC <<<
 
 module.exports = function(arr, condition) {
   let length = Array.isArray(arr) ? arr.length : 0;

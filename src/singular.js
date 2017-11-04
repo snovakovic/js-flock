@@ -1,4 +1,4 @@
-// Public
+// >>> PUBLIC <<<
 
 module.exports = function(fn) {
   let inProgress = false;

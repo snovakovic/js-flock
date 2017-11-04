@@ -1,4 +1,4 @@
-// Public
+// >>> PUBLIC <<<
 
 module.exports = (moduleName) => (type, val) => {
   const tag = Object.prototype.toString.call(val);
