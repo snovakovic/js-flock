@@ -42,20 +42,22 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var deep = function deep(action, obj, options) {
   var processed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : new Set();
 
+  // Prevent circular reference
+  if (processed.has(obj)) return obj;
+
   Object[action](obj);
+  processed.add(obj);
 
-  processed.add(obj); // Prevent circular reference
+  // Prevent TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
+  if (obj === Function.prototype) return obj;
 
-  if (obj !== Function.prototype) {
-    // Prevent TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
-    Reflect.ownKeys(obj).forEach(function (key) {
-      var prop = obj[key];
-      if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !ArrayBuffer.isView(prop) && !processed.has(prop)) {
-        // Prevent issue with freezing buffers
-        deep(action, prop, options, processed);
-      }
-    });
-  }
+  Reflect.ownKeys(obj).forEach(function (key) {
+    var prop = obj[key];
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !ArrayBuffer.isView(prop)) {
+      // Prevent issue with freezing buffers
+      deep(action, prop, options, processed);
+    }
+  });
 
   // Freeze object prototype if specified
   if (options && (typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object' && options.proto) {
