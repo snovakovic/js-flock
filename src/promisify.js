@@ -2,6 +2,8 @@ const assertType = require('./internals/assertType')('promisify');
 
 // Internals
 
+const PROMISIFIED_SYMBOL = Symbol('promisified');
+
 const promisified = function(fn, args, options) {
   return new Promise((resolve, reject) => {
     args.push((err, ...result) => {
@@ -15,7 +17,7 @@ const promisified = function(fn, args, options) {
 
 const shouldPromisify = function(key, cbModule, exclude, include, proto) {
   return typeof cbModule[key] === 'function' &&
-    cbModule[key].__promisified__ !== true &&
+    cbModule[key][PROMISIFIED_SYMBOL] !== true &&
     (proto === true || Object.prototype.hasOwnProperty.call(cbModule, key)) &&
     (!include || include.some((k) => k === key)) &&
     (!exclude || exclude.every((k) => k !== key));
@@ -48,7 +50,7 @@ promisify.all = (cbModule, options) => {
     if (shouldPromisify(key, cbModule, exclude, include, proto)) {
       const asyncKey = getKey(cbModule, key, suffix);
       cbModule[asyncKey] = promisify(cbModule[key], options);
-      cbModule[asyncKey].__promisified__ = true;
+      cbModule[asyncKey][PROMISIFIED_SYMBOL] = true;
     }
   }
 
