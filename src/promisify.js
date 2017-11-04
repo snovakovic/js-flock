@@ -1,4 +1,5 @@
 const assertType = require('./internals/assertType')('promisify');
+const isNativeObject = require('./internals/isNativeObject');
 
 // Internals
 
@@ -15,10 +16,9 @@ const promisified = function(fn, args, options) {
   });
 };
 
-const shouldPromisify = function(key, cbModule, exclude, include, proto) {
-  return typeof cbModule[key] === 'function' &&
-    cbModule[key][PROMISIFIED_SYMBOL] !== true &&
-    (proto === true || Object.prototype.hasOwnProperty.call(cbModule, key)) &&
+const shouldPromisify = function(prop, key, exclude, include) {
+  return typeof prop === 'function' &&
+    prop[PROMISIFIED_SYMBOL] !== true &&
     (!include || include.some((k) => k === key)) &&
     (!exclude || exclude.every((k) => k !== key));
 };
@@ -46,11 +46,19 @@ promisify.all = (cbModule, options) => {
   exclude = Array.isArray(exclude) ? exclude : undefined;
   include = Array.isArray(include) ? include : undefined;
 
-  for (const key in cbModule) {
-    if (shouldPromisify(key, cbModule, exclude, include, proto)) {
+  Object.getOwnPropertyNames(cbModule).forEach((key) => {
+    if (shouldPromisify(cbModule[key], key, exclude, include, proto)) {
       const asyncKey = getKey(cbModule, key, suffix);
       cbModule[asyncKey] = promisify(cbModule[key], options);
       cbModule[asyncKey][PROMISIFIED_SYMBOL] = true;
+    }
+  });
+
+  // Promisify object prototype if specified
+  if (proto) {
+    const prototype = Object.getPrototypeOf(cbModule);
+    if (proto && !isNativeObject(prototype)) {
+      promisify.all(prototype, options);
     }
   }
 

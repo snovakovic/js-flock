@@ -200,9 +200,10 @@ describe('promisify.all', () => {
   });
 
   it('Should promisify prototype chain', () => {
-    const asyncKeys = ['getNameAsync', 'ob1Async', 'protoAsync'];
     promisify.all(proto, { proto: true });
-    expect(proto).to.include.all.keys(asyncKeys);
+    expect(proto.protoAsync).to.be.an('function');
+    expect(proto.ob1Async).to.be.an('function');
+    expect(proto.getNameAsync).to.be.an('function');
   });
 
   it('Should not override prototype', () => {
