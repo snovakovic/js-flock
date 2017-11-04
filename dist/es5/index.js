@@ -28,12 +28,13 @@ var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symb
 // Public
 
 /**
- * A way to detect if object is native or user defined
+ * A way to detect if object is native(built in) or user defined
  * Warning! Detection is not bulletproof and can be easily tricked.
  * In real word scenarios there should not be fake positives
  *
- * @param {any} obj - preform isNativeObject check on provided value
- * @returns {boolean} - true if object is native false otherwise
+ * @param {any} obj - Value to be tested is native object
+ *
+ * @returns {boolean} - True if it's object and if it's built in JS object
  *
  * @example
  * isNativeObject({}); \\ => false
@@ -56,7 +57,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @param {Object} [options]
  * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
  * @param {Set} [processed=new Set()] - Used internally to prevent circular references
- * @returns {Object} Returns initial object which now have applied actions on him
+ *
+ *  @returns {Object} Initial object which now have applied actions on him
  */
 var deep = function deep(action, obj, options) {
   var processed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : new Set();
@@ -91,6 +93,15 @@ var deep = function deep(action, obj, options) {
 
 // Public
 
+/**
+ * Recursively apply Object.freeze on an object and all of the object properties that are either object or function.
+ *
+ * @param {Object} obj - The object we want to freeze
+ * @param {Object} [options]
+ * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
+ *
+ * @returns {Object} Initial object with applied Object.freeze
+ */
 var deepFreeze = function deepFreeze(obj, options) {
   return deep('freeze', obj, options);
 };
@@ -103,7 +114,8 @@ var deepFreeze = function deepFreeze(obj, options) {
  * @param {Object} obj - The object we want to freeze
  * @param {Object} [options]
  * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
- * @returns {Object} Returns initial object with applied Object.preventExtensions
+ *
+ * @returns {Object} Initial object with applied Object.preventExtensions
  */
 var deepPreventExtensions = function deepPreventExtensions(obj, options) {
   return deep('preventExtensions', obj, options);
@@ -117,7 +129,8 @@ var deepPreventExtensions = function deepPreventExtensions(obj, options) {
  * @param {Object} obj - The object we want to seal
  * @param {Object} [options]
  * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
- * @returns {Object} Returns initial object with applied Object.seal
+ *
+ * @returns {Object} Initial object with applied Object.seal
  */
 var deepSeal = function deepSeal(obj, options) {
   return deep('seal', obj, options);
@@ -158,8 +171,19 @@ var promisify_1 = createCommonjsModule(function (module) {
 
   // Internals
 
+  /**
+   * @const {Symbol} - Symbol to be applied on promisified functions to avoid multiple promisify of same function
+   */
   var PROMISIFIED_SYMBOL = Symbol('promisified');
 
+  /**
+   * Promisified resolver for error first callback function.
+   *
+   * @param {Function} fn - Error first callback function we want to promisify
+   * @param {Object} [options]
+   * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
+   * @returns {Function} - Promisified version of error first callback function
+   */
   var promisified = function promisified(fn, args, options) {
     var _this = this;
 
@@ -177,19 +201,54 @@ var promisify_1 = createCommonjsModule(function (module) {
     });
   };
 
-  var shouldPromisify = function shouldPromisify(key, cbModule, exclude, include, proto) {
-    return typeof cbModule[key] === 'function' && cbModule[key][PROMISIFIED_SYMBOL] !== true && (proto === true || Object.prototype.hasOwnProperty.call(cbModule, key)) && (!include || include.some(function (k) {
-      return k === key;
+  /**
+   * Check does we need to apply promisify
+   *
+   * @param {Object} prop - Object property we want to test
+   * @param {string[]} [exclude=undefined] - List of object keys not to promisify
+   * @param {string[]} [include=undefined] - Promisify only provided keys
+   *
+   * @returns {boolean}
+   */
+  var shouldPromisify = function shouldPromisify(prop, exclude, include) {
+    return typeof prop === 'function' && prop[PROMISIFIED_SYMBOL] !== true && (!include || include.some(function (k) {
+      return k === prop.name;
     })) && (!exclude || exclude.every(function (k) {
-      return k !== key;
+      return k !== prop.name;
     }));
   };
 
-  var getKey = function getKey(cbModule, key, suffix) {
+  /**
+   * Get the name of the new promisified function.
+   * Name is original function name appended with suffix
+   * In case new name is occupied 'Promisified' will be appended in recursion
+   *
+   * @param {Object} obj - Object where new function will be appended
+   * @param {string} key - Original function name
+   * @param {string} suffix - Suffix to be appended to function
+   *
+   * @returns {string} - New name that does not exist in object
+   */
+  var getAsyncKey = function getAsyncKey(obj, key, suffix) {
     var asyncKey = '' + key + suffix;
-    return asyncKey in cbModule ? getKey(cbModule, asyncKey, 'Promisified') : asyncKey;
+    return asyncKey in obj ? getAsyncKey(obj, asyncKey, 'Promisified') : asyncKey;
   };
 
+  /**
+   * Promisify error first callback function.
+   * Instead of taking a callback, the returned function will return a promise
+   * whose fate is decided by the callback behavior of the given node function
+   *
+   * @param {Function} fn - Error first callback function we want to promisify
+   * @param {Object} [options]
+   * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
+   *
+   * @returns {Function} - Promisified version of error first callback function
+   *
+   * @example
+   * const async = promisify((cb) => cb(null, 'res1'));
+   * async().then((response) => { console.log(response) });
+   */
   var promisify = function promisify(fn, options) {
     assertType$$1('Function', fn);
 
@@ -202,8 +261,24 @@ var promisify_1 = createCommonjsModule(function (module) {
     };
   };
 
-  promisify.all = function (cbModule, options) {
-    assertType$$1('Object', cbModule);
+  /**
+   * Promisify the entire object by going through the object's properties
+   * and creating an async equivalent of each function on the object.
+   *
+   * @param {Object} obj - The object we want to promisify
+   * @param {Object} [options]
+   * @param {string} [options.suffix='Async'] - Suffix will be appended to original method name
+   * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
+   * @param {boolean} [options.proto=false] - Promisify object prototype chain if true
+   * @param {string[]} [options.exclude=undefined] - List of object keys not to promisify
+   * @param {string[]} [options.include=undefined] - Promisify only provided keys
+   *
+   * @returns {Object} - Initial obj with appended promisified functions on him
+   */
+  promisify.all = function (obj, options) {
+    assertType$$1('Object', obj);
+
+    // Apply default options if not provided
 
     var _ref = options || {},
         suffix = _ref.suffix,
@@ -216,15 +291,23 @@ var promisify_1 = createCommonjsModule(function (module) {
     exclude = Array.isArray(exclude) ? exclude : undefined;
     include = Array.isArray(include) ? include : undefined;
 
-    for (var key in cbModule) {
-      if (shouldPromisify(key, cbModule, exclude, include, proto)) {
-        var asyncKey = getKey(cbModule, key, suffix);
-        cbModule[asyncKey] = promisify(cbModule[key], options);
-        cbModule[asyncKey][PROMISIFIED_SYMBOL] = true;
+    Object.getOwnPropertyNames(obj).forEach(function (key) {
+      if (shouldPromisify(obj[key], exclude, include, proto)) {
+        var asyncKey = getAsyncKey(obj, key, suffix);
+        obj[asyncKey] = promisify(obj[key], options);
+        obj[asyncKey][PROMISIFIED_SYMBOL] = true;
+      }
+    });
+
+    // Promisify object prototype if specified
+    if (proto) {
+      var prototype = Object.getPrototypeOf(obj);
+      if (prototype && !isNativeObject(prototype)) {
+        promisify.all(prototype, options);
       }
     }
 
-    return cbModule;
+    return obj;
   };
 
   // Public

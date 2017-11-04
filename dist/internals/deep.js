@@ -10,7 +10,8 @@ const isNativeObject = require('./isNativeObject');
  * @param {Object} [options]
  * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
  * @param {Set} [processed=new Set()] - Used internally to prevent circular references
- * @returns {Object} Returns initial object which now have applied actions on him
+ *
+ *  @returns {Object} Initial object which now have applied actions on him
  */
 module.exports = function deep(action, obj, options, processed = new Set()) {
   // Prevent circular reference

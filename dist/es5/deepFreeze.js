@@ -9,12 +9,13 @@ var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symb
 // Public
 
 /**
- * A way to detect if object is native or user defined
+ * A way to detect if object is native(built in) or user defined
  * Warning! Detection is not bulletproof and can be easily tricked.
  * In real word scenarios there should not be fake positives
  *
- * @param {any} obj - preform isNativeObject check on provided value
- * @returns {boolean} - true if object is native false otherwise
+ * @param {any} obj - Value to be tested is native object
+ *
+ * @returns {boolean} - True if it's object and if it's built in JS object
  *
  * @example
  * isNativeObject({}); \\ => false
@@ -37,7 +38,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @param {Object} [options]
  * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
  * @param {Set} [processed=new Set()] - Used internally to prevent circular references
- * @returns {Object} Returns initial object which now have applied actions on him
+ *
+ *  @returns {Object} Initial object which now have applied actions on him
  */
 var deep = function deep(action, obj, options) {
   var processed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : new Set();
@@ -72,6 +74,15 @@ var deep = function deep(action, obj, options) {
 
 // Public
 
+/**
+ * Recursively apply Object.freeze on an object and all of the object properties that are either object or function.
+ *
+ * @param {Object} obj - The object we want to freeze
+ * @param {Object} [options]
+ * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
+ *
+ * @returns {Object} Initial object with applied Object.freeze
+ */
 var deepFreeze = function deepFreeze(obj, options) {
   return deep('freeze', obj, options);
 };
