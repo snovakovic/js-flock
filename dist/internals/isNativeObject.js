@@ -1,4 +1,4 @@
-// Public
+// >>> PUBLIC <<<
 
 /**
  * A way to detect if object is native(built in) or user defined

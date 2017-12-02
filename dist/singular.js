@@ -1,8 +1,8 @@
-// Public
+// >>> PUBLIC <<<
 
 module.exports = function(fn) {
   let inProgress = false;
-  const done = () => { inProgress = false; };
+  const done = () => inProgress = false;
 
   return function(...args) {
     if (!inProgress) {

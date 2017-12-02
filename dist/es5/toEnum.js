@@ -6,7 +6,7 @@
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-// Internals
+// >>> INTERNALS <<<
 
 var castObject = function castObject(args) {
   if (Array.isArray(args)) {
@@ -27,7 +27,7 @@ var hardBindFunction = function hardBindFunction(obj, key) {
   }
 };
 
-// Public
+// >>> PUBLIC <<<
 
 var toEnum = function toEnum(arg) {
   var enu = castObject(arg);

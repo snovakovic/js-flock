@@ -6,7 +6,7 @@
 
 var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * A way to detect if object is native(built in) or user defined
@@ -28,7 +28,7 @@ var isNativeObject = function isNativeObject(obj) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * Recursively apply provided operation on object and all of the object properties that are either object or function.
@@ -72,7 +72,7 @@ var deep = function deep(action, obj, options) {
   return obj;
 };
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * Recursively apply Object.freeze on an object and all of the object properties that are either object or function.

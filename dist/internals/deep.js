@@ -1,6 +1,6 @@
 const isNativeObject = require('./isNativeObject');
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * Recursively apply provided operation on object and all of the object properties that are either object or function.

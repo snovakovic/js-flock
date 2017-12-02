@@ -4,12 +4,12 @@
 	(global.singular = global.singular || {}, global.singular.js = factory());
 }(this, (function () { 'use strict';
 
-// Public
+// >>> PUBLIC <<<
 
 var singular = function singular(fn) {
   var inProgress = false;
   var done = function done() {
-    inProgress = false;
+    return inProgress = false;
   };
 
   return function () {

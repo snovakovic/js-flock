@@ -4,14 +4,14 @@
 	(global['js-flock'] = factory());
 }(this, (function () { 'use strict';
 
-// Internals
+// >>> INTERNALS <<<
 
 var REJECTION_REASON = Object.freeze({
   isStrangled: true,
   message: 'Promise have timed out'
 });
 
-// Public
+// >>> PUBLIC <<<
 
 var collar = function collar(promise) {
   var ttl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5000;
@@ -25,7 +25,7 @@ var collar = function collar(promise) {
 
 var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * A way to detect if object is native(built in) or user defined
@@ -47,7 +47,7 @@ var isNativeObject = function isNativeObject(obj) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * Recursively apply provided operation on object and all of the object properties that are either object or function.
@@ -91,7 +91,7 @@ var deep = function deep(action, obj, options) {
   return obj;
 };
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * Recursively apply Object.freeze on an object and all of the object properties that are either object or function.
@@ -106,7 +106,7 @@ var deepFreeze = function deepFreeze(obj, options) {
   return deep('freeze', obj, options);
 };
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * Recursively apply Object.preventExtensions on an object and all of the object properties that are either object or function.
@@ -121,7 +121,7 @@ var deepPreventExtensions = function deepPreventExtensions(obj, options) {
   return deep('preventExtensions', obj, options);
 };
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * Recursively apply Object.seal on an object and all of the object properties that are either object or function.
@@ -136,7 +136,7 @@ var deepSeal = function deepSeal(obj, options) {
   return deep('seal', obj, options);
 };
 
-// Public
+// >>> PUBLIC <<<
 
 var last = function last(arr, condition) {
   var length = Array.isArray(arr) ? arr.length : 0;
@@ -155,7 +155,7 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
-// Public
+// >>> PUBLIC <<<
 
 var assertType = function assertType(moduleName) {
   return function (type, val) {
@@ -169,7 +169,7 @@ var assertType = function assertType(moduleName) {
 var promisify_1 = createCommonjsModule(function (module) {
   var assertType$$1 = assertType('promisify');
 
-  // Internals
+  // >>> INTERNALS <<<
 
   /**
    * @const {Symbol} - Symbol to be applied on promisified functions to avoid multiple promisify of same function
@@ -310,17 +310,17 @@ var promisify_1 = createCommonjsModule(function (module) {
     return obj;
   };
 
-  // Public
+  // >>> PUBLIC <<<
 
   module.exports = promisify;
 });
 
-// Public
+// >>> PUBLIC <<<
 
 var singular = function singular(fn) {
   var inProgress = false;
   var done = function done() {
-    inProgress = false;
+    return inProgress = false;
   };
 
   return function () {
@@ -337,7 +337,7 @@ var singular = function singular(fn) {
   };
 };
 
-// Internals
+// >>> INTERNALS <<<
 
 var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
   var valA = sortBy(a);
@@ -371,7 +371,7 @@ var sort = function sort(direction, ctx) {
   return ctx.sort(_sorter);
 };
 
-// Public
+// >>> PUBLIC <<<
 
 var sort_1 = function sort_1(ctx) {
   return {
@@ -386,7 +386,7 @@ var sort_1 = function sort_1(ctx) {
 
 var _typeof$2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-// Internals
+// >>> INTERNALS <<<
 
 var castObject = function castObject(args) {
   if (Array.isArray(args)) {
@@ -407,7 +407,7 @@ var hardBindFunction = function hardBindFunction(obj, key) {
   }
 };
 
-// Public
+// >>> PUBLIC <<<
 
 var toEnum = function toEnum(arg) {
   var enu = castObject(arg);
@@ -459,7 +459,7 @@ var toEnum = function toEnum(arg) {
 
 var assertType$2 = assertType('waitFor');
 
-// Public
+// >>> PUBLIC <<<
 
 var waitFor = function waitFor(fn, options) {
   assertType$2('Function', fn);
@@ -477,7 +477,7 @@ var waitFor = function waitFor(fn, options) {
   });
 };
 
-// Public
+// >>> PUBLIC <<<
 
 var src = {
   /* eslint-disable global-require */

@@ -1,7 +1,7 @@
 const assertType = require('./internals/assertType')('promisify');
 const isNativeObject = require('./internals/isNativeObject');
 
-// Internals
+// >>> INTERNALS <<<
 
 /**
  * @const {Symbol} - Symbol to be applied on promisified functions to avoid multiple promisify of same function
@@ -126,6 +126,6 @@ promisify.all = (obj, options) => {
   return obj;
 };
 
-// Public
+// >>> PUBLIC <<<
 
 module.exports = promisify;

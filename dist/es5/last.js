@@ -4,7 +4,7 @@
 	(global.last = global.last || {}, global.last.js = factory());
 }(this, (function () { 'use strict';
 
-// Public
+// >>> PUBLIC <<<
 
 var last = function last(arr, condition) {
   var length = Array.isArray(arr) ? arr.length : 0;

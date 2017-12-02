@@ -4,7 +4,7 @@
 	(global.waitFor = global.waitFor || {}, global.waitFor.js = factory());
 }(this, (function () { 'use strict';
 
-// Public
+// >>> PUBLIC <<<
 
 var assertType$1 = function assertType(moduleName) {
   return function (type, val) {
@@ -17,7 +17,7 @@ var assertType$1 = function assertType(moduleName) {
 
 var assertType = assertType$1('waitFor');
 
-// Public
+// >>> PUBLIC <<<
 
 var waitFor = function waitFor(fn, options) {
   assertType('Function', fn);

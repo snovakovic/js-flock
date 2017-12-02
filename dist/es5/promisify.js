@@ -8,7 +8,7 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
-// Public
+// >>> PUBLIC <<<
 
 var assertType = function assertType(moduleName) {
   return function (type, val) {
@@ -21,7 +21,7 @@ var assertType = function assertType(moduleName) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-// Public
+// >>> PUBLIC <<<
 
 /**
  * A way to detect if object is native(built in) or user defined
@@ -44,7 +44,7 @@ var isNativeObject = function isNativeObject(obj) {
 var promisify_1 = createCommonjsModule(function (module) {
   var assertType$$1 = assertType('promisify');
 
-  // Internals
+  // >>> INTERNALS <<<
 
   /**
    * @const {Symbol} - Symbol to be applied on promisified functions to avoid multiple promisify of same function
@@ -185,7 +185,7 @@ var promisify_1 = createCommonjsModule(function (module) {
     return obj;
   };
 
-  // Public
+  // >>> PUBLIC <<<
 
   module.exports = promisify;
 });

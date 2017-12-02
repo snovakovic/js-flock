@@ -1,11 +1,11 @@
-// Internals
+// >>> INTERNALS <<<
 
 const REJECTION_REASON = Object.freeze({
   isStrangled: true,
   message: 'Promise have timed out'
 });
 
-// Public
+// >>> PUBLIC <<<
 
 module.exports = function(promise, ttl = 5000) {
   const restraint = new Promise((resolve, reject) =>
