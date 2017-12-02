@@ -1,6 +1,6 @@
 const assertType = require('./internals/assertType')('waitFor');
 
-// Public
+// >>> PUBLIC <<<
 
 module.exports = function(fn, options) {
   assertType('Function', fn);

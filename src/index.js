@@ -1,4 +1,4 @@
-// Public
+// >>> PUBLIC <<<
 
 module.exports = {
   /* eslint-disable global-require */

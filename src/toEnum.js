@@ -1,4 +1,4 @@
-// Internals
+// >>> INTERNALS <<<
 
 const castObject = function(args) {
   if (Array.isArray(args)) {
@@ -17,7 +17,7 @@ const hardBindFunction = function(obj, key) {
   }
 };
 
-// Public
+// >>> PUBLIC <<<
 
 module.exports = function(arg) {
   const enu = castObject(arg);
