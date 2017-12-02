@@ -160,7 +160,7 @@ Enum representation is immutable (frozen)
  For example we will use Vue.js and click handler.
 
 ```html
-    <span @click="startConversation()" role="button"></span>
+    <span @click="save()" role="button">Save User</span>
 ```
 
 ```javascript
@@ -168,30 +168,16 @@ Enum representation is immutable (frozen)
 
   export default {
     methods: {
-      startConversation: singular(function(done) {
-        // After function is called all other calls will be ignored until done is called
-        if (this.conversation) { // Computed property that return conversation if exists
-          this.$store.dispatch('Chat/conversation/activate', this.conversation.channelId);
-          done(); // In this case done is called immediately
-          return;
-        }
-
-        // If conversation does not exist we need to create it in order to activate it
-        ChatService.conversation.createDirect(this.professor.id)
-          .then((newConversation) => {
-            this.$store.commit('Chat/conversation/add', newConversation);
-            this.$store.dispatch('Chat/conversation/activate', newConversation.channelId);
-          })
-          .catch((err) => {
-            Toast.showErrorToast();
-            this.$log.error(err);
-          })
-          .then(done); // In this case done is called asynchronously.
-      })
-    }
-  };
+      save: singular(function(done) {
+        // All subsequent calls to submit will be ignored until done is called
+        UserService.save(this.user)
+          .then(() => { /* Success handler */ })
+          .catch(() => { /* Exception handler */ })
+          .then(done);
+      }
+    };
+  }
 ```
-
 
 ### waitFor
 
