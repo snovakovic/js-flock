@@ -4,7 +4,7 @@ const singular = require('../../src/singular');
 
 
 describe('singular', () => {
-  it('Should behave correctly', (done) => {
+  it('Should ignore calls to the function when in progress', (done) => {
     let noCalls = 0;
     const test = singular((finished) => {
       noCalls += 1;
