@@ -4,17 +4,17 @@ const isNativeObject = require('./internals/isNativeObject');
 // >>> INTERNALS <<<
 
 /**
- * @const {Symbol} - Symbol to be applied on promisified functions to avoid multiple promisify of same function
+ * @const {Symbol} - Symbol to be applied on promisified functions to avoid multiple promisify
+ * of the same function.
  */
 const PROMISIFIED_SYMBOL = Symbol('promisified');
 
 /**
  * Promisified resolver for error first callback function.
- *
- * @param {Function} fn - Error first callback function we want to promisify
+ * @param {Function} fn Error first callback function we want to promisify.
  * @param {Object} [options]
- * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
- * @returns {Function} - Promisified version of error first callback function
+ * @param {boolean} [options.multiArgs=false] Promise will resolve with array of values if true.
+ * @returns {Function} Promisified version of error first callback function.
  */
 const promisified = function(fn, args, options) {
   return new Promise((resolve, reject) => {
@@ -28,13 +28,11 @@ const promisified = function(fn, args, options) {
 };
 
 /**
- * Check does we need to apply promisify
- *
- * @param {Object} prop - Object property we want to test
- * @param {string[]} [exclude=undefined] - List of object keys not to promisify
- * @param {string[]} [include=undefined] - Promisify only provided keys
- *
- * @returns {boolean}
+ * Check does we need to apply promisify.
+ * @param {Object} prop Object property we want to test.
+ * @param {string[]} [exclude=undefined] List of object keys not to promisify.
+ * @param {string[]} [include=undefined] Promisify only provided keys.
+ * @returns {boolean} True if we should promisify function otherwise false.
  */
 const shouldPromisify = function(prop, exclude, include) {
   return typeof prop === 'function' &&
@@ -44,16 +42,12 @@ const shouldPromisify = function(prop, exclude, include) {
 };
 
 /**
- * Promisify error first callback function.
- * Instead of taking a callback, the returned function will return a promise
- * whose fate is decided by the callback behavior of the given node function
- *
- * @param {Function} fn - Error first callback function we want to promisify
+ * Promisify error first callback function. Instead of taking a callback, the returned function
+ * will return a promise whose fate is decided by the callback behavior of the given node function.
+ * @param {Function} fn Error first callback function we want to promisify.
  * @param {Object} [options]
- * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
- *
- * @returns {Function} - Promisified version of error first callback function
- *
+ * @param {boolean} [options.multiArgs=false] Promise will resolve with array of values if true.
+ * @returns {Function} Promisified version of error first callback function.
  * @example
  * const async = promisify((cb) => cb(null, 'res1'));
  * async().then((response) => { console.log(response) });
@@ -67,18 +61,16 @@ const promisify = function(fn, options) {
 };
 
 /**
- * Promisify the entire object by going through the object's properties
- * and creating an async equivalent of each function on the object.
- *
- * @param {Object} obj - The object we want to promisify
+ * Promisify the entire object by going through the object's properties and creating an
+ * async equivalent of each function on the object.
+ * @param {Object} obj The object we want to promisify.
  * @param {Object} [options]
- * @param {string} [options.suffix='Async'] - Suffix will be appended to original method name
- * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
- * @param {boolean} [options.proto=false] - Promisify object prototype chain if true
- * @param {string[]} [options.exclude=undefined] - List of object keys not to promisify
- * @param {string[]} [options.include=undefined] - Promisify only provided keys
- *
- * @returns {Object} - Initial obj with appended promisified functions on him
+ * @param {string} [options.suffix='Async'] Suffix will be appended to original method name.
+ * @param {boolean} [options.multiArgs=false] Promise will resolve with array of values if true.
+ * @param {boolean} [options.proto=false] Promisify object prototype chain if true.
+ * @param {string[]} [options.exclude=undefined] List of object keys not to promisify.
+ * @param {string[]} [options.include=undefined] Promisify only provided keys.
+ * @returns {Object} Initial obj with appended promisified functions on him.
  */
 promisify.all = (obj, options) => {
   assertType('Object', obj);
