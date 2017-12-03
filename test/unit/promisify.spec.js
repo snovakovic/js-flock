@@ -260,4 +260,13 @@ describe('promisify.all', () => {
     expect(p2).to.have.any.key('testAsync');
     expect(p3).to.not.have.key('testAsync');
   });
+
+  it('Should not duplicate promisified functions', () => {
+    const test = { fun: () => {} };
+    promisify.all(test);
+    promisify.all(test);
+    promisify.all(test);
+
+    expect(test).to.have.all.keys(['fun', 'funAsync']);
+  });
 });
