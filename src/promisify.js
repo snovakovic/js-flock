@@ -44,24 +44,6 @@ const shouldPromisify = function(prop, exclude, include) {
 };
 
 /**
- * Get the name of the new promisified function.
- * Name is original function name appended with suffix
- * In case new name is occupied 'Promisified' will be appended in recursion
- *
- * @param {Object} obj - Object where new function will be appended
- * @param {string} key - Original function name
- * @param {string} suffix - Suffix to be appended to function
- *
- * @returns {string} - New name that does not exist in object
- */
-const getAsyncKey = function(obj, key, suffix) {
-  const asyncKey = `${key}${suffix}`;
-  return (asyncKey in obj)
-    ? getAsyncKey(obj, asyncKey, 'Promisified')
-    : asyncKey;
-};
-
-/**
  * Promisify error first callback function.
  * Instead of taking a callback, the returned function will return a promise
  * whose fate is decided by the callback behavior of the given node function
@@ -109,7 +91,16 @@ promisify.all = (obj, options) => {
 
   Object.getOwnPropertyNames(obj).forEach((key) => {
     if (shouldPromisify(obj[key], exclude, include, proto)) {
-      const asyncKey = getAsyncKey(obj, key, suffix);
+      let asyncKey = `${key}${suffix}`;
+      while (asyncKey in obj) {
+        // Function has already been promisified skip it
+        if (obj[asyncKey][PROMISIFIED_SYMBOL] === true) {
+          return;
+        }
+
+        asyncKey = `${asyncKey}Promisified`;
+      }
+
       obj[asyncKey] = promisify(obj[key], options);
       obj[asyncKey][PROMISIFIED_SYMBOL] = true;
     }
