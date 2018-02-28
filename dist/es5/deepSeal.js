@@ -53,9 +53,16 @@ var deep = function deep(action, obj, options) {
   // Prevent TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
   if (obj === Function.prototype) return obj;
 
-  Reflect.ownKeys(obj).forEach(function (key) {
+  var ownKeys = Object.getOwnPropertyNames(obj);
+
+  // Not supported in all enviroments
+  if (Object.getOwnPropertySymbols) {
+    ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(obj));
+  }
+
+  ownKeys.forEach(function (key) {
     var prop = obj[key];
-    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && !ArrayBuffer.isView(prop)) {
+    if (prop && ((typeof prop === 'undefined' ? 'undefined' : _typeof(prop)) === 'object' || typeof prop === 'function') && typeof ArrayBuffer !== 'undefined' && !ArrayBuffer.isView(prop)) {
       // Prevent issue with freezing buffers
       deep(action, prop, options, processed);
     }

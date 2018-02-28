@@ -23,11 +23,18 @@ module.exports = function deep(action, obj, options, processed = new Set()) {
   // Prevent TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
   if (obj === Function.prototype) return obj;
 
-  Reflect.ownKeys(obj).forEach((key) => {
+  let ownKeys = Object.getOwnPropertyNames(obj);
+
+  // Not supported in all enviroments
+  if (Object.getOwnPropertySymbols) {
+    ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(obj));
+  }
+
+  ownKeys.forEach((key) => {
     const prop = obj[key];
     if (prop &&
       (typeof prop === 'object' || typeof prop === 'function') &&
-      !ArrayBuffer.isView(prop)) { // Prevent issue with freezing buffers
+      (typeof ArrayBuffer !== 'undefined' && !ArrayBuffer.isView(prop))) { // Prevent issue with freezing buffers
       deep(action, prop, options, processed);
     }
   });
