@@ -10,10 +10,14 @@ const castObject = function(args) {
   return typeof args === 'object' ? Object.assign({}, args) : {};
 };
 
+const isClass = function(input) {
+  return /^class /.test(Function.prototype.toString.call(input));
+};
+
 const hardBindFunction = function(obj, key) {
-  let prop = obj[key];
-  if (typeof prop === 'function') {
-    prop = prop.bind(obj);
+  const prop = obj[key];
+  if (typeof prop === 'function' && !isClass(prop)) {
+    obj[key] = prop.bind(obj);
   }
 };
 
