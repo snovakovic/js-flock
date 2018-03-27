@@ -20,10 +20,15 @@ var castObject = function castObject(args) {
   return (typeof args === 'undefined' ? 'undefined' : _typeof(args)) === 'object' ? Object.assign({}, args) : {};
 };
 
+var isClass = function isClass(input) {
+  return (/^class /.test(Function.prototype.toString.call(input))
+  );
+};
+
 var hardBindFunction = function hardBindFunction(obj, key) {
   var prop = obj[key];
-  if (typeof prop === 'function') {
-    prop = prop.bind(obj);
+  if (typeof prop === 'function' && !isClass(prop)) {
+    obj[key] = prop.bind(obj);
   }
 };
 
