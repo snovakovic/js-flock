@@ -30,7 +30,7 @@ describe('empty', () => {
     expect(response).to.eql(persons);
   });
 
-  it('should not break if array is not provided', () => {
+  it('Should not break if array is not provided', () => {
     const response = empty(33);
     expect(response).to.eql(33);
   });
