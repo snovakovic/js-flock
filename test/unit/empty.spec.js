@@ -30,6 +30,12 @@ describe('empty', () => {
     expect(response).to.eql(persons);
   });
 
+  it('emptying already empty array should be ignored', () => {
+    const emptyArr = [];
+    const response = empty(emptyArr);
+    expect(emptyArr).to.equal(response);
+  });
+
   it('Should not break if array is not provided', () => {
     const response = empty(33);
     expect(response).to.eql(33);
