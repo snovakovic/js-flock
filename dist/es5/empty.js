@@ -10,12 +10,22 @@
  * Mutate array by removing all items from it
  * @param {Array} arr - array that will be emptied
  */
-var empty = function empty(arr) {
-  if (Array.isArray(arr)) {
-    arr.splice(0, arr.length);
+var empty = function empty() {
+  for (var _len = arguments.length, props = Array(_len), _key = 0; _key < _len; _key++) {
+    props[_key] = arguments[_key];
   }
 
-  return arr;
+  props.forEach(function (arr) {
+    if (Array.isArray(arr)) {
+      arr.splice(0, arr.length);
+    }
+  });
+
+  if (props.length === 1) {
+    return props[0];
+  }
+
+  return props;
 };
 
 return empty;
