@@ -30,6 +30,22 @@ describe('empty', () => {
     expect(response).to.eql(persons);
   });
 
+  it('Should empty multiple arrays', () => {
+    const arr1 = [1];
+    const arr2 = [1, 2];
+    const arr3 = [1, 2, 3];
+
+    const response = empty(arr1, arr2, arr3);
+
+    expect(response.length).to.equal(3);
+    expect(arr1.length).to.equal(0);
+    expect(arr2.length).to.equal(0);
+    expect(arr3.length).to.equal(0);
+
+    expect(response[2]).to.equal(arr3);
+    expect(response[2]).not.to.equal(arr2);
+  });
+
   it('emptying already empty array should be ignored', () => {
     const emptyArr = [];
     const response = empty(emptyArr);
@@ -40,4 +56,5 @@ describe('empty', () => {
     const response = empty(33);
     expect(response).to.eql(33);
   });
+
 });
