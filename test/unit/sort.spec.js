@@ -6,9 +6,11 @@ const sort = require('../../src/sort');
 describe('sort', () => {
   let flatArray;
   let persons;
+  let multiPropArray;
 
   beforeEach(() => {
     flatArray = [1, 5, 3, 2, 4, 5];
+
     persons = [{
       name: 'last',
       dob: new Date(1987, 14, 11),
@@ -21,6 +23,28 @@ describe('sort', () => {
       name: 'In the middle',
       dob: new Date(1987, 14, 10),
       address: { code: 1 }
+    }];
+
+    multiPropArray = [{
+      name: 'aa',
+      lastName: 'aa',
+      age: 10
+    }, {
+      name: 'aa',
+      lastName: undefined,
+      age: 8
+    }, {
+      name: 'aa',
+      lastName: undefined,
+      age: 9
+    }, {
+      name: 'aa',
+      lastName: 'bb',
+      age: 11
+    }, {
+      name: 'bb',
+      lastName: 'aa',
+      age: 6
     }];
   });
 
@@ -85,38 +109,44 @@ describe('sort', () => {
   });
 
   it('Should sort on multiple properties', () => {
-    const testArr = [{
-      name: 'aa',
-      lastName: 'aa',
-      age: 10
-    }, {
-      name: 'aa',
-      lastName: undefined,
-      age: 8
-    }, {
-      name: 'aa',
-      lastName: undefined,
-      age: 9
-    }, {
-      name: 'aa',
-      lastName: 'bb',
-      age: 11
-    }, {
-      name: 'bb',
-      lastName: 'aa',
-      age: 6
-    }];
-
-    sort(testArr).asc([
+    sort(multiPropArray).asc([
       (p) => p.name,
       (p) => p.lastName,
       (p) => p.age
     ]);
 
-    expect(testArr[0].age).to.equal(10);
-    expect(testArr[1].age).to.equal(11);
-    expect(testArr[2].age).to.equal(8);
-    expect(testArr[3].age).to.equal(9);
-    expect(testArr[4].age).to.equal(6);
+    expect(multiPropArray[0].age).to.equal(10);
+    expect(multiPropArray[1].age).to.equal(11);
+    expect(multiPropArray[2].age).to.equal(8);
+    expect(multiPropArray[3].age).to.equal(9);
+    expect(multiPropArray[4].age).to.equal(6);
   });
+
+  it('Should sort on multiple properties in different direction', () => {
+    sort(multiPropArray).asc([
+      (p) => p.name,
+      (p) => p.lastName,
+      (p) => -p.age
+    ]);
+
+    // Only this 2 properties are affected by age sorting
+    // Age is now sorted in descending order.
+    expect(multiPropArray[2].age).to.equal(9);
+    expect(multiPropArray[3].age).to.equal(8);
+  });
+
+  it('Should sort on multiple properties in different direction', () => {
+    sort(multiPropArray).asc([
+      (p) => p.name,
+      (p) => -p.lastName
+    ]);
+
+    expect(multiPropArray[0].lastName).to.equal('bb');
+    expect(multiPropArray[3].lastName).to.equal('aa');
+    expect(multiPropArray[1].lastName).to.equal(undefined);
+    expect(multiPropArray[2].lastName).to.equal(undefined);
+    expect(multiPropArray[4].lastName).to.equal('aa');
+  });
+
+
 });
