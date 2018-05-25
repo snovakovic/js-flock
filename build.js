@@ -52,10 +52,7 @@ options.mandatoryFiles.forEach((fileName) => Fs.copySync(fileName, `${options.di
 
 const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'));
 
-console.log('---MODULES---', modules);
-
 (function bundler(idx) {
-  console.log('Called', idx, modules.length);
   if (idx >= modules.length) return;
 
   const fileName = modules[idx];
