@@ -52,7 +52,10 @@ options.mandatoryFiles.forEach((fileName) => Fs.copySync(fileName, `${options.di
 
 const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'));
 
+console.log('---MODULES---', modules);
+
 (function bundler(idx) {
+  console.log('Called', idx, modules.length);
   if (idx >= modules.length) return;
 
   const fileName = modules[idx];
@@ -65,7 +68,7 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
       bundle.write({
         moduleName,
         format,
-        exports: 'default',
+        exports: fileName === 'index.js' ? 'named' : 'default',
         dest: `${options.dist}/es5/${fileName}`
       }));
 
