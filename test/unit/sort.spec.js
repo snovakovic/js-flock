@@ -147,6 +147,4 @@ describe('sort', () => {
     expect(multiPropArray[2].lastName).to.equal(undefined);
     expect(multiPropArray[4].lastName).to.equal('aa');
   });
-
-
 });
