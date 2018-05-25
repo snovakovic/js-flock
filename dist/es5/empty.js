@@ -8,7 +8,7 @@
 
 /**
  * Mutate array by removing all items from it
- * @param {Array} arr - array that will be emptied
+ * @param {Array[]} props - 1 or more arrays to empty out
  */
 var empty = function empty() {
   for (var _len = arguments.length, props = Array(_len), _key = 0; _key < _len; _key++) {
