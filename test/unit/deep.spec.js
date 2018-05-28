@@ -189,6 +189,27 @@ describe('deep', () => {
       expect(Object.isFrozen(proto2)).to.equal(true);
       expect(Object.isFrozen(nativeProto)).to.equal(false);
     });
+
+    it('Should not freeze excluded property', () => {
+      // Freeze this proerty but don't freeze nested `third property`
+      obj.third = { a: 22 };
+
+      deepFreeze(obj, {
+        exclude(key, context) {
+          return key === 'third' && context !== obj;
+        }
+      });
+
+      expect(Object.isFrozen(obj.third)).to.equal(true);
+      expect(Object.isFrozen(obj.first.second)).to.equal(true);
+      // We have exclude this property
+      expect(Object.isFrozen(obj.first.second.third)).to.equal(false);
+    });
+
+    it('Should not break on invalid exclude option', () => {
+      deepFreeze(obj, { exclude: 'third' });
+      expect(Object.isFrozen(obj.first.second.third)).to.equal(true);
+    });
   });
 
 

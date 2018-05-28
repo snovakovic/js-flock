@@ -5,10 +5,11 @@ const isNativeObject = require('./isNativeObject');
 /**
  * Recursively apply provided operation on object and all of the object properties that are either object or function.
  *
- * @param {string='freeze', 'seal', 'preventExtensions'} action - The action to be applied on object and his properties
- * @param {Object} obj - The object we want to modify
+ * @param {string['freeze', 'seal', 'preventExtensions']} action - The action to be applied on object and his properties
+ * @param {Object} obj - The object on which the action will be aplied
  * @param {Object} [options]
  * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
+ * @param {boolean} [options.exclude=function] - Function that decide should propery be excluded or included
  * @param {Set} [processed=new Set()] - Used internally to prevent circular references
  *
  *  @returns {Object} Initial object which now have applied actions on him
@@ -16,6 +17,8 @@ const isNativeObject = require('./isNativeObject');
 module.exports = function deep(action, obj, options, processed = new Set()) {
   // Prevent circular reference
   if (processed.has(obj)) return obj;
+
+  options = options || {};
 
   Object[action](obj);
   processed.add(obj);
@@ -34,13 +37,14 @@ module.exports = function deep(action, obj, options, processed = new Set()) {
     const prop = obj[key];
     if (prop &&
       (typeof prop === 'object' || typeof prop === 'function') &&
-      (typeof ArrayBuffer !== 'undefined' && !ArrayBuffer.isView(prop))) { // Prevent issue with freezing buffers
+      (typeof ArrayBuffer !== 'undefined' && !ArrayBuffer.isView(prop)) &&
+      (typeof options.exclude !== 'function' || !options.exclude(key, obj))) { // Prevent issue with freezing buffers
       deep(action, prop, options, processed);
     }
   });
 
   // Freeze object prototype if specified
-  if (options && typeof options === 'object' && options.proto) {
+  if (options.proto) {
     const proto = Object.getPrototypeOf(obj);
     if (proto && !isNativeObject(proto)) {
       deep(action, proto, options, processed);
