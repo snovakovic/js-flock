@@ -36,8 +36,8 @@ module.exports = function deep(action, obj, options, processed = new Set()) {
     const prop = obj[key];
     if (prop &&
       (typeof prop === 'object' || typeof prop === 'function') &&
-      (typeof ArrayBuffer !== 'undefined' && !ArrayBuffer.isView(prop)) &&
-      (typeof options.exclude !== 'function' || !options.exclude(key, obj))) { // Prevent issue with freezing buffers
+      (typeof ArrayBuffer !== 'undefined' && !ArrayBuffer.isView(prop)) && // Prevent issue with freezing buffers
+      (typeof options.exclude !== 'function' || !options.exclude(key, obj))) {
       deep(action, prop, options, processed);
     }
   });
