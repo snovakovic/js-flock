@@ -9,7 +9,7 @@ const isNativeObject = require('./isNativeObject');
  * @param {Object} [options] - Optional options that controls what will be affected with deep acion
  * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
  * @param {boolean} [options.exclude=Function] - Function that decide should propery be excluded or included.
- * Function accepts key as first parametar and contgext(object/function) as second parameter
+ * Function accepts key as first parametar and property context(object/function) as second parameter
  * @param {Set} [processed=new Set()] - Used internally to prevent circular references
  * @returns {Object} Initial object with aplied action(freeze/seel/preventExtension) on it
  */
