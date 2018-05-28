@@ -4,15 +4,14 @@ const isNativeObject = require('./isNativeObject');
 
 /**
  * Recursively apply provided operation on object and all of the object properties that are either object or function.
- *
  * @param {string['freeze', 'seal', 'preventExtensions']} action - The action to be applied on object and his properties
- * @param {Object} obj - The object on which the action will be aplied
- * @param {Object} [options]
+ * @param {Object} obj - The object that will be deeply freeze/seal...
+ * @param {Object} [options] - Optional options that controls what will be affected with deep acion
  * @param {boolean} [options.proto=false] - Should we loop over prototype chain or not
- * @param {boolean} [options.exclude=function] - Function that decide should propery be excluded or included
+ * @param {boolean} [options.exclude=Function] - Function that decide should propery be excluded or included.
+ * Function accepts key as first parametar and contgext(object/function) as second parameter
  * @param {Set} [processed=new Set()] - Used internally to prevent circular references
- *
- *  @returns {Object} Initial object which now have applied actions on him
+ * @returns {Object} Initial object with aplied action(freeze/seel/preventExtension) on it
  */
 module.exports = function deep(action, obj, options, processed = new Set()) {
   // Prevent circular reference
