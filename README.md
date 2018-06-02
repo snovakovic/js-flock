@@ -15,20 +15,22 @@ Collection of neat modular utilities for bumping up development in NODE and Brow
 
 ## Including library
 
-Each method is a separate module, so you can require only the methods that you need or a whole package. **By default unmodified ES6 code is loaded**, optionally we can include transpiled ES5 code.
-Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/) and can be loaded in Browser as CommonJs, AMD or as global var.
+Library is completely modular so you can include only modules that you need/use (recomended way of using library). **By default unmodified ES6 code is loaded**, optionally we can include transpiled ES5 code (recomended for browser enviroment).
+Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/) and can be loaded i Browser as CommonJs, AMD or as global var.
 
 ```javascript
-  // Load individual unmodified ES6 methods (recommended).
+  // Load unmodified ES6 sort module (recommended for node enviroment).
+  // In same way we can include any other library module e.g ('js-flock/toEnum', 'js-flock/deepFreeze'...)
   const sort = require('js-flock/sort');
 
-  // Load individual transpiled ES5 methods (recommended for browser).
+  // Load transpiled ES5 sort module (recommended for browser).
   const sort = require('js-flock/es5/sort');
 
   // Load whole unmodified ES6 library
   const jsFlock = require('js-flock');
 
   // Load whole transpiled ES5 library
+  // Note recommended in browser as bundle can be larger then we need
   const jsFlock = require('js-flock/es5');
 ```
 
@@ -49,14 +51,15 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 
 ### sort
 
-Fast array sorting that **outperforms lodash sort by ~2x** (in some cases it's more then **5x**).
-For more information about performance take a look at the benchmark result
-[here](https://www.npmjs.com/package/fast-sort). Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
-Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
+Fast and powerfull array sorting that **outperforms lodash sort by ~2x** (in some cases it's more then **5x**).
+For additional sort documentation and information about performance take a look at the dedicated [fast-sort page](https://www.npmjs.com/package/fast-sort).
 
-* Sorting array of objects (supports comparing by nested object properties)
+### higlights
+
+* Sorting an array of objects by one or more properties
 * Sorting flat arrays
-* Sorting by multiple properties
+* Easy to read syntax for asc and desc sorting
+* Faster then other sort alternatives
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
 
 ```javascript
@@ -65,15 +68,20 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort([1, 4, 2]).asc(); // => [1, 2, 4]
   sort([1, 4, 2]).desc(); // => [4, 2, 1]
 
-  // Sort persons [Object] ascending by lowercase firstName
-  sort(persons).asc((p) => p.firstName.toLowerCase());
+  // Sort persons [Object] ascending by firstName
+  sort(persons).asc(p => p.firstName);
+
+  // Same as above (but bit more performant)
+  // NOTE: sorting by string is avaliable from version [3.4.0]
+  sort(persons).asc('firstName');
 
   // Sort persons by multiple properties
   sort(persons).desc([
-    (p) => p.firstName, // Sort by first name
-    (p) => p.lastName, // Persons that have same firstName will be sorted by lastName
-    (p) => p.dob // Persons that have same firstName and lastName will be sorted by dob
+    'firstName', // Sort by first name
+    'lastName', // Persons that have same firstName will be sorted by lastName
+    p => p.address.city // NOTE: For nested properties we have to use function as 'address.city' is not valid property
   ]);
+
 
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
@@ -160,7 +168,7 @@ Enum representation is immutable (frozen)
  For example we will use Vue.js and click handler.
 
 ```html
-    <span @click="save()" role="button">Save User</span>
+<span @click="save()" role="button">Save User</span>
 ```
 
 ```javascript
@@ -276,37 +284,6 @@ The promisified method name will be the original method name suffixed with suffi
     include: [String], // [default: undefined] Promisify only provided keys
   });
 ```
-
-#### promisify benchmark
-
-Benchmark has been run on:
-
-* 16 GB Ram
-* Intel® Core™ i5-4570 CPU @ 3.20GHz × 4
-* Ubuntu 16.04
-* Node 8.5.0
-
-Promisify results:
-
-| Implementation   | ops/sec             | total       |
-| ---------------- | ------------------- | -----------:|
-| **js-flock**     | 10,742,789 ops/sec  | fastest     |
-| node-util        | 91,949 ops/sec      | 116x slower |
-| bluebird         | 59,821 ops/sec      | 179x slower |
-
-PromisifyAll results:
-
-| Implementation   | ops/sec         | total       |
-| ---------------- | ----------------| -----------:|
-| **js-flock**     | 503,387 ops/se  | fastest     |
-| bluebird         | 28,754 ops/sec  | 17x slower  |
-
-To run benchmark on your PC follow steps from below
-
-1) git clone https://github.com/snovakovic/js-flock.git
-2) cd js-flock
-3) npm install
-4) npm run benchmark:promisify
 
 
 ### collar
