@@ -8,7 +8,7 @@ const lodash = require('lodash');
 const base = require('./base');
 
 const implementations = {
-  flock: (arr) => jsFlock.sort(arr).asc((p) => p.amount),
+  flock: (arr) => jsFlock.sort(arr).asc('amount'),
   latestFlock: (arr) => latestFlockSort(arr).asc('amount'),
   lodash: (arr) => lodash.sortBy(arr, [(p) => p.amount]),
   sortArray: (arr) => sortArray(arr, 'amount'),
