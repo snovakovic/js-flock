@@ -58,6 +58,7 @@ For additional sort documentation and information about performance take a look 
 
 * Sorting an array of objects by one or more properties
 * Sorting flat arrays
+* Sorting in multiple directions
 * Easy to read syntax for asc and desc sorting
 * Faster then other sort alternatives
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
