@@ -82,6 +82,13 @@ For additional sort documentation and information about performance take a look 
     p => p.address.city // NOTE: For nested properties we have to use function as 'address.city' is not valid property
   ]);
 
+  // Sort in multiple directions
+  // NOTE: Available from version [3.5.0]
+  sort(persons).by[
+    { asc: 'name' }
+    { desc: 'age' }
+    { asc: p => p.address.city }
+  ];
 
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
