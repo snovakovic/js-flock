@@ -89,7 +89,6 @@ For additional sort documentation and information about performance take a look 
     { asc: p => p.address.city }
   ];
 
-
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
   sort(33).desc(); // => 33
