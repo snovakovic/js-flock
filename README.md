@@ -83,6 +83,7 @@ For additional sort documentation and information about performance take a look 
   ]);
 
   // Sort in multiple directions
+  // NOTE: Available from version [3.5.0]
   sort(persons).by[
     { asc: 'name' }
     { desc: 'age' }
