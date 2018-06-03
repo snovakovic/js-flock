@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const sort = require('../../src/sort');
 
 
-describe.only('sort', () => {
+describe('sort', () => {
   let flatArray;
   let persons;
   let multiPropArray;
@@ -91,6 +91,7 @@ describe.only('sort', () => {
     expect(sort(null).desc()).to.equal(null);
     expect(sort(33).asc()).to.equal(33);
     expect(sort({ name: 'test' }).desc()).to.eql({ name: 'test' });
+    expect(sort(33).by()).to.equal(33);
   });
 
   it('Should sort dates correctly', () => {
@@ -163,5 +164,15 @@ describe.only('sort', () => {
     ]);
 
     assertOrder([6, 10, 11, 8, 9], (idx) => multiPropArray[idx].age);
+  });
+
+  it('Should throw invalid usage of by sorter exception', () => {
+    expect(() =>
+      sort(multiPropArray).by([{ asc: 'lastName' }]))
+      .to.throw(Error);
+
+    expect(() =>
+      sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }]))
+      .to.throw(Error);
   });
 });
