@@ -86,6 +86,7 @@ For additional sort documentation and information about performance take a look 
   sort(persons).by[
     { asc: 'name' }
     { desc: 'age' }
+    { asc: p => p.address.city }
   ];
 
 
