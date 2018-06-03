@@ -85,11 +85,11 @@ For additional sort documentation and information about performance take a look 
 
   // Sort in multiple directions
   // NOTE: Available from version [3.5.0]
-  sort(persons).by[
+  sort(persons).by([
     { asc: 'name' }
     { desc: 'age' }
     { asc: p => p.address.city }
-  ];
+  ]);
 
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
