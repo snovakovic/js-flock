@@ -355,25 +355,20 @@ deepFreeze(person);
 
 Object.isFrozen(person); // true
 Object.isFrozen(person.address); // true WE HE
-```
 
-By default deepFreeze do not loop over prototype chain.
-That behaviour can be overridden by providing ```{ proto: true }``` option.
-Providing this option will freeze only user defined prototypes while leaving default built in prototypes unmodified.
+// We can modify deepFreeze behaviour by providing additional options
 
-```javascript
-const ob1 = { test: { a: 'a' } };
-const ob2 = Object.create(ob1);
+deepFreeze(object, {
+  proto: Boolean, // [default: false] - Freeze object prototype chain
+  exclude: Function, // Fine tune what will be frozen by providing exclude function. Available from version [3.3.2]
+});
 
-deepFreeze(ob2);
-Object.isFrozen(ob2.test); // false - because test property is on ob2 prototype
-
-deepFreeze(ob2, { proto: true });
-
-Object.isFrozen(ob2.test); // true
-Object.isFrozen(Object.getPrototypeOf(ob2)); // true
-Object.isFrozen(ob1); // true - same as writing above statement
-Object.isFrozen(Object.getPrototypeOf(ob1)); // false - prototype of ob1 is default built in object so it's skipped
+deepFreeze(person, {
+  // address object will not be frozen
+  exclude(key, context) {
+    return key === 'address' && context === person;
+  }
+});
 ```
 
 
