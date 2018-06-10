@@ -42,6 +42,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 - [toEnum](#toenum)
 - [singular](#singular)
 - [waitFor](#waitfor)
+- [rerun](#rerun)
 - [promisify](#promisify)
 - [promisify.all](#promisifyall)
 - [collar](#collar)
@@ -233,6 +234,37 @@ waitFor(() => Db.connection, options)
 waitFor(() => document.getElementById('elId'))
   .then(($el) => { /* Element is available now we can do manipulation with $el */})
   .catch(() => { /* Waiting timed out, handle the error! */ });
+```
+
+### rerun
+
+If you think of using setInterval stop and use rerun! For more info on usage reference unit tests ot source code.
+
+```javascript
+
+  // Any user defined function.
+  rerun(Function)
+    // How frequantly will rerun function be called
+    .every(timeInMiliseconds)
+    // [Optional] Execution is stoped if falsy value is returned from function. If falsy value is returned first time rerun will never be called.
+    .asLongAs(Function)
+    // Execute rerun function for first time and start execution cycle
+    .start()
+    // [Optional] -> Attach onStop listener
+    .onStop(Function)
+    // [Optional] Stop function execution. Function execution can also be stoped by return falsy value from asLongAs or by returning `false` value from within rerun function
+    .stop()
+
+  // Example
+  const tenMinutesInMs = 10 * 60 * 1000;
+  const refreshTokenRunner = rerun(refreshAuthToken)
+    .every(tenMinutesInMs)
+    .asLongAs(isUserLoggedIn);
+
+  // Function that will be called after user log in
+  // Every call to start will execute function immediately and restart execution cycle
+  eventBus.$on('login', refreshTokenRunner.start);
+
 ```
 
 
