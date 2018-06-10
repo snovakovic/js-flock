@@ -145,7 +145,7 @@ var deepSeal = function deepSeal(obj, options) {
 // >>> PUBLIC <<<
 
 /**
- * Mutate array by removing all items from it
+ * Remove all items from array
  * @param {Array[]} props - 1 or more arrays to empty out
  */
 var empty = function empty() {

@@ -38,15 +38,15 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 
 - [sort](#sort)
 - [last](#last)
+- [empty](#empty)
 - [toEnum](#toenum)
 - [singular](#singular)
 - [waitFor](#waitfor)
+- [rerun](#rerun)
 - [promisify](#promisify)
 - [promisify.all](#promisifyall)
 - [collar](#collar)
-- [deepFreeze](#deepfreeze)
-- [deepSeal](#deepseal)
-- [deepPreventExtensions](#deeppreventextensions)
+- [deepFreeze](#deepfreeze) / [deepSeal](#deepseal) / [deepPreventExtensions](#deeppreventextensions)
 
 
 ### sort
@@ -98,21 +98,36 @@ For additional sort documentation and information about performance take a look 
 
 ### last
 
-Get the last element of array. If condition is provided get the last element of the
-array that meets provided condition or undefined if no elements meets condition.
+Get the last element of an array. If condition is provided get the last element of an array that meets provided condition or undefined.
 
 ```javascript
-  const last = require('js-flock/last');
+const last = require('js-flock/last');
 
-  last([1, 4, 2]); // => 2
+last([1, 4, 2]); // => 2
 
-  const persons = [{ id: 1, name: 'john'}, { id: 2, name: 'john'}, { id: 3, name: 'doe'}]
+const persons = [{ id: 1, name: 'john'}, { id: 2, name: 'john'}, { id: 3, name: 'doe'}]
 
-  last(persons) // =>  { id: 3, name: 'doe'}
-  last(persons, (p) => p.name === 'john') // => { id: 2, name: 'john'}
-  last(persons, (p) => p.name === 'no-name') // => undefined
+last(persons) // =>  { id: 3, name: 'doe'}
+last(persons, (p) => p.name === 'john') // => { id: 2, name: 'john'}
+last(persons, (p) => p.name === 'no-name') // => undefined
 ```
 
+
+### empty
+Remove all items from 1 or more provided arrays.
+
+```javascript
+const empty = require('js-flock/empty');
+
+const arr = [1, 2, 3];
+
+// Shorthand for applying arr.splice(0, arr.length);
+const emptyArr = empty(arr); // => arr ==== []
+console.log(emptyArr === arr) // => true
+
+// We can empty multiple arrays. Non array values will be ignored
+empty(arr1, undefined, arr2, 3);
+```
 
 ### toEnum
 
@@ -120,50 +135,49 @@ Convert object or list of strings to enum representation.
 Enum representation is immutable (frozen)
 
 ```javascript
-  const toEnum = require('js-flock/toEnum');
+const toEnum = require('js-flock/toEnum');
 
-  const vehicleType = toEnum({
-    CAR: 'C',
-    TRUCK: 'T',
-    AIRPLANE: 'A',
-    HELICOPTER: 'H',
-    canFly(type) { // Define custom helper
-      return type === this.AIRPLANE || type === this.HELICOPTER;
-    }
-  });
-
-  const vehicle = getVehicle();
-
-  if (vehicle.type === vehicleType.TRUCK) {
-    // Special behaviour only for truck vehicles
+const vehicleType = toEnum({
+  CAR: 'C',
+  TRUCK: 'T',
+  AIRPLANE: 'A',
+  HELICOPTER: 'H',
+  canFly(type) { // Define custom helper
+    return type === this.AIRPLANE || type === this.HELICOPTER;
   }
+});
 
-  if (vehicleType.canFly(vehicle.type)) {
-    // Special behaviour for vehicles that can fly
-  }
+const vehicle = getVehicle();
 
-  // enum is immutable
-  vehicleType.TRUCK = 'boat'; // vehicleType.TRUCK === 'T'
+if (vehicle.type === vehicleType.TRUCK) {
+  // Special behaviour only for truck vehicles
+}
 
-  // Each enum have standard helpers
+if (vehicleType.canFly(vehicle.type)) {
+  // Special behaviour for vehicles that can fly
+}
 
-  vehicleType.keys(); // ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'] - helper functions are not included in keys
-  vehicleType.values(); // ['C', 'T', 'A', 'H']
+// enum is immutable
+vehicleType.TRUCK = 'boat'; // vehicleType.TRUCK === 'T'
 
-  vehicleType.exists('C'); // true
-  vehicleType.exists('something'); // false
+// Each enum have standard helpers
 
-  vehicleType.haveKey('CAR'); // true
-  vehicleType.haveKey('something'); // false
+vehicleType.keys(); // ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'] - helper functions are not included in keys
+vehicleType.values(); // ['C', 'T', 'A', 'H']
+
+vehicleType.exists('C'); // true
+vehicleType.exists('something'); // false
+
+vehicleType.haveKey('CAR'); // true
+vehicleType.haveKey('something'); // false
 
 
-  // We can define enum with short notation. Limitation of short notation is that we can't define custom enum helpers.
+// We can define enum with short notation. Limitation of short notation is that we can't define custom enum helpers.
 
-  const gender = toEnum(['MAN', 'WOMEN', 'OTHER']);
+const gender = toEnum(['MAN', 'WOMEN', 'OTHER']);
 
-  gender.keys(); // ['MAN', 'WOMEN', 'OTHER']
-  gender.values(); // [Symbol(MAN), Symbol(Women), Symbol(OTHER)]
-
+gender.keys(); // ['MAN', 'WOMEN', 'OTHER']
+gender.values(); // [Symbol(MAN), Symbol(Women), Symbol(OTHER)]
 ```
 
 
@@ -180,19 +194,19 @@ Enum representation is immutable (frozen)
 ```
 
 ```javascript
-  const singular = require('js-flock/singular');
+const singular = require('js-flock/singular');
 
-  export default {
-    methods: {
-      save: singular(function(done) {
-        // All subsequent calls to submit will be ignored until done is called
-        UserService.save(this.user)
-          .then(() => { /* Success handler */ })
-          .catch(() => { /* Exception handler */ })
-          .then(done);
-      }
-    };
-  }
+export default {
+  methods: {
+    save: singular(function(done) {
+      // All subsequent calls to submit will be ignored until done is called
+      UserService.save(this.user)
+        .then(() => { /* Success handler */ })
+        .catch(() => { /* Exception handler */ })
+        .then(done);
+    }
+  };
+}
 ```
 
 ### waitFor
@@ -202,22 +216,53 @@ you can hook into to signify that a given task is complete. waitFor returns prom
 after check function returns truthy value.
 
 ```javascript
-  const waitFor = require('js-flock/waitFor');
+const waitFor = require('js-flock/waitFor');
 
-  const options = {
-    interval: Number, // [Default: 50ms] - How frequently will check be preformed.
-    timeout: Number, // [Default: 5000ms] - Timeout if function is not resolved by then.
-  };
+const options = {
+  interval: Number, // [Default: 50ms] - How frequently will check be preformed.
+  timeout: Number, // [Default: 5000ms] - Timeout if function is not resolved by then.
+};
 
-  // Wait for DB connection
-  waitFor(() => Db.connection, options)
-    .then((connection) => { /* connection to DB has been established */})
-    .catch(() => { /* Waiting timed out, handle the error! */ });
+// Wait for DB connection
+waitFor(() => Db.connection, options)
+  .then((connection) => { /* connection to DB has been established */})
+  .catch(() => { /* Waiting timed out, handle the error! */ });
 
-  // Wait for DOM element to become accessible
-  waitFor(() => document.getElementById('elId'))
-    .then(($el) => { /* Element is available now we can do manipulation with $el */})
-    .catch(() => { /* Waiting timed out, handle the error! */ });
+// Wait for DOM element to become accessible
+waitFor(() => document.getElementById('elId'))
+  .then(($el) => { /* Element is available now we can do manipulation with $el */})
+  .catch(() => { /* Waiting timed out, handle the error! */ });
+```
+
+### rerun
+
+If you think of using setInterval stop and use rerun! For more info on usage reference unit tests ot source code.
+
+```javascript
+
+  // Any user defined function.
+  rerun(Function)
+    // How frequently will rerun function be called
+    .every(timeInMiliseconds)
+    // [Optional] Execution is stoped if falsy value is returned from function. If falsy value is returned first time rerun will never be called.
+    .asLongAs(Function)
+    // Execute rerun function for first time and start execution cycle
+    .start()
+    // [Optional] -> Attach onStop listener
+    .onStop(Function)
+    // [Optional] Stop function execution. Function execution can also be stoped by returning falsy value from asLongAs or by returning `false` value from within rerun function
+    .stop()
+
+  // Example
+  // refreshAuthToken and isUserLoggedIn are custom function implementations
+  const tenMinutesInMs = 10 * 60 * 1000;
+  const refreshTokenRunner = rerun(refreshAuthToken)
+    .every(tenMinutesInMs)
+    .asLongAs(isUserLoggedIn);
+
+  // Function that will be called after user log in
+  // Every call to start will execute function immediately and restart execution cycle
+  eventBus.$on('login', refreshTokenRunner.start);
 
 ```
 
@@ -229,23 +274,23 @@ will return a promise whose fate is decided by the callback behavior of the give
 Promisify returns native Promise (requires Promise polyfill on older browser)
 
 ```javascript
-  const promisify = require('js-flock/promisify');
-  const readFile = require("fs").readFile;
-  const readFileAsync = promisify(readFile);
+const promisify = require('js-flock/promisify');
+const readFile = require("fs").readFile;
+const readFileAsync = promisify(readFile);
 
-  // Native version of read file
-  readFile('test.txt', 'utf8', (err, data) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    console.log(data);
-  });
+// Native version of read file
+readFile('test.txt', 'utf8', (err, data) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  console.log(data);
+});
 
-  // Promisify version
-  readFileAsync('test.txt', 'utf8')
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
+// Promisify version
+readFileAsync('test.txt', 'utf8')
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err));
 ```
 
 If callback function is called with multiple success values, the fulfillment value will be the
@@ -256,10 +301,10 @@ an array of the callback's success value(s). This is needed because promises onl
 single success value while some callback API's have multiple success value.
 
 ```javascript
-  const fun = (cb) => cb(undefined, 'res1', 'res2');
-  const funAsync = promisify(fun, { multiArgs: true });
+const fun = (cb) => cb(undefined, 'res1', 'res2');
+const funAsync = promisify(fun, { multiArgs: true });
 
-  funAsync().then(([r1, r2]) => { /* r1 === res1, r2 === res2 */ });
+funAsync().then(([r1, r2]) => { /* r1 === res1, r2 === res2 */ });
 ```
 
 
@@ -276,21 +321,21 @@ By default promisify.all does not loop over object prototype which can be change
 The promisified method name will be the original method name suffixed with suffix (default = 'Async').
 
 ```javascript
-  const promisify = require('js-flock/promisify');
-  const fs = promisify.all(require("fs"));
+const promisify = require('js-flock/promisify');
+const fs = promisify.all(require("fs"));
 
-  // New function appended by promisify.all
-  fs.readFileAsync('test.txt', 'utf8')
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
+// New function appended by promisify.all
+fs.readFileAsync('test.txt', 'utf8')
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err));
 
-  const withOptions = promisify.all(test, {
-    suffix: String, // [default: 'Async'] - Suffix will be appended to original method name
-    multyArgs: Boolean, // [default: false] Promise will resolve with array of values if true
-    proto: Boolean, // [default: false] Promisify object prototype chain if true
-    exclude: [String], // [default: undefined] List of object keys not to promisify
-    include: [String], // [default: undefined] Promisify only provided keys
-  });
+const withOptions = promisify.all(test, {
+  suffix: String, // [default: 'Async'] - Suffix will be appended to original method name
+  multyArgs: Boolean, // [default: false] Promise will resolve with array of values if true
+  proto: Boolean, // [default: false] Promisify object prototype chain if true
+  exclude: [String], // [default: undefined] List of object keys not to promisify
+  include: [String], // [default: undefined] Promisify only provided keys
+});
 ```
 
 
@@ -299,19 +344,19 @@ The promisified method name will be the original method name suffixed with suffi
 Set maximum waiting time for promise to resolve. Reject promise if it's not resolved in that time
 
 ```javascript
-  const collar = require('js-flock/collar');
+const collar = require('js-flock/collar');
 
-  const MAX_WAITING_TIME = 500;
+const MAX_WAITING_TIME = 500;
 
-  // Reject HTTP request if it's not resolved in 0.5 seconds
-  collar(Http.get('test-url'), MAX_WAITING_TIME)
-    .then((response) => { /* handle response */  })
-    .catch((err) => {
-      // CollarError = { isStrangled: true, message: 'Promise have timed out' }
-      if (typeof err === 'object' && err.isStrangled) {
-        console.log(err.message);
-      }
-    });
+// Reject HTTP request if it's not resolved in 0.5 seconds
+collar(Http.get('test-url'), MAX_WAITING_TIME)
+.then((response) => { /* handle response */  })
+.catch((err) => {
+  // CollarError = { isStrangled: true, message: 'Promise have timed out' }
+  if (typeof err === 'object' && err.isStrangled) {
+    console.log(err.message);
+  }
+});
 ```
 
 
@@ -320,45 +365,40 @@ Set maximum waiting time for promise to resolve. Reject promise if it's not reso
 Recursively apply [Object.freeze](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
 
 ```javascript
-  const deepFreeze = require('js-flock/deepFreeze');
+const deepFreeze = require('js-flock/deepFreeze');
 
-  const person = {
-    fullName: 'test person',
-    dob: new Date(),
-    address: {
-      country: 'testiland',
-      city: 'this one'
-    }
-  };
+const person = {
+  fullName: 'test person',
+  dob: new Date(),
+  address: {
+    country: 'testiland',
+    city: 'this one'
+  }
+};
 
-  Object.freeze(person);
+Object.freeze(person);
 
-  Object.isFrozen(person); // true
-  Object.isFrozen(person.address); // false UH OH
+Object.isFrozen(person); // true
+Object.isFrozen(person.address); // false UH OH
 
-  deepFreeze(person);
+deepFreeze(person);
 
-  Object.isFrozen(person); // true
-  Object.isFrozen(person.address); // true WE HE
-```
+Object.isFrozen(person); // true
+Object.isFrozen(person.address); // true WE HE
 
-By default deepFreeze do not loop over prototype chain.
-That behaviour can be overridden by providing ```{ proto: true }``` option.
-Providing this option will freeze only user defined prototypes while leaving default built in prototypes unmodified.
+// We can modify deepFreeze behaviour by providing additional options
 
-```javascript
-  const ob1 = { test: { a: 'a' } };
-  const ob2 = Object.create(ob1);
+deepFreeze(object, {
+  proto: Boolean, // [default: false] - Freeze object prototype chain
+  exclude: Function, // Fine tune what will be frozen by providing exclude function. Available from version [3.3.2]
+});
 
-  deepFreeze(ob2);
-  Object.isFrozen(ob2.test); // false - because test property is on ob2 prototype
-
-  deepFreeze(ob2, { proto: true });
-
-  Object.isFrozen(ob2.test); // true
-  Object.isFrozen(Object.getPrototypeOf(ob2)); // true
-  Object.isFrozen(ob1); // true - same as writing above statement
-  Object.isFrozen(Object.getPrototypeOf(ob1)); // false - prototype of ob1 is default built in object so it's skipped
+deepFreeze(person, {
+  // address object will not be frozen
+  exclude(key, context) {
+    return key === 'address' && context === person;
+  }
+});
 ```
 
 
