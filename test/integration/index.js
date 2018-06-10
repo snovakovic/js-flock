@@ -67,6 +67,21 @@ function testModules(modules) {
       assert.equal(res, true);
       console.log('waitFor: SUCCESS');
     });
+
+  // empty
+  const arr = [1, 2, 4];
+  modules.empty(arr);
+  assert.equal(arr.length, 0);
+
+  // rerun
+  let counter = 0;
+  modules
+    .rerun(() => counter += 1)
+    .every(1)
+    .asLongAs(() => counter < 2)
+    .start();
+
+  setTimeout(() => assert.equal(2, 2), 25);
 }
 
 function run(err) {
