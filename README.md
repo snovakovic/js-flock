@@ -46,9 +46,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 - [promisify](#promisify)
 - [promisify.all](#promisifyall)
 - [collar](#collar)
-- [deepFreeze](#deepfreeze)
-- [deepSeal](#deepseal)
-- [deepPreventExtensions](#deeppreventextensions)
+- [deepFreeze](#deepfreeze) / [deepSeal](#deepseal) / [deepPreventExtensions](#deeppreventextensions)
 
 
 ### sort
@@ -244,7 +242,7 @@ If you think of using setInterval stop and use rerun! For more info on usage ref
 
   // Any user defined function.
   rerun(Function)
-    // How frequantly will rerun function be called
+    // How frequently will rerun function be called
     .every(timeInMiliseconds)
     // [Optional] Execution is stoped if falsy value is returned from function. If falsy value is returned first time rerun will never be called.
     .asLongAs(Function)
@@ -252,10 +250,11 @@ If you think of using setInterval stop and use rerun! For more info on usage ref
     .start()
     // [Optional] -> Attach onStop listener
     .onStop(Function)
-    // [Optional] Stop function execution. Function execution can also be stoped by return falsy value from asLongAs or by returning `false` value from within rerun function
+    // [Optional] Stop function execution. Function execution can also be stoped by returning falsy value from asLongAs or by returning `false` value from within rerun function
     .stop()
 
   // Example
+  // refreshAuthToken and isUserLoggedIn are custom function implementations
   const tenMinutesInMs = 10 * 60 * 1000;
   const refreshTokenRunner = rerun(refreshAuthToken)
     .every(tenMinutesInMs)
