@@ -99,8 +99,7 @@ For additional sort documentation and information about performance take a look 
 
 ### last
 
-Get the last element of array. If condition is provided get the last element of the
-array that meets provided condition or undefined if no elements meets condition.
+Get the last element of an array. If condition is provided get the last element of an array that meets provided condition or undefined.
 
 ```javascript
 const last = require('js-flock/last');
@@ -116,18 +115,18 @@ last(persons, (p) => p.name === 'no-name') // => undefined
 
 
 ### empty
-Remove all items from array. We can provide 1 or more arrays to be emptied. Non array values will be ignored.
+Remove all items from 1 or more provided arrays.
 
 ```javascript
 const empty = require('js-flock/empty');
 
-const arr1 = [1, 2, 3];
+const arr = [1, 2, 3];
 
-// Shorthand for applying arr1.splice(0, arr1.length);
-const emptyArr = empty(arr1); // => arr1 ==== []
-console.log(emptyArr === arr1) // => true
+// Shorthand for applying arr.splice(0, arr.length);
+const emptyArr = empty(arr); // => arr ==== []
+console.log(emptyArr === arr) // => true
 
-// We can empty multiple arrays. Non arrays will be ignored
+// We can empty multiple arrays. Non array values will be ignored
 empty(arr1, undefined, arr2, 3);
 ```
 
