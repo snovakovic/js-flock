@@ -168,11 +168,31 @@ describe('sort', () => {
 
   it('Should throw invalid usage of by sorter exception', () => {
     expect(() =>
-      sort(multiPropArray).by([{ asc: 'lastName' }]))
-      .to.throw(Error);
+      sort(multiPropArray).by('name')
+        .to.throw(Error));
+
+    expect(() =>
+      sort(multiPropArray).by([{ asci: 'name' }])
+        .to.throw(Error));
 
     expect(() =>
       sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }]))
       .to.throw(Error);
+  });
+
+  it('Should sort ascending with by on 1 property', () => {
+    sort(multiPropArray).by([
+      { asc: (p) => p.age }
+    ]);
+
+    assertOrder([6, 8, 9, 10, 11], (idx) => multiPropArray[idx].age);
+  });
+
+  it('Should sort descending with by on 1 property', () => {
+    sort(multiPropArray).by([
+      { desc: (p) => p.age }
+    ]);
+
+    assertOrder([11, 10, 9, 8, 6], (idx) => multiPropArray[idx].age);
   });
 });
