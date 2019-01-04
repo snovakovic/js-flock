@@ -30,7 +30,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
   const jsFlock = require('js-flock');
 
   // Load whole transpiled ES5 library
-  // Note recommended in browser as bundle can be larger then we need
+  // Note recommended in browser as bundle can be larger than we need
   const jsFlock = require('js-flock/es5');
 ```
 
@@ -51,7 +51,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 
 ### sort
 
-Fast and powerfull array sorting that **outperforms lodash sort by ~2x** (in some cases it's more then **5x**).
+Fast and powerful array sorting that **outperforms lodash sort by ~2x** (in some cases it's more than **5x**).
 For additional sort documentation and information about performance take a look at the dedicated [fast-sort page](https://www.npmjs.com/package/fast-sort).
 
 ### higlights
@@ -60,7 +60,7 @@ For additional sort documentation and information about performance take a look 
 * Sorting flat arrays
 * Sorting in multiple directions
 * Easy to read syntax for asc and desc sorting
-* Faster then other sort alternatives
+* Faster than other sort alternatives
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
 
 ```javascript
