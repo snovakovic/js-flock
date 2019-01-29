@@ -1,14 +1,8 @@
-const isNativeObject = require('./internals/isNativeObject');
-
 // >>> PUBLIC <<<
 
 module.exports = function(objOrArray) {
   if (Array.isArray(objOrArray)) {
     return Promise.all(objOrArray);
-  }
-
-  if (!isNativeObject(objOrArray)) {
-    throw new TypeError('promiseAll: provided param should be object or array');
   }
 
   const objectKeys = Object.keys(objOrArray);
@@ -23,5 +17,7 @@ module.exports = function(objOrArray) {
         .forEach((resolvedPromise, idx) => {
           objResponse[objectKeys[idx]] = resolvedPromise;
         });
+
+      return objResponse;
     });
 }

@@ -9,27 +9,27 @@ function resolveWith(value, { after }) {
 }
 
 describe('promiseAll', () => {
-  it('Should resolve object of promises', () => {
-    const response = promiseAll({
+  it('Should resolve object of promises', async() => {
+    const response = await promiseAll({
       foo: resolveWith('foo-prop', 1),
       bar: resolveWith('bar-prop', 5),
       baz: resolveWith('bar-prop', 2)
     });
 
-    expect(response).to.deepEqual({
+    expect(response).to.deep.equal({
       foo: 'foo-prop',
       bar: 'bar-prop',
       baz: 'baz-prop'
-    })
+    });
   });
 
-  it('Should resolve array or promises', () => {
-    const response = promiseAll([
+  it('Should resolve array or promises', async() => {
+    const response = await promiseAll([
       resolveWith('foo-prop', 1),
       resolveWith('bar-prop', 3)
     ]);
 
-    expect(response).to.deepEqual([
+    expect(response).to.deep.equal([
       'foo-prop',
       'bar-prop'
     ]);
