@@ -2,7 +2,7 @@ const assertType = require('./internals/assertType')('rerun');
 
 // >>> PUBLIC <<<
 
-module.exports = function rerun(fn) {
+module.exports = function(fn) {
   assertType('Function', fn);
 
   let count = 0;

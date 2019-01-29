@@ -7,7 +7,7 @@ const REJECTION_REASON = Object.freeze({
 
 // >>> PUBLIC <<<
 
-module.exports = function collar(promise, ttl = 5000) {
+module.exports = function(promise, ttl = 5000) {
   const restraint = new Promise((resolve, reject) =>
     setTimeout(reject, ttl, REJECTION_REASON));
 

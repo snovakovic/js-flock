@@ -23,7 +23,7 @@ const hardBindFunction = function(obj, key) {
 
 // >>> PUBLIC <<<
 
-module.exports = function toEnum(arg) {
+module.exports = function(arg) {
   const enu = castObject(arg);
   const keys = Object.keys(enu).filter((key) => typeof enu[key] !== 'function');
   const values = keys.map((key) => enu[key]);

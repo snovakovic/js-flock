@@ -118,7 +118,7 @@ const sort = function(direction, ctx, sortBy) {
 
 // >>> PUBLIC <<<
 
-module.exports = function fastSort(ctx) {
+module.exports = function(ctx) {
   return {
     asc: (sortBy) => sort(1, ctx, sortBy),
     desc: (sortBy) => sort(-1, ctx, sortBy),

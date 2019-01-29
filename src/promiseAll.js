@@ -1,18 +1,18 @@
-const isNativeObject = require('./isNativeObject');
+const isNativeObject = require('./internals/isNativeObject');
 
 // >>> PUBLIC <<<
 
-module.exports = function promiseAll(objOrArray) {
+module.exports = function(objOrArray) {
   if (Array.isArray(objOrArray)) {
     return Promise.all(objOrArray);
   }
 
   if (!isNativeObject(objOrArray)) {
-    throw new TypeError(`promiseAll: provided param should be object or array`);
+    throw new TypeError('promiseAll: provided param should be object or array');
   }
 
   const objectKeys = Object.keys(objOrArray);
-  const promises = objectKeys.map(key => objOrArray[key]);
+  const promises = objectKeys.map((key) => objOrArray[key]);
 
   return Promise
     .all(promises)
