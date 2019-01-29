@@ -12,14 +12,16 @@ describe('promiseAll', () => {
   it('Should resolve object of promises', async() => {
     const response = await promiseAll({
       foo: resolveWith('foo-prop', 1),
-      bar: resolveWith('bar-prop', 5),
-      baz: resolveWith('bar-prop', 2)
+      bar: resolveWith('bar-prop', 10),
+      baz: resolveWith('baz-prop', 2),
+      boo: resolveWith('boo-prop', 5)
     });
 
     expect(response).to.deep.equal({
       foo: 'foo-prop',
       bar: 'bar-prop',
-      baz: 'baz-prop'
+      baz: 'baz-prop',
+      boo: 'boo-prop'
     });
   });
 
