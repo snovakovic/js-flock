@@ -1,6 +1,6 @@
 // >>> PUBLIC <<<
 
-module.exports = function(arr, condition) {
+module.exports = function last(arr, condition) {
   let length = Array.isArray(arr) ? arr.length : 0;
 
   if (!length) return undefined;

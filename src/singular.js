@@ -1,6 +1,6 @@
 // >>> PUBLIC <<<
 
-module.exports = function(fn) {
+module.exports = function singular(fn) {
   let inProgress = false;
   const done = () => inProgress = false;
 
