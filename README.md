@@ -238,7 +238,7 @@ waitFor(() => document.getElementById('elId'))
 // NOTE: Available from v3.6.0
 waitFor((abort) => {
   if(componentIsDestroyed) {
-    // Wait for will immediately stop checking for presence of element and
+    // waitFor will immediately stop checking for presence of element
     // than/catch will never be called after calling abort
     abort();
   } else {
