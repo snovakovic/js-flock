@@ -8,12 +8,18 @@ module.exports = function(fn, options) {
   const interval = Number(options && options.interval) || 50;
   const endTime = Date.now() + (Number(options && options.timeout) || 5000);
 
-  return new Promise(function check(resolve, reject) {
-    const result = fn();
+  return new Promise((resolve, reject) => {
+    let isAborted = false;
+    const abort = () => isAborted = true;
 
-    if (result) return resolve(result);
-    if (Date.now() > endTime) return reject(new Error('Timed out!'));
+    (function check() {
+      const result = fn(abort);
 
-    return setTimeout(check, interval, resolve, reject);
+      if (isAborted) return;
+      if (result) return resolve(result);
+      if (Date.now() > endTime) return reject(new Error('Timed out!'));
+
+      setTimeout(check, interval);
+    }());
   });
 };
