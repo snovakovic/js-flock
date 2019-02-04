@@ -25,13 +25,21 @@ var waitFor = function waitFor(fn, options) {
   var interval = Number(options && options.interval) || 50;
   var endTime = Date.now() + (Number(options && options.timeout) || 5000);
 
-  return new Promise(function check(resolve, reject) {
-    var result = fn();
+  return new Promise(function (resolve, reject) {
+    var isAborted = false;
+    var abort = function abort() {
+      return isAborted = true;
+    };
 
-    if (result) return resolve(result);
-    if (Date.now() > endTime) return reject(new Error('Timed out!'));
+    (function check() {
+      var result = fn(abort);
 
-    return setTimeout(check, interval, resolve, reject);
+      if (isAborted) return;
+      if (result) return resolve(result);
+      if (Date.now() > endTime) return reject(new Error('Timed out!'));
+
+      setTimeout(check, interval);
+    })();
   });
 };
 
