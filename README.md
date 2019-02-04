@@ -235,6 +235,7 @@ waitFor(() => document.getElementById('elId'))
 
 // We can abort execution of waitFor at any moment by calling abort function that is
 // injected to waitFor listener as shown in example.
+// NOTE: Available from v3.6.0
 waitFor((abort) => {
   if(componentIsDestroyed) {
     // Wait for will immediately stop checking for presence of element and
