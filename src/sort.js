@@ -53,7 +53,7 @@ const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, a, 
   const direction = sortByObj.asc ? 1 : -1;
 
   if (!sortBy) {
-    throw Error(`sort: Invalid 'by' sorting onfiguration.
+    throw Error(`sort: Invalid 'by' sorting configuration.
       Expecting object with 'asc' or 'desc' key`);
   }
 
@@ -123,9 +123,11 @@ module.exports = function(ctx) {
     asc: (sortBy) => sort(1, ctx, sortBy),
     desc: (sortBy) => sort(-1, ctx, sortBy),
     by: (sortBy) => {
+      console.log('sortBY', sortBy);
       if (!Array.isArray(ctx)) return ctx;
 
       if (!Array.isArray(sortBy)) {
+        console.log('here');
         throw Error(`sort: Invalid usage of 'by' sorter. Array syntax is required.
           Did you mean to use 'asc' or 'desc' sorter instead?`);
       }
@@ -135,7 +137,7 @@ module.exports = function(ctx) {
         const direction = sortBy[0].asc ? 1 : -1;
         const sortOnProp = sortBy[0].asc || sortBy[0].desc;
         if (!sortOnProp) {
-          throw Error(`sort: Invalid 'by' sorting onfiguration.
+          throw Error(`sort: Invalid 'by' sorting configuration.
             Expecting object with 'asc' or 'desc' key`);
         }
         return sort(direction, ctx, sortOnProp);
