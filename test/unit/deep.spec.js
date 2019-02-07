@@ -1,5 +1,4 @@
-const { expect } = require('chai');
-
+const { assert } = require('chai');
 const deepFreeze = require('../../src/deepFreeze');
 const deepSeal = require('../../src/deepSeal');
 const deepPreventExtensions = require('../../src/deepPreventExtensions');
@@ -34,37 +33,37 @@ describe('deep', () => {
   describe('deepFreeze', () => {
     it('Should deep freeze nested objects', () => {
       deepFreeze(obj);
-      expect(Object.isFrozen(obj.first.second)).to.equal(true);
-      expect(Object.isFrozen(obj.first.second.third)).to.equal(true);
-      expect(Object.isFrozen(obj.first.second.third.fun)).to.equal(true);
+      assert.equal(Object.isFrozen(obj.first.second), true);
+      assert.equal(Object.isFrozen(obj.first.second.third), true);
+      assert.equal(Object.isFrozen(obj.first.second.third.fun), true);
     });
 
     it('Should handle circular reference', () => {
       deepFreeze(circ1);
-      expect(Object.isFrozen(circ1.first)).to.equal(true);
-      expect(Object.isFrozen(circ1.circ2)).to.equal(true);
-      expect(Object.isFrozen(circ1.circ2.second)).to.equal(true);
+      assert.equal(Object.isFrozen(circ1.first), true);
+      assert.equal(Object.isFrozen(circ1.circ2), true);
+      assert.equal(Object.isFrozen(circ1.circ2.second), true);
     });
 
     it('Should not freeze prototype chain', () => {
       deepFreeze(proto);
-      expect(Object.isFrozen(proto)).to.equal(true);
-      expect(Object.isFrozen(proto.child)).to.equal(true);
-      expect(Object.isFrozen(proto.function)).to.equal(true);
-      expect(Object.isFrozen(proto.ob2Prop)).to.equal(false);
-      expect(Object.isFrozen(proto.proto.test)).to.equal(false);
+      assert.equal(Object.isFrozen(proto), true);
+      assert.equal(Object.isFrozen(proto.child), true);
+      assert.equal(Object.isFrozen(proto.function), true);
+      assert.equal(Object.isFrozen(proto.ob2Prop), false);
+      assert.equal(Object.isFrozen(proto.proto.test), false);
     });
 
     it('Should not break on invalid options', () => {
       deepFreeze(obj, null);
-      expect(Object.isFrozen(obj)).to.equal(true);
+      assert.equal(Object.isFrozen(obj), true);
     });
 
     it('Should not brake on restricted properties', () => {
       const fun = function() { };
       const funPrototype = Object.getPrototypeOf(fun);
       deepFreeze(funPrototype);
-      expect(Object.isFrozen(funPrototype)).to.equal(true);
+      assert.equal(Object.isFrozen(funPrototype), true);
     });
 
     it('Should deep freeze object with null prototype', () => {
@@ -73,8 +72,8 @@ describe('deep', () => {
       ob1.ob2 = Object.create(null);
 
       deepFreeze(ob1);
-      expect(Object.isFrozen(ob1)).to.equal(true);
-      expect(Object.isFrozen(ob1.ob2)).to.equal(true);
+      assert.equal(Object.isFrozen(ob1), true);
+      assert.equal(Object.isFrozen(ob1.ob2), true);
     });
 
     it('Should deep freeze object with null prototype and proto option', () => {
@@ -82,8 +81,8 @@ describe('deep', () => {
       ob1.ob2 = Object.create(null);
 
       deepFreeze(ob1, { proto: true });
-      expect(Object.isFrozen(ob1)).to.equal(true);
-      expect(Object.isFrozen(ob1.ob2)).to.equal(true);
+      assert.equal(Object.isFrozen(ob1), true);
+      assert.equal(Object.isFrozen(ob1.ob2), true);
     });
 
     it('Should deep freeze complex object', () => {
@@ -97,14 +96,14 @@ describe('deep', () => {
       set.test = { prop: { prop2: 1 } };
 
       deepFreeze(ob);
-      expect(Object.isFrozen(ob)).to.equal(true);
-      expect(Object.isFrozen(ob.fun)).to.equal(true);
-      expect(Object.isFrozen(ob.fun.test)).to.equal(true);
-      expect(Object.isFrozen(ob.arr)).to.equal(true);
-      expect(Object.isFrozen(ob.arr.test)).to.equal(true);
-      expect(Object.isFrozen(ob.arr.test)).to.equal(true);
-      expect(Object.isFrozen(ob.set)).to.equal(true);
-      expect(Object.isFrozen(ob.set.test)).to.equal(true);
+      assert.equal(Object.isFrozen(ob), true);
+      assert.equal(Object.isFrozen(ob.fun), true);
+      assert.equal(Object.isFrozen(ob.fun.test), true);
+      assert.equal(Object.isFrozen(ob.arr), true);
+      assert.equal(Object.isFrozen(ob.arr.test), true);
+      assert.equal(Object.isFrozen(ob.arr.test), true);
+      assert.equal(Object.isFrozen(ob.set), true);
+      assert.equal(Object.isFrozen(ob.set.test), true);
     });
 
     it('Should deep freeze non enumerable properties', () => {
@@ -114,7 +113,7 @@ describe('deep', () => {
       });
 
       deepFreeze(obj);
-      expect(Object.isFrozen(obj.nonEnumerable)).to.equal(true);
+      assert.equal(Object.isFrozen(obj.nonEnumerable), true);
     });
 
     it('Should validate readme examples', () => {
@@ -122,28 +121,28 @@ describe('deep', () => {
         fullName: 'test person',
         dob: new Date(),
         address: {
-          country: 'testiland',
+          country: 'Croatia',
           city: 'this one'
         }
       };
 
       Object.freeze(person);
-      expect(Object.isFrozen(person)).to.equal(true);
-      expect(Object.isFrozen(person.address)).to.equal(false);
+      assert.equal(Object.isFrozen(person), true);
+      assert.equal(Object.isFrozen(person.address), false);
 
       deepFreeze(person);
-      expect(Object.isFrozen(person)).to.equal(true);
-      expect(Object.isFrozen(person.address)).to.equal(true);
+      assert.equal(Object.isFrozen(person), true);
+      assert.equal(Object.isFrozen(person.address), true);
 
       const ob1 = { test: { a: 'a' } };
       const ob2 = Object.create(ob1);
 
       deepFreeze(ob2, { proto: true });
 
-      expect(Object.isFrozen(ob2.test)).to.equal(true);
-      expect(Object.isFrozen(Object.getPrototypeOf(ob2))).to.equal(true);
-      expect(Object.isFrozen(ob1)).to.equal(true);
-      expect(Object.isFrozen(Object.getPrototypeOf(ob1))).to.equal(false);
+      assert.equal(Object.isFrozen(ob2.test), true);
+      assert.equal(Object.isFrozen(Object.getPrototypeOf(ob2)), true);
+      assert.equal(Object.isFrozen(ob1), true);
+      assert.equal(Object.isFrozen(Object.getPrototypeOf(ob1)), false);
     });
 
     it('Should freeze object with Symbol property', () => {
@@ -153,7 +152,7 @@ describe('deep', () => {
       };
 
       deepFreeze(obj);
-      expect(Object.isFrozen(obj[sim].key)).to.be.equal(true);
+      assert.equal(Object.isFrozen(obj[sim].key), true);
     });
 
     it('Should not break for TypedArray properties', () => {
@@ -161,21 +160,21 @@ describe('deep', () => {
       obj.buffer = Buffer.from('TEST');
 
       deepFreeze(obj);
-      expect(Object.isFrozen(obj)).to.equal(true);
+      assert.equal(Object.isFrozen(obj), true);
     });
 
     it('Should deep freeze children of already frozen object', () => {
       Object.freeze(obj.first);
 
       deepFreeze(obj);
-      expect(Object.isFrozen(obj.first.second)).to.equal(true);
-      expect(Object.isFrozen(obj.first.second.third)).to.equal(true);
+      assert.equal(Object.isFrozen(obj.first.second), true);
+      assert.equal(Object.isFrozen(obj.first.second.third), true);
     });
 
     it('Should not freeze object prototype', () => {
       deepFreeze(proto);
-      expect(Object.isFrozen(proto)).to.equal(true);
-      expect(Object.isFrozen(Object.getPrototypeOf(proto))).to.equal(false);
+      assert.equal(Object.isFrozen(proto), true);
+      assert.equal(Object.isFrozen(Object.getPrototypeOf(proto)), false);
     });
 
     it('Should freeze object prototype', () => {
@@ -184,14 +183,14 @@ describe('deep', () => {
       const proto2 = Object.getPrototypeOf(proto1);
       const nativeProto = Object.getPrototypeOf(proto2);
 
-      expect(Object.isFrozen(proto)).to.equal(true);
-      expect(Object.isFrozen(proto1)).to.equal(true);
-      expect(Object.isFrozen(proto2)).to.equal(true);
-      expect(Object.isFrozen(nativeProto)).to.equal(false);
+      assert.equal(Object.isFrozen(proto), true);
+      assert.equal(Object.isFrozen(proto1), true);
+      assert.equal(Object.isFrozen(proto2), true);
+      assert.equal(Object.isFrozen(nativeProto), false);
     });
 
     it('Should not freeze excluded property', () => {
-      // Freeze this proerty but don't freeze nested `third property`
+      // Freeze this property but don't freeze nested `third property`
       obj.third = { a: 22 };
 
       deepFreeze(obj, {
@@ -200,15 +199,15 @@ describe('deep', () => {
         }
       });
 
-      expect(Object.isFrozen(obj.third)).to.equal(true);
-      expect(Object.isFrozen(obj.first.second)).to.equal(true);
+      assert.equal(Object.isFrozen(obj.third), true);
+      assert.equal(Object.isFrozen(obj.first.second), true);
       // We have exclude this property
-      expect(Object.isFrozen(obj.first.second.third)).to.equal(false);
+      assert.equal(Object.isFrozen(obj.first.second.third), false);
     });
 
     it('Should not break on invalid exclude option', () => {
       deepFreeze(obj, { exclude: 'third' });
-      expect(Object.isFrozen(obj.first.second.third)).to.equal(true);
+      assert.equal(Object.isFrozen(obj.first.second.third), true);
     });
   });
 
@@ -216,16 +215,16 @@ describe('deep', () => {
   describe('deepSeal', () => {
     it('Should deep seal nested objects', () => {
       deepSeal(obj);
-      expect(Object.isSealed(obj.first.second)).to.equal(true);
-      expect(Object.isSealed(obj.first.second.third)).to.equal(true);
-      expect(Object.isSealed(obj.first.second.third.fun)).to.equal(true);
+      assert.equal(Object.isSealed(obj.first.second), true);
+      assert.equal(Object.isSealed(obj.first.second.third), true);
+      assert.equal(Object.isSealed(obj.first.second.third.fun), true);
     });
 
     it('Should handle circular reference', () => {
       deepSeal(circ1);
-      expect(Object.isSealed(circ1.first)).to.equal(true);
-      expect(Object.isSealed(circ1.circ2)).to.equal(true);
-      expect(Object.isSealed(circ1.circ2.second)).to.equal(true);
+      assert.equal(Object.isSealed(circ1.first), true);
+      assert.equal(Object.isSealed(circ1.circ2), true);
+      assert.equal(Object.isSealed(circ1.circ2.second), true);
     });
   });
 
@@ -233,9 +232,9 @@ describe('deep', () => {
   describe('deepPreventExtensions', () => {
     it('Should deep prevent extension', () => {
       deepPreventExtensions(obj);
-      expect(Object.isExtensible(obj)).to.equal(false);
-      expect(Object.isExtensible(obj.first.second)).to.equal(false);
-      expect(Object.isExtensible(obj.first.second.third)).to.equal(false);
+      assert.equal(Object.isExtensible(obj), false);
+      assert.equal(Object.isExtensible(obj.first.second), false);
+      assert.equal(Object.isExtensible(obj.first.second.third), false);
     });
   });
 });
