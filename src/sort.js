@@ -123,11 +123,9 @@ module.exports = function(ctx) {
     asc: (sortBy) => sort(1, ctx, sortBy),
     desc: (sortBy) => sort(-1, ctx, sortBy),
     by: (sortBy) => {
-      console.log('sortBY', sortBy);
       if (!Array.isArray(ctx)) return ctx;
 
       if (!Array.isArray(sortBy)) {
-        console.log('here');
         throw Error(`sort: Invalid usage of 'by' sorter. Array syntax is required.
           Did you mean to use 'asc' or 'desc' sorter instead?`);
       }
