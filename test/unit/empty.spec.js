@@ -1,13 +1,11 @@
-const { expect } = require('chai');
-
+const { assert } = require('chai');
 const empty = require('../../src/empty');
 
-
 describe('empty', () => {
-  it('Shuld empty flat array', () => {
+  it('Should empty flat array', () => {
     const flatArray = [1, 5, 3, 2, 4, 5];
     empty(flatArray);
-    expect(flatArray.length).to.equal(0);
+    assert.equal(flatArray.length, 0);
   });
 
   it('Should empty deep object array', () => {
@@ -26,8 +24,8 @@ describe('empty', () => {
 
     // response should be equal to the provided emptied array
     const response = empty(persons);
-    expect(persons.length).to.equal(0);
-    expect(response).to.eql(persons);
+    assert.equal(persons.length, 0);
+    assert.deepEqual(response, persons);
   });
 
   it('Should empty multiple arrays', () => {
@@ -37,24 +35,23 @@ describe('empty', () => {
 
     const response = empty(arr1, arr2, arr3);
 
-    expect(response.length).to.equal(3);
-    expect(arr1.length).to.equal(0);
-    expect(arr2.length).to.equal(0);
-    expect(arr3.length).to.equal(0);
+    assert.equal(response.length, 3);
+    assert.equal(arr1.length, 0);
+    assert.equal(arr2.length, 0);
+    assert.equal(arr3.length, 0);
 
-    expect(response[2]).to.equal(arr3);
-    expect(response[2]).not.to.equal(arr2);
+    assert.equal(response[2], arr3);
+    assert.deepEqual(response[2], arr2);
   });
 
   it('emptying already empty array should be ignored', () => {
     const emptyArr = [];
     const response = empty(emptyArr);
-    expect(emptyArr).to.equal(response);
+    assert.equal(emptyArr, response);
   });
 
   it('Should not break if array is not provided', () => {
     const response = empty(33);
-    expect(response).to.eql(33);
+    assert.deepEqual(response, 33);
   });
-
 });
