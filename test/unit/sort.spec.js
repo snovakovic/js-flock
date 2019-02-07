@@ -1,5 +1,4 @@
-const { expect } = require('chai');
-
+const { expect, assert } = require('chai');
 const sort = require('../../src/sort');
 
 
@@ -10,7 +9,7 @@ describe('sort', () => {
 
   function assertOrder(order, valueCb) {
     order.forEach((item, idx) => {
-      expect(valueCb(idx)).to.equal(item);
+      assert.equal(valueCb(idx), item);
     });
   }
 
@@ -56,72 +55,72 @@ describe('sort', () => {
 
   it('Should sort flat array in ascending order', () => {
     const sorted = sort(flatArray).asc();
-    expect(sorted).to.eql([1, 2, 3, 4, 5, 5]);
-    expect(sorted).to.equal(flatArray);
+    assert.deepEqual(sorted, [1, 2, 3, 4, 5, 5]);
+    assert.equal(sorted, flatArray);
   });
 
   it('Should sort flat array in descending order', () => {
-    expect(sort(flatArray).desc()).to.eql([5, 5, 4, 3, 2, 1]);
+    assert.deepEqual(sort(flatArray).desc(), [5, 5, 4, 3, 2, 1]);
   });
 
   it('Should sort by object property in ascending order', () => {
-    sort(persons).asc((p) => p.name.toLowerCase());
-    assertOrder(['FIRST', 'In the middle', 'last'], (idx) => persons[idx].name);
+    sort(persons).asc(p => p.name.toLowerCase());
+    assertOrder(['FIRST', 'In the middle', 'last'], idx => persons[idx].name);
   });
 
   it('Should sort by object property in descending order', () => {
     sort(persons).desc((p) => p.name.toLowerCase());
-    assertOrder(['last', 'In the middle', 'FIRST'], (idx) => persons[idx].name);
+    assertOrder(['last', 'In the middle', 'FIRST'], idx => persons[idx].name);
   });
 
   it('Should sort undefined values to the bottom', () => {
     sort(persons).asc((p) => p.address.code);
-    assertOrder([1, 3, undefined], (idx) => persons[idx].address.code);
+    assertOrder([1, 3, undefined], idx => persons[idx].address.code);
 
     sort(persons).desc((p) => p.address.code);
-    assertOrder([3, 1, undefined], (idx) => persons[idx].address.code);
+    assertOrder([3, 1, undefined], idx => persons[idx].address.code);
 
     const sorted = sort([1, undefined, 3, null, 2]).desc();
-    expect(sorted).to.eql([3, 2, 1, null, undefined]);
+    assert.deepEqual(sorted, [3, 2, 1, null, undefined]);
   });
 
   it('Should ignore values that are not sortable', () => {
-    expect(sort('string').asc()).to.equal('string');
-    expect(sort(undefined).desc()).to.equal(undefined);
-    expect(sort(null).desc()).to.equal(null);
-    expect(sort(33).asc()).to.equal(33);
-    expect(sort({ name: 'test' }).desc()).to.eql({ name: 'test' });
-    expect(sort(33).by()).to.equal(33);
+    assert.equal(sort('string').asc(), 'string');
+    assert.equal(sort(undefined).desc(), undefined);
+    assert.equal(sort(null).desc(), null);
+    assert.equal(sort(33).asc(), 33);
+    assert.deepEqual(sort({ name: 'test' }).desc(), { name: 'test' });
+    assert.equal(sort(33).by(), 33);
   });
 
   it('Should sort dates correctly', () => {
     sort(persons).asc('dob');
-    assertOrder(['FIRST', 'In the middle', 'last'], (idx) => persons[idx].name);
+    assertOrder(['FIRST', 'In the middle', 'last'], idx => persons[idx].name);
   });
 
   it('Should should unwrap single array value', () => {
     sort(persons).asc(['name']);
-    assertOrder(['FIRST', 'In the middle', 'last'], (idx) => persons[idx].name);
+    assertOrder(['FIRST', 'In the middle', 'last'], idx => persons[idx].name);
   });
 
   it('Should sort on multiple properties', () => {
     sort(multiPropArray).asc([
-      (p) => p.name,
-      (p) => p.lastName,
-      (p) => p.age
+      p => p.name,
+      p => p.lastName,
+      p => p.age
     ]);
 
-    assertOrder([10, 11, 8, 9, 6], (idx) => multiPropArray[idx].age);
+    assertOrder([10, 11, 8, 9, 6], idx => multiPropArray[idx].age);
   });
 
   it('Should sort on multiple properties by string sorter', () => {
     sort(multiPropArray).asc(['name', 'age', 'lastName']);
-    assertOrder([8, 9, 10, 11, 6], (idx) => multiPropArray[idx].age);
+    assertOrder([8, 9, 10, 11, 6], idx => multiPropArray[idx].age);
   });
 
   it('Should sort on multiple mixed properties', () => {
-    sort(multiPropArray).asc(['name', (p) => p.lastName, 'age']);
-    assertOrder([10, 11, 8, 9, 6], (idx) => multiPropArray[idx].age);
+    sort(multiPropArray).asc(['name', p => p.lastName, 'age']);
+    assertOrder([10, 11, 8, 9, 6], idx => multiPropArray[idx].age);
   });
 
   it('Should sort with all equal values', () => {
@@ -134,7 +133,7 @@ describe('sort', () => {
     }];
 
     sort(same).asc(['name', 'age']);
-    expect(same[0].name).to.equal('a');
+    assert.equal(same[0].name, 'a');
   });
 
   it('Should sort by desc name and asc lastName', () => {
@@ -143,7 +142,7 @@ describe('sort', () => {
       { asc: 'lastName' }
     ]);
 
-    assertOrder(['aa', 'aa', 'bb', undefined, null], (idx) => multiPropArray[idx].lastName);
+    assertOrder(['aa', 'aa', 'bb', undefined, null], idx => multiPropArray[idx].lastName);
   });
 
   it('Should sort by asc name and desc age', () => {
@@ -152,47 +151,50 @@ describe('sort', () => {
       { desc: 'age' }
     ]);
 
-    assertOrder([11, 10, 9, 8, 6], (idx) => multiPropArray[idx].age);
+    assertOrder([11, 10, 9, 8, 6], idx => multiPropArray[idx].age);
   });
 
 
   it('Should sort by asc lastName, desc name and asc age', () => {
     sort(multiPropArray).by([
-      { asc: (p) => p.lastName },
-      { desc: (p) => p.name },
-      { asc: (p) => p.age }
+      { asc: p => p.lastName },
+      { desc: p => p.name },
+      { asc: p => p.age }
     ]);
 
-    assertOrder([6, 10, 11, 8, 9], (idx) => multiPropArray[idx].age);
+    assertOrder([6, 10, 11, 8, 9], idx => multiPropArray[idx].age);
   });
 
   it('Should throw invalid usage of by sorter exception', () => {
-    expect(() =>
-      sort(multiPropArray).by('name')
-        .to.throw(Error));
+    expect(() => sort(multiPropArray).by('name'))
+      .to.throw(Error);
 
-    expect(() =>
-      sort(multiPropArray).by([{ asci: 'name' }])
-        .to.throw(Error));
+    expect(() => sort(multiPropArray).by([{ asci: 'name' }]))
+      .to.throw(Error);
 
-    expect(() =>
-      sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }]))
+    expect(() => sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }]))
       .to.throw(Error);
   });
 
   it('Should sort ascending with by on 1 property', () => {
     sort(multiPropArray).by([
-      { asc: (p) => p.age }
+      { asc: p => p.age }
     ]);
 
-    assertOrder([6, 8, 9, 10, 11], (idx) => multiPropArray[idx].age);
+    assertOrder(
+      [6, 8, 9, 10, 11],
+      idx => multiPropArray[idx].age
+    );
   });
 
   it('Should sort descending with by on 1 property', () => {
     sort(multiPropArray).by([
-      { desc: (p) => p.age }
+      { desc: p => p.age }
     ]);
 
-    assertOrder([11, 10, 9, 8, 6], (idx) => multiPropArray[idx].age);
+    assertOrder(
+      [11, 10, 9, 8, 6],
+      idx => multiPropArray[idx].age,
+    );
   });
 });
