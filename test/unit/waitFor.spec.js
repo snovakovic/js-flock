@@ -2,7 +2,6 @@ const { expect, assert } = require('chai');
 const { delay } = require('../utils');
 const waitFor = require('../../src/waitFor');
 
-
 describe('waitFor', () => {
   it('Should wait for value to become true', (done) => {
     let condition = false;

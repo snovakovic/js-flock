@@ -1,7 +1,6 @@
 const { expect, assert } = require('chai');
 const toEnum = require('../../src/toEnum');
 
-
 describe('toEnum', () => {
   let arr;
   let obj;
