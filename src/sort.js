@@ -37,7 +37,7 @@ const multiPropFunctionSorter = function(sortBy, thenBy, depth, direction, a, b)
 };
 
 /**
- * Used when we have sorting by multyple properties and when current sorter is string
+ * Used when we have sorting by multiple properties and when current sorter is string
  * @example sort(users).asc(['firstName', 'lastName'])
  */
 const multiPropStringSorter = function(sortBy, thenBy, depth, direction, a, b) {
