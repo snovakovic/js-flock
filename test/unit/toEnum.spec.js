@@ -1,5 +1,4 @@
-const { expect } = require('chai');
-
+const { expect, assert } = require('chai');
 const toEnum = require('../../src/toEnum');
 
 
@@ -10,25 +9,25 @@ describe('toEnum', () => {
   beforeEach(() => {
     obj = {};
     arr = ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'];
-    arr.forEach((key) => { obj[key] = key; });
+    arr.forEach(key => obj[key] = key);
   });
 
   it('Should convert normal object to Enum representation', () => {
     const testEnum = toEnum(obj);
 
-    expect(Object.isFrozen(testEnum)).to.equal(true);
-    expect(testEnum.values()).to.eql(arr);
-    expect(testEnum.keys()).to.eql(arr);
-    expect(testEnum.exists('CAR')).to.eql(true);
-    expect(testEnum.exists('1')).to.eql(false);
-    expect(testEnum.haveKey('CAR')).to.eql(true);
-    expect(testEnum.haveKey('car')).to.eql(false);
+    assert.isTrue(Object.isFrozen(testEnum));
+    assert.deepEqual(testEnum.values(), arr);
+    assert.deepEqual(testEnum.keys(), arr);
+    assert.isTrue(testEnum.exists('CAR'));
+    assert.isFalse(testEnum.exists('1'));
+    assert.isTrue(testEnum.haveKey('CAR'));
+    assert.isFalse(testEnum.haveKey('car'));
   });
 
   it('Should convert arr representation to Enum representation', () => {
     const testEnum = toEnum(arr);
 
-    expect(Object.isFrozen(testEnum)).to.equal(true);
+    assert.isTrue(Object.isFrozen(testEnum));
     expect(testEnum.CAR).to.be.a('symbol');
     expect(testEnum.TRUCK).to.be.a('symbol');
     expect(testEnum).to.include.all.keys(['values', 'keys', 'haveKey', 'exists']);
@@ -41,8 +40,8 @@ describe('toEnum', () => {
 
     keys[0] = 'changed key';
 
-    expect(Object.isFrozen(values)).to.equal(true);
-    expect(testEnum.keys()).to.eql(arr);
+    assert.isTrue(Object.isFrozen(values));
+    assert.deepEqual(testEnum.keys(), arr);
   });
 
   it('Should handle helper functions', () => {
@@ -51,16 +50,16 @@ describe('toEnum', () => {
     };
 
     const testEnum = toEnum(obj);
-    expect(testEnum.canFly(testEnum.HELICOPTER)).to.equal(true);
-    expect(testEnum.canFly(testEnum.AIRPLANE)).to.equal(true);
-    expect(testEnum.canFly(testEnum.TRUCK)).to.equal(false);
-    expect(testEnum.canFly(null)).to.equal(false);
-    expect(testEnum.haveKey('canFly')).to.equal(false);
-    expect(testEnum.exists('canFly')).to.equal(false);
+    assert.isTrue(testEnum.canFly(testEnum.HELICOPTER));
+    assert.isTrue(testEnum.canFly(testEnum.AIRPLANE));
+    assert.isFalse(testEnum.canFly(testEnum.TRUCK));
+    assert.isFalse(testEnum.canFly(null));
+    assert.isFalse(testEnum.haveKey('canFly'));
+    assert.isFalse(testEnum.exists('canFly'));
 
     const values = ['CAR', 'TRUCK', 'AIRPLANE', 'HELICOPTER'];
-    expect(testEnum.values()).to.eql(values);
-    expect(testEnum.keys()).to.eql(values);
+    assert.deepEqual(testEnum.values(), values);
+    assert.deepEqual(testEnum.keys(), values);
   });
 
   it('Should throw exception for duplicate values', () => {
@@ -71,7 +70,7 @@ describe('toEnum', () => {
   it('Invalid input should return empty enum', () => {
     const testEnum = toEnum('invalid');
 
-    expect(testEnum.values()).to.eql([]);
-    expect(testEnum.keys()).to.eql([]);
+    assert.deepEqual(testEnum.values(), []);
+    assert.deepEqual(testEnum.keys(), []);
   });
 });
