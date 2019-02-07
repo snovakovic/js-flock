@@ -23,6 +23,7 @@ module.exports = {
     'no-unused-expressions': 0,
     'guard-for-in': 0,
     'no-plusplus': 0,
-    'object-curly-newline': 0
+    'object-curly-newline': 0,
+    'consistent-return': 0,
   }
 };

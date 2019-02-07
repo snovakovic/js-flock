@@ -232,6 +232,21 @@ waitFor(() => Db.connection, options)
 waitFor(() => document.getElementById('elId'))
   .then(($el) => { /* Element is available now we can do manipulation with $el */})
   .catch(() => { /* Waiting timed out, handle the error! */ });
+
+// We can abort execution of waitFor at any moment by calling abort function that is
+// injected to waitFor listener as shown in example.
+// NOTE: Available from v3.6.0
+waitFor((abort) => {
+  if(componentIsDestroyed) {
+    // waitFor will immediately stop checking for presence of element
+    // than/catch will never be called after calling abort
+    abort();
+  } else {
+    return document.getElementById('elId');
+  }
+})
+  .then(($el) => { /* Element is available now we can do manipulation with $el */})
+  .catch(() => { /* Waiting timed out, handle the error! */ });
 ```
 
 ### rerun

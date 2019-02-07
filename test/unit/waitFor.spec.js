@@ -105,4 +105,26 @@ describe('waitFor', () => {
 
     setTimeout(() => { condition = true; }, 10);
   });
+
+  it('Should abort execution without throwing error', (done) => {
+    let thenIsCalled = false;
+    let catchIsCalled = false;
+
+    waitFor((abort) => {
+      abort();
+      // Even thou true is returned we should not resolve it as abort was called before
+      return true;
+    }, {
+      timeout: 5,
+      interval: 2
+    })
+      .then(() => thenIsCalled = true)
+      .catch(() => catchIsCalled = true);
+
+    setTimeout(() => {
+      expect(thenIsCalled).to.be.false;
+      expect(catchIsCalled).to.be.false;
+      done();
+    }, 10);
+  });
 });
