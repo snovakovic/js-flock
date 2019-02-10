@@ -9,8 +9,11 @@
 var assertType$1 = function assertType(moduleName) {
   return function (type, val) {
     var tag = Object.prototype.toString.call(val);
-    if ("[object " + type + "]" !== tag) {
-      throw new TypeError(moduleName + ": expected [" + type + "] but got " + tag + "]");
+    // Match both [object Function] and [object AsyncFunction]
+    var throwError = type === 'Function' ? typeof val !== 'function' : '[object ' + type + ']' !== tag;
+
+    if (throwError) {
+      throw new TypeError(moduleName + ': expected [' + type + '] but got ' + tag + ']');
     }
   };
 };
@@ -36,7 +39,7 @@ var rerun = function rerun(fn) {
 
       if (shouldContinue) {
         setTimeout(run, timeout);
-        // Don't continue to stop handler as runing is still in progress if we are her
+        // Don't continue to stop handler as running is still in progress if we are her
         return;
       }
     }
@@ -47,17 +50,17 @@ var rerun = function rerun(fn) {
   }
 
   return {
-    every: function every(timoutInMs) {
-      timoutInMs = Number(timoutInMs);
-      assertType('Number', timoutInMs);
+    every: function every(timeoutInMs) {
+      timeoutInMs = Number(timeoutInMs);
+      assertType('Number', timeoutInMs);
 
-      var isValid = timoutInMs >= 0;
+      var isValid = timeoutInMs >= 0;
 
       if (!isValid) {
         throw Error('rerun: every() need to be called with positive number');
       }
 
-      timeout = timoutInMs;
+      timeout = timeoutInMs;
       return this;
     },
     asLongAs: function asLongAs(condition) {

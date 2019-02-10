@@ -9,8 +9,11 @@
 var assertType$1 = function assertType(moduleName) {
   return function (type, val) {
     var tag = Object.prototype.toString.call(val);
-    if ("[object " + type + "]" !== tag) {
-      throw new TypeError(moduleName + ": expected [" + type + "] but got " + tag + "]");
+    // Match both [object Function] and [object AsyncFunction]
+    var throwError = type === 'Function' ? typeof val !== 'function' : '[object ' + type + ']' !== tag;
+
+    if (throwError) {
+      throw new TypeError(moduleName + ': expected [' + type + '] but got ' + tag + ']');
     }
   };
 };
