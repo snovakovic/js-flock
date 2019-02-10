@@ -1,7 +1,5 @@
 const { expect } = require('chai');
-
 const jsFlock = require('../../src/index');
-
 
 describe('index', () => {
   it('should load all modules', () => {

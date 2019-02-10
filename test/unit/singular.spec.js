@@ -1,10 +1,9 @@
-const { expect } = require('chai');
-
+const { assert } = require('chai');
+const { delay } = require('../utils');
 const singular = require('../../src/singular');
 
-
 describe('singular', () => {
-  it('Should ignore calls to the function when in progress', (done) => {
+  it('Should ignore calls to the function when in progress', async() => {
     let noCalls = 0;
     const test = singular((finished) => {
       noCalls += 1;
@@ -15,17 +14,17 @@ describe('singular', () => {
     test();
     test();
 
-    expect(noCalls).to.equal(1);
+    assert.equal(noCalls, 1);
 
-    setTimeout(() => {
-      test();
-      test();
-      expect(noCalls).to.equal(2);
-      done();
-    }, 5);
+    await delay(5);
+
+    test();
+    test();
+
+    assert.equal(noCalls, 2);
   });
 
-  it('Should resolve function with arguments', (done) => {
+  it('Should resolve function with arguments', async() => {
     let total = 0;
     const test = singular((finished, increaseBy) => {
       total += increaseBy;
@@ -36,20 +35,19 @@ describe('singular', () => {
     test(3);
     test(2);
 
-    expect(total).to.equal(5);
+    assert.equal(total, 5);
 
-    setTimeout(() => {
-      test(10);
-      test(12);
-      expect(total).to.equal(15);
-      done();
-    }, 5);
+    await delay(5);
+
+    test(10);
+    test(12);
+    assert.equal(total, 15);
   });
 
   it('Should preserve this', () => {
     const obj = { test: 'test' };
     const test = singular(function() {
-      expect(this).to.equal(obj);
+      assert.equal(this, obj);
     });
     test.apply(obj);
   });

@@ -1,112 +1,91 @@
-const { expect } = require('chai');
-
+const { expect, shouldNotBeCalled } = require('chai');
 const promisify = require('../../src/promisify');
 
-
-const shouldNotBeCalled = () => {
-  throw Error('This should not be called');
-};
-
-
 describe('promisify', () => {
-  let fun;
+  let funct;
 
   beforeEach(() => {
-    fun = (cb) => cb(undefined);
+    funct = cb => cb(undefined);
   });
 
-  it('Should resolve promisified function', (done) => {
-    const successFunAsync = promisify((cb) => cb(undefined, 'response'));
+  it('Should resolve promisified function', async() => {
+    const successFunAsync = promisify(cb => cb(undefined, 'response'));
+    const response = await successFunAsync();
 
-    successFunAsync().then((response) => {
-      expect(response).to.equal('response');
-      done();
-    }).catch(shouldNotBeCalled);
+    expect(response).to.equal('response');
   });
 
   it('Should reject promisified function', (done) => {
-    const errorFunAsync = promisify((cb) => cb('error'));
+    const errorFunAsync = promisify(cb => cb('error'));
 
     errorFunAsync()
-      .then(shouldNotBeCalled)
       .catch((err) => {
         expect(err).to.equal('error');
         done();
       });
   });
 
-  it('Should promisify function with multiple inputs', (done) => {
+  it('Should promisify function with multiple inputs', async() => {
     const successFunAsync = promisify((p1, p2, cb) => {
       setTimeout(() => cb(undefined, [`${p1}-res`, `${p2}-res`]), 50);
     });
 
-    successFunAsync('p1', 'p2').then(([response1, response2]) => {
-      expect(response1).to.equal('p1-res');
-      expect(response2).to.equal('p2-res');
-      done();
-    }).catch(shouldNotBeCalled);
+    const [response1, response2] = await successFunAsync('p1', 'p2');
+    expect(response1).to.equal('p1-res');
+    expect(response2).to.equal('p2-res');
   });
 
-  it('Should handle multiple params with multiArgs option', (done) => {
-    const testFun = (cb) => cb(undefined, 'res1', 2, 'res3');
+  it('Should handle multiple params with multiArgs option', async() => {
+    const testFun = cb => cb(undefined, 'res1', 2, 'res3');
     const funAsync = promisify(testFun, { multiArgs: true });
 
-    funAsync().then(([r1, r2, r3]) => {
-      expect(r1).to.equal('res1');
-      expect(r2).to.equal(2);
-      expect(r3).to.equal('res3');
-      done();
-    }).catch(shouldNotBeCalled);
+    const [r1, r2, r3] = await funAsync();
+    expect(r1).to.equal('res1');
+    expect(r2).to.equal(2);
+    expect(r3).to.equal('res3');
   });
 
-  it('Should return single param if multiArgs is not provided', (done) => {
-    const funAsync = promisify((cb) => cb(undefined, 'res1', 2));
+  it('Should return single param if multiArgs is not provided', async() => {
+    const funAsync = promisify(cb => cb(undefined, 'res1', 2));
 
-    funAsync().then((r1, r2) => {
-      expect(r1).to.equal('res1');
-      expect(r2).to.equal(undefined);
-      done();
-    }).catch(shouldNotBeCalled);
+    const response = await funAsync();
+    expect(response).to.equal('res1');
   });
 
-  it('Should handle function with no params', (done) => {
-    promisify(fun)().then((response) => {
-      expect(response).to.equal(undefined);
-      done();
-    }).catch(shouldNotBeCalled);
+  it('Should handle function with no params', async() => {
+    const response = await promisify(funct)();
+    expect(response).to.equal(undefined);
   });
 
-  it('Should handle function with no params and multiArgs option', (done) => {
-    const funAsync = promisify(fun, { multiArgs: true });
+  it('Should handle function with no params and multiArgs option', async() => {
+    const funAsync = promisify(funct, { multiArgs: true });
 
-    funAsync().then(([res1, res2]) => {
-      expect(res1).to.equal(undefined);
-      expect(res2).to.equal(undefined);
-      done();
-    }).catch(shouldNotBeCalled);
+    const [res1, res2] = await funAsync();
+    expect(res1).to.equal(undefined);
+    expect(res2).to.equal(undefined);
   });
 
   it('Should handle function that throws error', (done) => {
     const errorFunAsync = promisify(() => { throw Error(); });
     errorFunAsync()
-      .then(shouldNotBeCalled)
       .catch((err) => {
         expect(err).to.be.an('error');
         done();
       });
   });
 
-  it('Should work with truthy values for multyArgs', (done) => {
-    const funAsync1 = promisify(fun, { multiArgs: 33 });
-    const funAsync2 = promisify(fun, { multiArgs: null });
-    Promise.all([
+  it('Should work with truthy values for multiArgs', async() => {
+    const funAsync1 = promisify(funct, { multiArgs: 33 });
+    const funAsync2 = promisify(funct, { multiArgs: null });
+
+    await Promise.all([
       funAsync1()
         .then((args) => { expect(args).to.be.an('array'); })
         .catch(shouldNotBeCalled),
       funAsync2()
         .then((args) => { expect(args).to.not.be.an('array'); })
         .catch(shouldNotBeCalled)
-    ]).then(() => done());
+    ]);
   });
 
   it('Should throw type error if function not provided', () => {
@@ -116,10 +95,10 @@ describe('promisify', () => {
   });
 
   it('Should not break on invalid options', () => {
-    expect(promisify(fun, undefined)()).to.be.a('promise');
-    expect(promisify(fun, [])()).to.be.a('promise');
-    expect(promisify(fun, null)()).to.be.a('promise');
-    expect(promisify(fun, 33)()).to.be.a('promise');
+    expect(promisify(funct, undefined)()).to.be.a('promise');
+    expect(promisify(funct, [])()).to.be.a('promise');
+    expect(promisify(funct, null)()).to.be.a('promise');
+    expect(promisify(funct, 33)()).to.be.a('promise');
   });
 });
 
@@ -144,11 +123,14 @@ describe('promisify.all', () => {
 
   it('Should promisify all', (done) => {
     const asyncModule = promisify.all(mdl);
-    const prom1 = asyncModule.successAsync('test').then((response) => {
-      expect(response).to.equal('test-success');
-    }).catch(shouldNotBeCalled);
+    const prom1 = asyncModule.successAsync('test')
+      .then((response) => {
+        expect(response).to.equal('test-success');
+      })
+      .catch(shouldNotBeCalled);
 
-    const prom2 = asyncModule.errorAsync().then(shouldNotBeCalled)
+    const prom2 = asyncModule.errorAsync()
+      .then(shouldNotBeCalled)
       .catch((err) => {
         expect(err).to.equal('error');
       });
@@ -262,11 +244,11 @@ describe('promisify.all', () => {
   });
 
   it('Should not duplicate promisified functions', () => {
-    const test = { fun: () => {} };
+    const test = { funct: () => {} };
     promisify.all(test);
     promisify.all(test);
     promisify.all(test);
 
-    expect(test).to.have.all.keys(['fun', 'funAsync']);
+    expect(test).to.have.all.keys(['funct', 'functAsync']);
   });
 });

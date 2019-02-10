@@ -7,7 +7,9 @@ const castObject = function(args) {
     return obj;
   }
 
-  return typeof args === 'object' ? Object.assign({}, args) : {};
+  return typeof args === 'object'
+    ? Object.assign({}, args)
+    : {};
 };
 
 const isClass = function(input) {

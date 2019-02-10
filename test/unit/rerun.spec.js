@@ -1,7 +1,6 @@
-const { expect } = require('chai');
-
+const { assert, expect } = require('chai');
+const { delay } = require('../utils');
 const rerun = require('../../src/rerun');
-
 
 describe('rerun', () => {
   let counter;
@@ -15,18 +14,17 @@ describe('rerun', () => {
       .every(0)
       .asLongAs((count) => count < 5)
       .start()
-      .onStop(() => {
-        expect(counter).to.equal(5);
+      .onStop(async() => {
+        assert.equal(counter, 5);
 
-        // ensure execution did not continue after this point
-        setTimeout(() => {
-          expect(counter).to.equal(5);
-          done();
-        }, 5);
+        await delay(5);
+
+        assert.equal(counter, 5);
+        done();
       });
   });
 
-  it('It should stop execution from withing function', (done) => {
+  it('It should stop execution from withing function', async() => {
     rerun(() => {
       counter += 1;
       if (counter === 5) {
@@ -37,35 +35,32 @@ describe('rerun', () => {
       .every(0)
       .start();
 
-    setTimeout(() => {
-      expect(counter).to.equal(5);
-      done();
-    }, 10);
+    await delay(10);
+
+    assert.equal(counter, 5);
   });
 
-  it('Should start/stop execution with', (done) => {
+  it('Should start/stop execution with', async() => {
     const runner = rerun(() => { counter += 1; })
       .every(5)
       .start();
 
-    setTimeout(() => {
-      // at this point rerunn should be called 2 times
-      // From initial call and after 5 ms of delay
-      runner.stop();
-    }, 7);
+    await delay(7);
 
-    setTimeout(() => {
-      expect(counter).to.equal(2);
+    // at this point rerun should be called 2 times
+    // From initial call and after 5 ms of delay
+    runner.stop();
 
-      runner.start();
+    await delay(20);
 
-      setTimeout(() => {
-        runner.stop();
-        expect(counter).to.equal(4);
-        done();
-      }, 7);
+    assert.equal(counter, 2);
 
-    }, 20);
+    runner.start();
+
+    await delay(7);
+
+    runner.stop();
+    assert.equal(counter, 4);
   });
 
   it('Should throw error if start is called before calling every', () => {

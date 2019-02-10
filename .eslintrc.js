@@ -25,5 +25,6 @@ module.exports = {
     'no-plusplus': 0,
     'object-curly-newline': 0,
     'consistent-return': 0,
+    'arrow-parens': 0,
   }
 };
