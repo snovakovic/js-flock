@@ -20,8 +20,6 @@
     "publish": "node publish",
     "test:integration": "node test/integration/index.js",
     "test": "istanbul cover --include-all-sources --config ./test/config/istanbul.yml _mocha -- --opts ./test/config/mocha.opts",
-    "benchmark:sort": "node benchmark/sort",
-    "benchmark:promisify": "node benchmark/promisify",
     "codacy:coverage": "npm test && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
   },
   "repository": {
