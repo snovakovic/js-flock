@@ -43,7 +43,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 - [singular](#singular)
 - [waitFor](#waitfor)
 - [rerun](#rerun)
-- [promiseAll](#promiseAll)
+- [promiseAll](#promiseall)
 - [promisify](#promisify)
 - [promisify.all](#promisifyall)
 - [collar](#collar)
