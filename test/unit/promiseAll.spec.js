@@ -78,7 +78,7 @@ describe('promiseAll', () => {
   it('Should resolve array or promises and non promises', async() => {
     const response = await promiseAll([
       resolveWith('foo-prop', 1),
-      'bar-prop',
+      'bar-prop'
     ]);
 
     assert.deepEqual(response, [

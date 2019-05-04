@@ -2,7 +2,7 @@ const assertType = require('./internals/assertType')('waitFor');
 
 // >>> PUBLIC <<<
 
-module.exports = function waitFor(fn, options) {
+module.exports = function(fn, options) {
   assertType('Function', fn);
 
   const interval = Number(options && options.interval) || 50;
