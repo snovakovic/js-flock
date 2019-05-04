@@ -284,7 +284,7 @@ If you think of using setInterval stop and use rerun! For more info on usage ref
 
 ### promiseAll
 
-Alias for `Promise.all` that works both on objects and arrays
+Alias for `Promise.all` that works on objects and arrays
 
 ```js
 const promiseAll = require('js-flock/promiseAll');
