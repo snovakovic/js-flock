@@ -15,7 +15,7 @@ function rejectWith(value, after) {
 }
 
 
-describe.only('promiseAll', () => {
+describe('promiseAll', () => {
   it('Should resolve object of promises', async() => {
     const response = await promiseAll({
       foo: resolveWith('foo-prop', 1),
@@ -67,6 +67,18 @@ describe.only('promiseAll', () => {
     const response = await promiseAll([
       resolveWith('foo-prop', 1),
       resolveWith('bar-prop', 3)
+    ]);
+
+    assert.deepEqual(response, [
+      'foo-prop',
+      'bar-prop'
+    ]);
+  });
+
+  it('Should resolve array or promises and non promises', async() => {
+    const response = await promiseAll([
+      resolveWith('foo-prop', 1),
+      'bar-prop',
     ]);
 
     assert.deepEqual(response, [
