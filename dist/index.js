@@ -8,6 +8,7 @@ module.exports = {
   deepSeal: require('./deepSeal'),
   empty: require('./empty'),
   last: require('./last'),
+  promiseAll: require('./promiseAll'),
   promisify: require('./promisify'),
   rerun: require('./rerun'),
   singular: require('./singular'),

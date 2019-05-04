@@ -181,6 +181,29 @@ var last = function last(arr, condition) {
   return undefined;
 };
 
+// >>> PUBLIC <<<
+
+var promiseAll = function promiseAll(objOrArray) {
+  if (Array.isArray(objOrArray)) {
+    return Promise.all(objOrArray);
+  }
+
+  var objectKeys = Object.keys(objOrArray);
+  var promises = objectKeys.map(function (key) {
+    return objOrArray[key];
+  });
+
+  return Promise.all(promises).then(function (resolvedPromises) {
+    var objResponse = {};
+
+    resolvedPromises.forEach(function (resolvedPromise, idx) {
+      objResponse[objectKeys[idx]] = resolvedPromise;
+    });
+
+    return objResponse;
+  });
+};
+
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
@@ -707,6 +730,7 @@ var src = {
   deepSeal: deepSeal,
   empty: empty,
   last: last,
+  promiseAll: promiseAll,
   promisify: promisify_1,
   rerun: rerun,
   singular: singular,
@@ -721,12 +745,13 @@ var src_3 = src.deepPreventExtensions;
 var src_4 = src.deepSeal;
 var src_5 = src.empty;
 var src_6 = src.last;
-var src_7 = src.promisify;
-var src_8 = src.rerun;
-var src_9 = src.singular;
-var src_10 = src.sort;
-var src_11 = src.toEnum;
-var src_12 = src.waitFor;
+var src_7 = src.promiseAll;
+var src_8 = src.promisify;
+var src_9 = src.rerun;
+var src_10 = src.singular;
+var src_11 = src.sort;
+var src_12 = src.toEnum;
+var src_13 = src.waitFor;
 
 exports['default'] = src;
 exports.collar = src_1;
@@ -735,12 +760,13 @@ exports.deepPreventExtensions = src_3;
 exports.deepSeal = src_4;
 exports.empty = src_5;
 exports.last = src_6;
-exports.promisify = src_7;
-exports.rerun = src_8;
-exports.singular = src_9;
-exports.sort = src_10;
-exports.toEnum = src_11;
-exports.waitFor = src_12;
+exports.promiseAll = src_7;
+exports.promisify = src_8;
+exports.rerun = src_9;
+exports.singular = src_10;
+exports.sort = src_11;
+exports.toEnum = src_12;
+exports.waitFor = src_13;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
