@@ -9,7 +9,7 @@ const assert = require('assert');
 const { exec } = require('child_process');
 
 
-function testModules(modules) {
+async function testModules(modules) {
   // collar
   modules.collar(Promise.resolve('test'), 5)
     .then((response) => {
@@ -41,6 +41,17 @@ function testModules(modules) {
   promisified().then((data) => {
     assert.equal(data, 10);
     console.log('promisify: SUCCESS');
+  });
+
+  // promiseAll
+  const promiseAllResponse = await modules.promiseAll({
+    a: Promise.resolve(1),
+    b: Promise.resolve(2)
+  });
+
+  assert.deepEqual(promiseAllResponse, {
+    a: 1,
+    b: 2
   });
 
   // singular
