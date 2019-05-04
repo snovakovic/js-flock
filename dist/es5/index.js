@@ -190,8 +190,11 @@ function createCommonjsModule(fn, module) {
 var assertType = function assertType(moduleName) {
   return function (type, val) {
     var tag = Object.prototype.toString.call(val);
-    if ("[object " + type + "]" !== tag) {
-      throw new TypeError(moduleName + ": expected [" + type + "] but got " + tag + "]");
+    // Match both [object Function] and [object AsyncFunction]
+    var throwError = type === 'Function' ? typeof val !== 'function' : '[object ' + type + ']' !== tag;
+
+    if (throwError) {
+      throw new TypeError(moduleName + ': expected [' + type + '] but got ' + tag + ']');
     }
   };
 };
@@ -359,7 +362,7 @@ var rerun = function rerun(fn) {
 
       if (shouldContinue) {
         setTimeout(run, timeout);
-        // Don't continue to stop handler as runing is still in progress if we are her
+        // Don't continue to stop handler as running is still in progress if we are her
         return;
       }
     }
@@ -370,17 +373,17 @@ var rerun = function rerun(fn) {
   }
 
   return {
-    every: function every(timoutInMs) {
-      timoutInMs = Number(timoutInMs);
-      assertType$2('Number', timoutInMs);
+    every: function every(timeoutInMs) {
+      timeoutInMs = Number(timeoutInMs);
+      assertType$2('Number', timeoutInMs);
 
-      var isValid = timoutInMs >= 0;
+      var isValid = timeoutInMs >= 0;
 
       if (!isValid) {
         throw Error('rerun: every() need to be called with positive number');
       }
 
-      timeout = timoutInMs;
+      timeout = timeoutInMs;
       return this;
     },
     asLongAs: function asLongAs(condition) {
@@ -474,7 +477,7 @@ var multiPropFunctionSorter = function multiPropFunctionSorter(sortBy, thenBy, d
 };
 
 /**
- * Used when we have sorting by multyple properties and when current sorter is string
+ * Used when we have sorting by multiple properties and when current sorter is string
  * @example sort(users).asc(['firstName', 'lastName'])
  */
 var multiPropStringSorter = function multiPropStringSorter(sortBy, thenBy, depth, direction, a, b) {
@@ -490,7 +493,7 @@ var multiPropObjectSorter = function multiPropObjectSorter(sortByObj, thenBy, de
   var direction = sortByObj.asc ? 1 : -1;
 
   if (!sortBy) {
-    throw Error('sort: Invalid \'by\' sorting onfiguration.\n      Expecting object with \'asc\' or \'desc\' key');
+    throw Error('sort: Invalid \'by\' sorting configuration.\n      Expecting object with \'asc\' or \'desc\' key');
   }
 
   var multiSorter = getMultiPropertySorter(sortBy);
@@ -577,7 +580,7 @@ var sort_1 = function sort_1(ctx) {
         var direction = sortBy[0].asc ? 1 : -1;
         var sortOnProp = sortBy[0].asc || sortBy[0].desc;
         if (!sortOnProp) {
-          throw Error('sort: Invalid \'by\' sorting onfiguration.\n            Expecting object with \'asc\' or \'desc\' key');
+          throw Error('sort: Invalid \'by\' sorting configuration.\n            Expecting object with \'asc\' or \'desc\' key');
         }
         return sort(direction, ctx, sortOnProp);
       }

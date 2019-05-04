@@ -47,7 +47,7 @@ var multiPropFunctionSorter = function multiPropFunctionSorter(sortBy, thenBy, d
 };
 
 /**
- * Used when we have sorting by multyple properties and when current sorter is string
+ * Used when we have sorting by multiple properties and when current sorter is string
  * @example sort(users).asc(['firstName', 'lastName'])
  */
 var multiPropStringSorter = function multiPropStringSorter(sortBy, thenBy, depth, direction, a, b) {
@@ -63,7 +63,7 @@ var multiPropObjectSorter = function multiPropObjectSorter(sortByObj, thenBy, de
   var direction = sortByObj.asc ? 1 : -1;
 
   if (!sortBy) {
-    throw Error('sort: Invalid \'by\' sorting onfiguration.\n      Expecting object with \'asc\' or \'desc\' key');
+    throw Error('sort: Invalid \'by\' sorting configuration.\n      Expecting object with \'asc\' or \'desc\' key');
   }
 
   var multiSorter = getMultiPropertySorter(sortBy);
@@ -150,7 +150,7 @@ var sort_1 = function sort_1(ctx) {
         var direction = sortBy[0].asc ? 1 : -1;
         var sortOnProp = sortBy[0].asc || sortBy[0].desc;
         if (!sortOnProp) {
-          throw Error('sort: Invalid \'by\' sorting onfiguration.\n            Expecting object with \'asc\' or \'desc\' key');
+          throw Error('sort: Invalid \'by\' sorting configuration.\n            Expecting object with \'asc\' or \'desc\' key');
         }
         return sort(direction, ctx, sortOnProp);
       }

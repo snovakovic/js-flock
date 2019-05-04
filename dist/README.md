@@ -15,11 +15,11 @@ Collection of neat modular utilities for bumping up development in NODE and Brow
 
 ## Including library
 
-Library is completely modular so you can include only modules that you need/use (recomended way of using library). **By default unmodified ES6 code is loaded**, optionally we can include transpiled ES5 code (recomended for browser enviroment).
-Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/) and can be loaded i Browser as CommonJs, AMD or as global var.
+Library is modular so you can include only modules that you need/use (recommended way of using library). **By default unmodified ES6 code is loaded**, optionally we can include transpiled ES5 code (recommended for browser environment).
+Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/) and can be loaded in Browser as CommonJs, AMD or as global var.
 
 ```javascript
-  // Load unmodified ES6 sort module (recommended for node enviroment).
+  // Load unmodified ES6 sort module (recommended for node environment).
   // In same way we can include any other library module e.g ('js-flock/toEnum', 'js-flock/deepFreeze'...)
   const sort = require('js-flock/sort');
 
@@ -54,7 +54,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 Fast and powerful array sorting that **outperforms lodash sort by ~2x** (in some cases it's more than **5x**).
 For additional sort documentation and information about performance take a look at the dedicated [fast-sort page](https://www.npmjs.com/package/fast-sort).
 
-### higlights
+### highlights
 
 * Sorting an array of objects by one or more properties
 * Sorting flat arrays
@@ -73,7 +73,7 @@ For additional sort documentation and information about performance take a look 
   sort(persons).asc(p => p.firstName);
 
   // Same as above (but bit more performant)
-  // NOTE: sorting by string is avaliable from version [3.4.0]
+  // NOTE: sorting by string is available from version [3.4.0]
   sort(persons).asc('firstName');
 
   // Sort persons by multiple properties
@@ -346,7 +346,7 @@ fs.readFileAsync('test.txt', 'utf8')
 
 const withOptions = promisify.all(test, {
   suffix: String, // [default: 'Async'] - Suffix will be appended to original method name
-  multyArgs: Boolean, // [default: false] Promise will resolve with array of values if true
+  multiArgs: Boolean, // [default: false] Promise will resolve with array of values if true
   proto: Boolean, // [default: false] Promisify object prototype chain if true
   exclude: [String], // [default: undefined] List of object keys not to promisify
   include: [String], // [default: undefined] Promisify only provided keys

@@ -19,7 +19,7 @@ module.exports = function(fn) {
 
       if (shouldContinue) {
         setTimeout(run, timeout);
-        // Don't continue to stop handler as runing is still in progress if we are her
+        // Don't continue to stop handler as running is still in progress if we are her
         return;
       }
     }
@@ -30,17 +30,17 @@ module.exports = function(fn) {
   }
 
   return {
-    every(timoutInMs) {
-      timoutInMs = Number(timoutInMs);
-      assertType('Number', timoutInMs);
+    every(timeoutInMs) {
+      timeoutInMs = Number(timeoutInMs);
+      assertType('Number', timeoutInMs);
 
-      const isValid = timoutInMs >= 0;
+      const isValid = timeoutInMs >= 0;
 
       if (!isValid) {
         throw Error('rerun: every() need to be called with positive number');
       }
 
-      timeout = timoutInMs;
+      timeout = timeoutInMs;
       return this;
     },
     asLongAs(condition) {

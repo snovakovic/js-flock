@@ -1,7 +1,5 @@
-const { expect } = require('chai');
-
+const { assert } = require('chai');
 const last = require('../../src/last');
-
 
 describe('last', () => {
   let flatArray;
@@ -18,30 +16,30 @@ describe('last', () => {
   });
 
   it('Should return last element of array', () => {
-    expect(last(flatArray)).to.equal(5);
-    expect(last(persons).name).to.equal('last');
+    assert.equal(last(flatArray), 5);
+    assert.equal(last(persons).name, 'last');
   });
 
   it('Should return last element of array that meets condition', () => {
-    const person = last(persons, (p) => p.name === 'middle');
-    expect(person.id).to.equal(3);
+    const person = last(persons, p => p.name === 'middle');
+    assert.equal(person.id, 3);
   });
 
   it('Should return undefined for condition that does not match any element', () => {
-    const person = last(persons, (p) => p.name === 'empty');
-    expect(person).to.equal(undefined);
+    const person = last(persons, p => p.name === 'empty');
+    assert.equal(person, undefined);
   });
 
   it('Should return undefined if array is not provided', () => {
-    expect(last(null)).to.equal(undefined);
-    expect(last({})).to.equal(undefined);
-    expect(last(33), (p) => p.name === 'middle').to.equal(undefined);
-    expect(last(true), (p) => p.name === 'middle').to.equal(undefined);
-    expect(last('string'), (p) => p.name === 'middle').to.equal(undefined);
+    assert.equal(last(null), undefined);
+    assert.equal(last({}), undefined);
+    assert.equal(last(33), undefined);
+    assert.equal(last(true), undefined);
+    assert.equal(last('string'), undefined);
   });
 
   it('Should return last element if condition is not function', () => {
-    expect(last(persons, {}).id).to.equal(4);
-    expect(last(persons, null).id).to.equal(4);
+    assert.equal(last(persons, {}).id, 4);
+    assert.equal(last(persons, null).id, 4);
   });
 });
