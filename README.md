@@ -282,28 +282,30 @@ If you think of using setInterval stop and use rerun! For more info on usage ref
 
 ```
 
-### promisify
+### promiseAll
 
-Alias for `Promise.all` that works both on arrays and on objects
+Alias for `Promise.all` that works both on objects and arrays
 
 ```js
 const promiseAll = require('js-flock/promiseAll');
 
-const promisifiedObject = await promiseAll({
+const objectResponse = await promiseAll({
   users: db.fetchUsers(),
   schools: db.fetchSchools(),
 });
+
 /*
-  promisifiedObject =>
+  objectResponse =>
     {
       users: [{...}, {...}], // value of fetchUsers promise resolve
       schools: [{...}, {...}], // value of fetchSchools promise resolve
     }
 */
 
-const promisifiedArray = await promiseAll([db.fetchUsers(), db.fetchSchools()]);
+const arrayResponse = await promiseAll([db.fetchUsers(), db.fetchSchools()]);
+
 /*
-  promisifiedArray => [usersResponse, schoolsResponse]
+  arrayResponse => [usersResponse, schoolsResponse]
 */
 
 ```
