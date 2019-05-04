@@ -20,4 +20,4 @@ module.exports = function(objOrArray) {
 
       return objResponse;
     });
-}
+};
