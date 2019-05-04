@@ -43,6 +43,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 - [singular](#singular)
 - [waitFor](#waitfor)
 - [rerun](#rerun)
+- [promiseAll](#promiseAll)
 - [promisify](#promisify)
 - [promisify.all](#promisifyall)
 - [collar](#collar)
@@ -281,6 +282,31 @@ If you think of using setInterval stop and use rerun! For more info on usage ref
 
 ```
 
+### promisify
+
+Alias for `Promise.all` that works both on arrays and on objects
+
+```js
+const promiseAll = require('js-flock/promiseAll');
+
+const promisifiedObject = await promiseAll({
+  users: db.fetchUsers(),
+  schools: db.fetchSchools(),
+});
+/*
+  promisifiedObject =>
+    {
+      users: [{...}, {...}], // value of fetchUsers promise resolve
+      schools: [{...}, {...}], // value of fetchSchools promise resolve
+    }
+*/
+
+const promisifiedArray = await promiseAll([db.fetchUsers(), db.fetchSchools()]);
+/*
+  promisifiedArray => [usersResponse, schoolsResponse]
+*/
+
+```
 
 ### promisify
 
