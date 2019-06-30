@@ -58,7 +58,7 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
 
   const build = Rollup.rollup({ input, plugins })
     .then((bundle) => {
-      bundle.write({
+      return bundle.write({
         name: moduleName,
         format,
         exports: fileName === 'index.js' ? 'named' : 'default',
@@ -70,17 +70,17 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
   const minifiedBuild = Rollup.rollup({
     input,
     plugins: [...plugins, uglify({})]
-  }).then((bundle) => {
+  }).then(async (bundle) => {
     // NOTE: Previosuly full version was saved as `name.js` and minigied as `name.min.js`
     // That have been updated to serve minified version by default with `name.js` and full version
     // with `name.full.js`. (keeping .min to be backward compatible)
-    bundle.write({
+    await bundle.write({
       name: moduleName,
       format,
       file: `${options.dist}/es5/${fileName.replace('.js', '.min.js')}`
     });
 
-    bundle.write({
+    return bundle.write({
       name: moduleName,
       format,
       file: `${options.dist}/es5/${fileName}`
