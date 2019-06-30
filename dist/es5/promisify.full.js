@@ -1,56 +1,48 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.promisify = global.promisify || {}, global.promisify.js = factory());
-}(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = global || self, (global.promisify = global.promisify || {}, global.promisify.js = factory()));
+}(this, function () { 'use strict';
 
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
+  // >>> PUBLIC <<<
+  var assertType = function assertType(moduleName) {
+    return function (type, val) {
+      var tag = Object.prototype.toString.call(val); // Match both [object Function] and [object AsyncFunction]
 
-// >>> PUBLIC <<<
+      var throwError = type === 'Function' ? typeof val !== 'function' : "[object ".concat(type, "]") !== tag;
 
-var assertType = function assertType(moduleName) {
-  return function (type, val) {
-    var tag = Object.prototype.toString.call(val);
-    // Match both [object Function] and [object AsyncFunction]
-    var throwError = type === 'Function' ? typeof val !== 'function' : '[object ' + type + ']' !== tag;
-
-    if (throwError) {
-      throw new TypeError(moduleName + ': expected [' + type + '] but got ' + tag);
-    }
+      if (throwError) {
+        throw new TypeError("".concat(moduleName, ": expected [").concat(type, "] but got ").concat(tag));
+      }
+    };
   };
-};
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+  function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-// >>> PUBLIC <<<
+  // >>> PUBLIC <<<
 
-/**
- * A way to detect if object is native(built in) or user defined
- * Warning! Detection is not bulletproof and can be easily tricked.
- * In real word scenarios there should not be fake positives
- * @param {any} obj - Value to be tested is native object
- * @returns {boolean} - True if it's object and if it's built in JS object
- * @example
- * isNativeObject({}); \\ => false
- * isNativeObject(Object.prototype); \\ => true
- * isNativeObject(Number.prototype); \\ => true
- */
-var isNativeObject = function isNativeObject(obj) {
-  return !!(obj && ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' || typeof obj === 'function') && Object.prototype.hasOwnProperty.call(obj, 'constructor') && typeof obj.constructor === 'function' && Function.prototype.toString.call(obj.constructor).includes('[native code]'));
-};
+  /**
+   * A way to detect if object is native(built in) or user defined
+   * Warning! Detection is not bulletproof and can be easily tricked.
+   * In real word scenarios there should not be fake positives
+   * @param {any} obj - Value to be tested is native object
+   * @returns {boolean} - True if it's object and if it's built in JS object
+   * @example
+   * isNativeObject({}); \\ => false
+   * isNativeObject(Object.prototype); \\ => true
+   * isNativeObject(Number.prototype); \\ => true
+   */
+  var isNativeObject = function isNativeObject(obj) {
+    return !!(obj && (_typeof(obj) === 'object' || typeof obj === 'function') && Object.prototype.hasOwnProperty.call(obj, 'constructor') && typeof obj.constructor === 'function' && Function.prototype.toString.call(obj.constructor).includes('[native code]'));
+  };
 
-var promisify_1 = createCommonjsModule(function (module) {
-  var assertType$$1 = assertType('promisify');
-
-  // >>> INTERNALS <<<
+  var assertType$1 = assertType('promisify'); // >>> INTERNALS <<<
 
   /**
    * @const {Symbol} - Symbol to be applied on promisified functions to avoid multiple promisify of same function
    */
-  var PROMISIFIED_SYMBOL = Symbol('promisified');
 
+  var PROMISIFIED_SYMBOL = Symbol('promisified');
   /**
    * Promisified resolver for error first callback function.
    *
@@ -59,23 +51,23 @@ var promisify_1 = createCommonjsModule(function (module) {
    * @param {boolean} [options.multiArgs=false] - Promise will resolve with array of values if true
    * @returns {Function} - Promisified version of error first callback function
    */
+
   var promisified = function promisified(fn, args, options) {
     var _this = this;
 
     return new Promise(function (resolve, reject) {
       args.push(function (err) {
-        for (var _len = arguments.length, result = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        if (err) return reject(err);
+
+        for (var _len = arguments.length, result = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
           result[_key - 1] = arguments[_key];
         }
 
-        if (err) return reject(err);
         return resolve(options && options.multiArgs ? result : result[0]);
       });
-
       fn.apply(_this, args);
     });
   };
-
   /**
    * Check does we need to apply promisify
    *
@@ -85,6 +77,8 @@ var promisify_1 = createCommonjsModule(function (module) {
    *
    * @returns {boolean}
    */
+
+
   var shouldPromisify = function shouldPromisify(prop, exclude, include) {
     return typeof prop === 'function' && prop[PROMISIFIED_SYMBOL] !== true && (!include || include.some(function (k) {
       return k === prop.name;
@@ -92,7 +86,6 @@ var promisify_1 = createCommonjsModule(function (module) {
       return k !== prop.name;
     }));
   };
-
   /**
    * Promisify error first callback function.
    * Instead of taking a callback, the returned function will return a promise
@@ -108,18 +101,18 @@ var promisify_1 = createCommonjsModule(function (module) {
    * const async = promisify((cb) => cb(null, 'res1'));
    * async().then((response) => { console.log(response) });
    */
-  var promisify = function promisify(fn, options) {
-    assertType$$1('Function', fn);
 
+
+  var promisify = function promisify(fn, options) {
+    assertType$1('Function', fn);
     return function () {
-      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
         args[_key2] = arguments[_key2];
       }
 
       return promisified.call(this, fn, args, options);
     };
   };
-
   /**
    * Promisify the entire object by going through the object's properties
    * and creating an async equivalent of each function on the object.
@@ -134,10 +127,10 @@ var promisify_1 = createCommonjsModule(function (module) {
    *
    * @returns {Object} - Initial obj with appended promisified functions on him
    */
-  promisify.all = function (obj, options) {
-    assertType$$1('Object', obj);
 
-    // Apply default options if not provided
+
+  promisify.all = function (obj, options) {
+    assertType$1('Object', obj); // Apply default options if not provided
 
     var _ref = options || {},
         suffix = _ref.suffix,
@@ -149,40 +142,38 @@ var promisify_1 = createCommonjsModule(function (module) {
     suffix = typeof suffix === 'string' ? suffix : 'Async';
     exclude = Array.isArray(exclude) ? exclude : undefined;
     include = Array.isArray(include) ? include : undefined;
-
     Object.getOwnPropertyNames(obj).forEach(function (key) {
-      if (shouldPromisify(obj[key], exclude, include, proto)) {
-        var asyncKey = '' + key + suffix;
+      if (shouldPromisify(obj[key], exclude, include)) {
+        var asyncKey = "".concat(key).concat(suffix);
+
         while (asyncKey in obj) {
           // Function has already been promisified skip it
           if (obj[asyncKey][PROMISIFIED_SYMBOL] === true) {
             return;
           }
 
-          asyncKey = asyncKey + 'Promisified';
+          asyncKey = "".concat(asyncKey, "Promisified");
         }
 
         obj[asyncKey] = promisify(obj[key], options);
         obj[asyncKey][PROMISIFIED_SYMBOL] = true;
       }
-    });
+    }); // Promisify object prototype if specified
 
-    // Promisify object prototype if specified
     if (proto) {
       var prototype = Object.getPrototypeOf(obj);
+
       if (prototype && !isNativeObject(prototype)) {
         promisify.all(prototype, options);
       }
     }
 
     return obj;
-  };
+  }; // >>> PUBLIC <<<
 
-  // >>> PUBLIC <<<
 
-  module.exports = promisify;
-});
+  var promisify_1 = promisify;
 
-return promisify_1;
+  return promisify_1;
 
-})));
+}));
