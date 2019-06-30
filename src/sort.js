@@ -64,13 +64,14 @@ const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, a, 
 // >>> HELPERS <<<
 
 /**
- * Return multiProperty sort handler based on sortBy value
+ * Return multiProperty sort hanrdler based on sortBy value
  */
 const getMultiPropertySorter = function(sortBy) {
   const type = typeof sortBy;
   if (type === 'string') {
     return multiPropStringSorter;
-  } else if (type === 'function') {
+  }
+  if (type === 'function') {
     return multiPropFunctionSorter;
   }
 

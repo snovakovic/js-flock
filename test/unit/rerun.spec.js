@@ -70,8 +70,9 @@ describe('rerun', () => {
 
   it('Should throw error on invalid inputs', () => {
     const invalidMessageForEvery = 'rerun: every() need to be called with positive number';
-    const getErrorMessage = (expected, actual) =>
-      `rerun: expected [${expected}] but got [object ${actual}]`;
+    const getErrorMessage = (expected, actual) => {
+      return `rerun: expected [${expected}] but got [object ${actual}]`;
+    };
 
     // Invalid onStop values
     expect(() => rerun(() => {}).onStop(33))
