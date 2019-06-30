@@ -8,6 +8,6 @@ module.exports = (moduleName) => (type, val) => {
     : `[object ${type}]` !== tag;
 
   if (throwError) {
-    throw new TypeError(`${moduleName}: expected [${type}] but got ${tag}]`);
+    throw new TypeError(`${moduleName}: expected [${type}] but got ${tag}`);
   }
 };

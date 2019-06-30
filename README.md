@@ -43,6 +43,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 - [singular](#singular)
 - [waitFor](#waitfor)
 - [rerun](#rerun)
+- [delay](#delay)
 - [promiseAll](#promiseall)
 - [promisify](#promisify)
 - [promisify.all](#promisifyall)
@@ -115,6 +116,7 @@ last(persons, (p) => p.name === 'no-name') // => undefined
 
 
 ### empty
+
 Remove all items from 1 or more provided arrays.
 
 ```javascript
@@ -252,15 +254,15 @@ waitFor((abort) => {
 
 ### rerun
 
-If you think of using setInterval stop and use rerun! For more info on usage reference unit tests ot source code.
+setInterval on steroids.
 
 ```javascript
 
   // Any user defined function.
   rerun(Function)
     // How frequently will rerun function be called
-    .every(timeInMiliseconds)
-    // [Optional] Execution is stoped if falsy value is returned from function. If falsy value is returned first time rerun will never be called.
+    .every(timeInMilliseconds)
+    // [Optional] Execution is stopped if falsy value is returned from function. If falsy value is returned first time rerun will never be called.
     .asLongAs(Function)
     // Execute rerun function for first time and start execution cycle
     .start()
@@ -279,14 +281,32 @@ If you think of using setInterval stop and use rerun! For more info on usage ref
   // Function that will be called after user log in
   // Every call to start will execute function immediately and restart execution cycle
   eventBus.$on('login', refreshTokenRunner.start);
+```
 
+## delay
+
+Delay a promise a specified amount of time. Think of it as setTimeout for async flow
+
+```javascript
+const delay = require('js-flock/delay');
+
+async exampleFunction() {
+  bar();
+
+  // Wait for 100 milliseconds
+  // If delay time not provided it defaults ot 0ms (next tick)
+  await delay(100);
+
+  // Executed 100 milliseconds later
+  baz();
+}
 ```
 
 ### promiseAll
 
 Alias for `Promise.all` that works on objects and arrays
 
-```js
+```javascript
 const promiseAll = require('js-flock/promiseAll');
 
 const objectResponse = await promiseAll({

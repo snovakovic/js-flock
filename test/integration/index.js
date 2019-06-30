@@ -32,6 +32,12 @@ async function testModules(modules) {
   assert.equal(Object.isSealed(sealed), true);
   console.log('deepSeal: SUCCESS');
 
+  // delay
+  let numberOfCalls = 0;
+  setImmediate(() => numberOfCalls++);
+  await modules.delay();
+  assert.equal(numberOfCalls, 1);
+
   // last
   assert.equal(modules.last([1, 4, 3]), 3);
   console.log('last: SUCCESS');

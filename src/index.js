@@ -6,6 +6,7 @@ module.exports = {
   deepFreeze: require('./deepFreeze'),
   deepPreventExtensions: require('./deepPreventExtensions'),
   deepSeal: require('./deepSeal'),
+  delay: require('./delay'),
   empty: require('./empty'),
   last: require('./last'),
   promiseAll: require('./promiseAll'),
