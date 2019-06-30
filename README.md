@@ -293,7 +293,8 @@ const delay = require('js-flock/delay');
 async exampleFunction() {
   bar();
 
-  // Wait for 100ms (If delay not provided it defaults ot 0ms)
+  // Wait for 100ms
+  // If delay time not provided it defaults ot 0ms (next tick)
   await delay(100);
 
   // Executed 100 milliseconds later
