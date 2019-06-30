@@ -102,6 +102,8 @@ For additional sort documentation and information about performance take a look 
 
 Get the last element of an array. If condition is provided get the last element of an array that meets provided condition or undefined.
 
+##### since: v2.2.0
+
 ```javascript
 const last = require('js-flock/last');
 
@@ -118,6 +120,8 @@ last(persons, (p) => p.name === 'no-name') // => undefined
 ### empty
 
 Remove all items from 1 or more provided arrays.
+
+##### since: v3.2.0
 
 ```javascript
 const empty = require('js-flock/empty');
@@ -218,6 +222,8 @@ Wait for task to complete before executing function. This module is useful when 
 you can hook into to signify that a given task is complete. waitFor returns promise that resolves
 after check function returns truthy value.
 
+##### since: v2.4.0
+
 ```javascript
 const waitFor = require('js-flock/waitFor');
 
@@ -256,6 +262,8 @@ waitFor((abort) => {
 
 setInterval on steroids.
 
+##### since: v3.3.0
+
 ```javascript
 
   // Any user defined function.
@@ -285,7 +293,10 @@ setInterval on steroids.
 
 ## delay
 
-Delay a promise a specified amount of time. Think of it as setTimeout for async flow
+Delay a promise a specified amount of time. Think of it as setTimeout for async flo
+
+##### since: v3.8.0
+
 
 ```javascript
 const delay = require('js-flock/delay');
@@ -305,6 +316,8 @@ async exampleFunction() {
 ### promiseAll
 
 Alias for `Promise.all` that works on objects and arrays
+
+##### since: v3.7.0
 
 ```javascript
 const promiseAll = require('js-flock/promiseAll');
