@@ -66,18 +66,28 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
         moduleName,
         format,
         exports: fileName === 'index.js' ? 'named' : 'default',
-        dest: `${options.dist}/es5/${fileName}`
+        dest: `${options.dist}/es5/${fileName.replace('.js', '.full.js')}`
       }));
 
+  // NOTE: minified files will as defa
   const minifiedBuild =
     Rollup.rollup({
       input,
       plugins: [...plugins, uglify({})]
     }).then((bundle) => {
+      // NOTE: Previosuly full version was saved as `name.js` and minigied as `name.min.js`
+      // That have been updated to serve minified version by default with `name.js` and full version
+      // with `name.full.js`. (keeping .min to be backward compatible)
       bundle.write({
         moduleName,
         format,
         dest: `${options.dist}/es5/${fileName.replace('.js', '.min.js')}`
+      });
+
+      bundle.write({
+        moduleName,
+        format,
+        dest: `${options.dist}/es5/${fileName}`
       });
     });
 
