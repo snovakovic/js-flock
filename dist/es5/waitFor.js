@@ -13,7 +13,7 @@ var assertType$1 = function assertType(moduleName) {
     var throwError = type === 'Function' ? typeof val !== 'function' : '[object ' + type + ']' !== tag;
 
     if (throwError) {
-      throw new TypeError(moduleName + ': expected [' + type + '] but got ' + tag + ']');
+      throw new TypeError(moduleName + ': expected [' + type + '] but got ' + tag);
     }
   };
 };

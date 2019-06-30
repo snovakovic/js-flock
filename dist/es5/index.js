@@ -144,6 +144,22 @@ var deepSeal = function deepSeal(obj, options) {
 
 // >>> PUBLIC <<<
 
+var delay = function delay() {
+  var numberOfMs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+  var delay = Number(numberOfMs);
+  if (Number.isNaN(delay)) {
+    var tag = Object.prototype.toString.call(numberOfMs);
+    throw new TypeError("delay: expected [Number] but got " + tag);
+  }
+
+  return new Promise(function (resolve) {
+    setTimeout(resolve, numberOfMs);
+  });
+};
+
+// >>> PUBLIC <<<
+
 /**
  * Remove all items from array
  * @param {Array[]} props - 1 or more arrays to empty out
@@ -217,7 +233,7 @@ var assertType = function assertType(moduleName) {
     var throwError = type === 'Function' ? typeof val !== 'function' : '[object ' + type + ']' !== tag;
 
     if (throwError) {
-      throw new TypeError(moduleName + ': expected [' + type + '] but got ' + tag + ']');
+      throw new TypeError(moduleName + ': expected [' + type + '] but got ' + tag);
     }
   };
 };
@@ -728,6 +744,7 @@ var src = {
   deepFreeze: deepFreeze,
   deepPreventExtensions: deepPreventExtensions,
   deepSeal: deepSeal,
+  delay: delay,
   empty: empty,
   last: last,
   promiseAll: promiseAll,
@@ -743,30 +760,32 @@ var src_1 = src.collar;
 var src_2 = src.deepFreeze;
 var src_3 = src.deepPreventExtensions;
 var src_4 = src.deepSeal;
-var src_5 = src.empty;
-var src_6 = src.last;
-var src_7 = src.promiseAll;
-var src_8 = src.promisify;
-var src_9 = src.rerun;
-var src_10 = src.singular;
-var src_11 = src.sort;
-var src_12 = src.toEnum;
-var src_13 = src.waitFor;
+var src_5 = src.delay;
+var src_6 = src.empty;
+var src_7 = src.last;
+var src_8 = src.promiseAll;
+var src_9 = src.promisify;
+var src_10 = src.rerun;
+var src_11 = src.singular;
+var src_12 = src.sort;
+var src_13 = src.toEnum;
+var src_14 = src.waitFor;
 
 exports['default'] = src;
 exports.collar = src_1;
 exports.deepFreeze = src_2;
 exports.deepPreventExtensions = src_3;
 exports.deepSeal = src_4;
-exports.empty = src_5;
-exports.last = src_6;
-exports.promiseAll = src_7;
-exports.promisify = src_8;
-exports.rerun = src_9;
-exports.singular = src_10;
-exports.sort = src_11;
-exports.toEnum = src_12;
-exports.waitFor = src_13;
+exports.delay = src_5;
+exports.empty = src_6;
+exports.last = src_7;
+exports.promiseAll = src_8;
+exports.promisify = src_9;
+exports.rerun = src_10;
+exports.singular = src_11;
+exports.sort = src_12;
+exports.toEnum = src_13;
+exports.waitFor = src_14;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

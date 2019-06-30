@@ -1,6 +1,6 @@
 {
   "name": "js-flock",
-  "version": "3.7.0",
+  "version": "3.8.0",
   "description": "Collection of neat modular utilities for bumping up development in NODE and Browser.",
   "main": "index.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
@@ -31,6 +31,7 @@
     "deepFreeze",
     "deepPreventExtensions",
     "deepSeal",
+    "delay",
     "enum",
     "es2015",
     "es6",
