@@ -1,15 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 const Path = require('path');
-
+const Fs = require('node-fs-extra');
+const Rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
-const eslint = require('rollup-plugin-eslint');
-const Fs = require('node-fs-extra');
 const resolve = require('rollup-plugin-node-resolve');
-const Rollup = require('rollup');
-const uglify = require('rollup-plugin-uglify');
-
+const { eslint } = require('rollup-plugin-eslint');
+const { uglify } = require('rollup-plugin-uglify');
 
 const options = {
   src: Path.resolve(__dirname, 'src/'),
@@ -20,9 +18,7 @@ const options = {
 const plugins = [
   eslint({}),
   resolve({
-    jsnext: true,
-    main: true,
-    browser: true
+    browser: true,
   }),
   commonjs({
     include: 'src/**'

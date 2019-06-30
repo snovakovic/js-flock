@@ -61,8 +61,8 @@
     "waitFor"
   ],
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-preset-es2015": "^6.24.1",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
     "chai": "^4.2.0",
     "codacy-coverage": "^3.4.0",
     "eslint": "^6.0.1",
@@ -82,5 +82,6 @@
     "sinon-chai": "^3.3.0"
   },
   "//": "WARNING: Do not remove!.  Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
-  "private": true
+  "private": true,
+  "dependencies": {}
 }
