@@ -70,7 +70,7 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
   const minifiedBuild = Rollup.rollup({
     input,
     plugins: [...plugins, uglify({})]
-  }).then(async (bundle) => {
+  }).then(async(bundle) => {
     // NOTE: Previosuly full version was saved as `name.js` and minigied as `name.min.js`
     // That have been updated to serve minified version by default with `name.js` and full version
     // with `name.full.js`. (keeping .min to be backward compatible)

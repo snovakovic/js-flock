@@ -293,7 +293,7 @@ setInterval on steroids.
 
 ## delay
 
-Delay a promise a specified amount of time. Think of it as setTimeout for async flo
+Delay a promise a specified amount of time. Think of it as setTimeout for async flow
 
 ##### since: v3.8.0
 
