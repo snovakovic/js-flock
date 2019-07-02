@@ -24,14 +24,14 @@ describe('NumberIterator', () => {
     assert.equal(numberIterator.current(), 11);
   });
 
-  it('will throw iterator exausted error', () => {
+  it('will throw iterator exhausted error', () => {
     const numberIterator = new NumberIterator({
       startFrom: Number.MAX_SAFE_INTEGER - 1
     });
 
     assert.equal(numberIterator.next(), Number.MAX_SAFE_INTEGER);
 
-    assert.throws(() => numberIterator.next(), Error, 'Number iterator exausted');
+    assert.throws(() => numberIterator.next(), Error, 'Number iterator exhausted');
 
     assert.equal(numberIterator.current(), Number.MAX_SAFE_INTEGER);
   });

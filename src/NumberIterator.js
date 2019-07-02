@@ -7,7 +7,7 @@ module.exports = class NumberIterator {
 
   next() {
     if (this._currentNumber >= Number.MAX_SAFE_INTEGER) {
-      throw Error('Number iterator exausted');
+      throw Error('Number iterator exhausted');
     }
 
     this._currentNumber++;
