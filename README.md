@@ -139,7 +139,9 @@ empty(arr1, undefined, arr2, 3);
 
 ### NumberIterator
 
-get next number in sequence,
+get next number in sequence.
+
+##### since: v3.9.0
 
 ````javascript
 const NumberIterator = require('js-flock/NumberIterator');
