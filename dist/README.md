@@ -39,6 +39,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 - [sort](#sort)
 - [last](#last)
 - [empty](#empty)
+- [numberIterator](#numberiterator)
 - [toEnum](#toenum)
 - [singular](#singular)
 - [waitFor](#waitfor)
@@ -135,6 +136,29 @@ console.log(emptyArr === arr) // => true
 // We can empty multiple arrays. Non array values will be ignored
 empty(arr1, undefined, arr2, 3);
 ```
+
+### NumberIterator
+
+get next number in sequence.
+
+##### since: v3.9.0
+
+````javascript
+const NumberIterator = require('js-flock/NumberIterator');
+
+const numberIterator = new NumberIterator();
+numberIterator.current() // => 0
+numberIterator.next() // => 1
+numberIterator.next() // => 2
+numberIterator.current() // => 2
+
+// When instantiating iterator we can pass optional startFrom property
+const numberIterator2 = new NumberIterator({ startFrom: 10 });
+numberIterator2.current() // => 10
+numberIterator2.next() // => 11
+````
+
+If iterator reaches `Number.MAX_SAFE_INTEGER` the iterator exhausted error will be thrown on next iteration call.
 
 ### toEnum
 
