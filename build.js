@@ -18,7 +18,7 @@ const options = {
 const plugins = [
   eslint({}),
   resolve({
-    browser: true,
+    browser: true
   }),
   commonjs({
     include: 'src/**'
@@ -57,14 +57,12 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
   const format = 'umd';
 
   const build = Rollup.rollup({ input, plugins })
-    .then((bundle) => {
-      return bundle.write({
-        name: moduleName,
-        format,
-        exports: fileName === 'index.js' ? 'named' : 'default',
-        file: `${options.dist}/es5/${fileName.replace('.js', '.full.js')}`
-      });
-    });
+    .then(bundle => bundle.write({
+      name: moduleName,
+      format,
+      exports: fileName === 'index.js' ? 'named' : 'default',
+      file: `${options.dist}/es5/${fileName.replace('.js', '.full.js')}`
+    }));
 
   // NOTE: minified files will as defa
   const minifiedBuild = Rollup.rollup({
