@@ -114,17 +114,21 @@ function run(err) {
     .map((fileName) => fileName.replace('.js', ''));
 
   const jsFlock = require('js-flock');
+  // NOTE jsFLockEs5 and jsFLockEs5Min are same (jsFLockEs5Min is left for backward compatibility)
   const jsFLockEs5 = require('js-flock/es5');
   const jsFLockEs5Min = require('js-flock/es5/index.min.js');
+  const jsFLockEs5Full = require('js-flock/es5/index.full.js');
 
   const es6Modules = {};
   const es5Modules = {};
   const es5MinModules = {};
+  const es5FullModules = {};
 
   modules.forEach((name) => {
     es6Modules[name] = require(`js-flock/${name}`);
     es5Modules[name] = require(`js-flock/es5/${name}`);
     es5MinModules[name] = require(`js-flock/es5/${name}.min.js`);
+    es5FullModules[name] = require(`js-flock/es5/${name}.full.js`);
   });
 
   console.log('\n --- jsFlock full lib test-----\n ');
@@ -136,14 +140,20 @@ function run(err) {
   console.log('\n --- jsFLockEs5Min full lib test-----\n ');
   testModules(jsFLockEs5Min);
 
+  console.log('\n --- jsFLockEs5Full full lib test-----\n ');
+  testModules(jsFLockEs5Full);
+
   console.log('\n --- es6Modules test-----\n ');
   testModules(es6Modules);
 
   console.log('\n --- es5Modules test-----\n ');
   testModules(es5Modules);
 
-  console.log('\n ---es5MinModules full lib test----- \n');
+  console.log('\n ---es5MinModules test----- \n');
   testModules(es5MinModules);
+
+  console.log('\n ---es5FullModules test----- \n');
+  testModules(es5FullModules);
 
   console.log('----- DONE -----');
 }

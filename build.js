@@ -1,15 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 const Path = require('path');
-
+const Fs = require('fs-extra');
+const Rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
-const eslint = require('rollup-plugin-eslint');
-const Fs = require('node-fs-extra');
 const resolve = require('rollup-plugin-node-resolve');
-const Rollup = require('rollup');
-const uglify = require('rollup-plugin-uglify');
-
+const { eslint } = require('rollup-plugin-eslint');
+const { uglify } = require('rollup-plugin-uglify');
 
 const options = {
   src: Path.resolve(__dirname, 'src/'),
@@ -20,8 +18,6 @@ const options = {
 const plugins = [
   eslint({}),
   resolve({
-    jsnext: true,
-    main: true,
     browser: true
   }),
   commonjs({
@@ -40,7 +36,7 @@ Fs.removeSync(options.dist);
 
 // Copy all unmodified source files to dist
 
-Fs.copy(options.src, options.dist);
+Fs.copySync(options.src, options.dist);
 
 
 // Copy all other required files to dist
@@ -61,25 +57,33 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
   const format = 'umd';
 
   const build = Rollup.rollup({ input, plugins })
-    .then((bundle) =>
-      bundle.write({
-        moduleName,
-        format,
-        exports: fileName === 'index.js' ? 'named' : 'default',
-        dest: `${options.dist}/es5/${fileName}`
-      }));
+    .then(bundle => bundle.write({
+      name: moduleName,
+      format,
+      exports: fileName === 'index.js' ? 'named' : 'default',
+      file: `${options.dist}/es5/${fileName.replace('.js', '.full.js')}`
+    }));
 
-  const minifiedBuild =
-    Rollup.rollup({
-      input,
-      plugins: [...plugins, uglify({})]
-    }).then((bundle) => {
-      bundle.write({
-        moduleName,
-        format,
-        dest: `${options.dist}/es5/${fileName.replace('.js', '.min.js')}`
-      });
+  // NOTE: minified files will as defa
+  const minifiedBuild = Rollup.rollup({
+    input,
+    plugins: [...plugins, uglify({})]
+  }).then(async(bundle) => {
+    // NOTE: Previosuly full version was saved as `name.js` and minigied as `name.min.js`
+    // That have been updated to serve minified version by default with `name.js` and full version
+    // with `name.full.js`. (keeping .min to be backward compatible)
+    await bundle.write({
+      name: moduleName,
+      format,
+      file: `${options.dist}/es5/${fileName.replace('.js', '.min.js')}`
     });
+
+    return bundle.write({
+      name: moduleName,
+      format,
+      file: `${options.dist}/es5/${fileName}`
+    });
+  });
 
   // Rollup fails if we don't build one at the time;
   Promise.all([build, minifiedBuild]).then(() => bundler(idx + 1));
