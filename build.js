@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 const Path = require('path');
-const Fs = require('node-fs-extra');
+const Fs = require('fs-extra');
 const Rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
