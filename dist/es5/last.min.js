@@ -1,0 +1,1 @@
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):((e=e||self).last=e.last||{},e.last.js=t())}(this,function(){"use strict";return function(e,t){var n=Array.isArray(e)?e.length:0;if(n){if("function"!=typeof t)return e[n-1];for(;--n;)if(t(e[n]))return e[n]}}});

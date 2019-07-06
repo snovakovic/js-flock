@@ -36,7 +36,7 @@ Fs.removeSync(options.dist);
 
 // Copy all unmodified source files to dist
 
-Fs.copy(options.src, options.dist);
+Fs.copySync(options.src, options.dist);
 
 
 // Copy all other required files to dist
