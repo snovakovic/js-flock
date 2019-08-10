@@ -89,6 +89,8 @@ async function testModules(modules) {
   const arr = [1, 2, 4];
   modules.empty(arr);
   assert.equal(arr.length, 0);
+  console.log('empty: SUCCESS');
+
 
   // rerun
   let counter = 0;
@@ -99,6 +101,17 @@ async function testModules(modules) {
     .start();
 
   setTimeout(() => assert.equal(2, 2), 25);
+
+  setTimeout(() => {
+    assert.equal(counter, 2);
+    console.log('rerun: SUCCESS');
+  }, 25);
+
+  // Number iterator
+  const numberIterator = new modules.NumberIterator();
+  assert.equal(numberIterator.next(), 1);
+
+  console.log('numberIterator: SUCCESS');
 }
 
 function run(err) {
