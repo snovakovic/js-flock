@@ -9,6 +9,7 @@ module.exports = {
   delay: require('./delay'),
   empty: require('./empty'),
   last: require('./last'),
+  NumberIterator: require('./NumberIterator'),
   promiseAll: require('./promiseAll'),
   promisify: require('./promisify'),
   rerun: require('./rerun'),

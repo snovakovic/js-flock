@@ -180,6 +180,45 @@
     return undefined;
   };
 
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+  // >>> PUBLIC <<<
+  var NumberIterator_1 =
+  /*#__PURE__*/
+  function () {
+    function NumberIterator() {
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          startFrom = _ref.startFrom;
+
+      _classCallCheck(this, NumberIterator);
+
+      this._currentNumber = Number(startFrom) || 0;
+    }
+
+    _createClass(NumberIterator, [{
+      key: "next",
+      value: function next() {
+        if (this._currentNumber >= Number.MAX_SAFE_INTEGER) {
+          throw Error('Number iterator exhausted');
+        }
+
+        this._currentNumber++;
+        return this._currentNumber;
+      }
+    }, {
+      key: "current",
+      value: function current() {
+        return this._currentNumber;
+      }
+    }]);
+
+    return NumberIterator;
+  }();
+
   // >>> PUBLIC <<<
   var promiseAll = function promiseAll(objOrArray) {
     if (Array.isArray(objOrArray)) {
@@ -719,6 +758,7 @@
     delay: delay,
     empty: empty,
     last: last,
+    NumberIterator: NumberIterator_1,
     promiseAll: promiseAll,
     promisify: promisify_1,
     rerun: rerun,
@@ -734,14 +774,16 @@
   var src_5 = src.delay;
   var src_6 = src.empty;
   var src_7 = src.last;
-  var src_8 = src.promiseAll;
-  var src_9 = src.promisify;
-  var src_10 = src.rerun;
-  var src_11 = src.singular;
-  var src_12 = src.sort;
-  var src_13 = src.toEnum;
-  var src_14 = src.waitFor;
+  var src_8 = src.NumberIterator;
+  var src_9 = src.promiseAll;
+  var src_10 = src.promisify;
+  var src_11 = src.rerun;
+  var src_12 = src.singular;
+  var src_13 = src.sort;
+  var src_14 = src.toEnum;
+  var src_15 = src.waitFor;
 
+  exports.NumberIterator = src_8;
   exports.collar = src_1;
   exports.deepFreeze = src_2;
   exports.deepPreventExtensions = src_3;
@@ -750,13 +792,13 @@
   exports.delay = src_5;
   exports.empty = src_6;
   exports.last = src_7;
-  exports.promiseAll = src_8;
-  exports.promisify = src_9;
-  exports.rerun = src_10;
-  exports.singular = src_11;
-  exports.sort = src_12;
-  exports.toEnum = src_13;
-  exports.waitFor = src_14;
+  exports.promiseAll = src_9;
+  exports.promisify = src_10;
+  exports.rerun = src_11;
+  exports.singular = src_12;
+  exports.sort = src_13;
+  exports.toEnum = src_14;
+  exports.waitFor = src_15;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

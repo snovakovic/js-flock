@@ -15,7 +15,7 @@ Collection of neat modular utilities for bumping up development in NODE and Brow
 
 ## Including library
 
-Library is modular so you can include only modules that you need/use (recommended way of using library). **By default unmodified ES6 code is loaded**, optionally we can include transpiled ES5 code (recommended for browser environment).
+Library is modular so you can include only modules that you need/use (recommended way of using library). **By default unmodified ES6 code is loaded**, optionally you can include transpiled ES5 code (recommended for browser environment).
 Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/) and can be loaded in Browser as CommonJs, AMD or as global var.
 
 ```javascript
@@ -23,13 +23,13 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
   // In same way we can include any other library module e.g ('js-flock/toEnum', 'js-flock/deepFreeze'...)
   const sort = require('js-flock/sort');
 
-  // Load transpiled ES5 sort module (recommended for browser).
+  // Load transpiled/minified ES5 sort module (recommended for browser).
   const sort = require('js-flock/es5/sort');
 
   // Load whole unmodified ES6 library
   const jsFlock = require('js-flock');
 
-  // Load whole transpiled ES5 library
+  // Load whole transpiled/minified ES5 library
   // Note recommended in browser as bundle can be larger than we need
   const jsFlock = require('js-flock/es5');
 ```
