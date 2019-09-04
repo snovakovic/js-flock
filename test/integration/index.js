@@ -11,8 +11,8 @@ const { exec } = require('child_process');
 
 async function testModules(modules) {
   // castBoolean
-  assert.isTrue(modules.castBoolean('true'));
-  assert.isFalse(modules.castBoolean('foo'));
+  assert.equal(modules.castBoolean('true'), true);
+  assert.equal(modules.castBoolean('foo'), false);
 
   console.log('castBoolean: SUCCESS');
 

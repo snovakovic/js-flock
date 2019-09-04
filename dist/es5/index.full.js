@@ -4,6 +4,15 @@
   (global = global || self, factory(global['js-flock'] = {}));
 }(this, function (exports) { 'use strict';
 
+  // >>> PUBLIC <<<
+
+  /**
+   * Cast any value to boolean value
+   */
+  var castBoolean = function castBoolean(val) {
+    return val === true || val === 'true';
+  };
+
   // >>> INTERNALS <<<
   var REJECTION_REASON = Object.freeze({
     isStrangled: true,
@@ -751,6 +760,7 @@
 
   var src = {
     /* eslint-disable global-require */
+    castBoolean: castBoolean,
     collar: collar,
     deepFreeze: deepFreeze,
     deepPreventExtensions: deepPreventExtensions,
@@ -767,38 +777,40 @@
     toEnum: toEnum,
     waitFor: waitFor
   };
-  var src_1 = src.collar;
-  var src_2 = src.deepFreeze;
-  var src_3 = src.deepPreventExtensions;
-  var src_4 = src.deepSeal;
-  var src_5 = src.delay;
-  var src_6 = src.empty;
-  var src_7 = src.last;
-  var src_8 = src.NumberIterator;
-  var src_9 = src.promiseAll;
-  var src_10 = src.promisify;
-  var src_11 = src.rerun;
-  var src_12 = src.singular;
-  var src_13 = src.sort;
-  var src_14 = src.toEnum;
-  var src_15 = src.waitFor;
+  var src_1 = src.castBoolean;
+  var src_2 = src.collar;
+  var src_3 = src.deepFreeze;
+  var src_4 = src.deepPreventExtensions;
+  var src_5 = src.deepSeal;
+  var src_6 = src.delay;
+  var src_7 = src.empty;
+  var src_8 = src.last;
+  var src_9 = src.NumberIterator;
+  var src_10 = src.promiseAll;
+  var src_11 = src.promisify;
+  var src_12 = src.rerun;
+  var src_13 = src.singular;
+  var src_14 = src.sort;
+  var src_15 = src.toEnum;
+  var src_16 = src.waitFor;
 
-  exports.NumberIterator = src_8;
-  exports.collar = src_1;
-  exports.deepFreeze = src_2;
-  exports.deepPreventExtensions = src_3;
-  exports.deepSeal = src_4;
+  exports.NumberIterator = src_9;
+  exports.castBoolean = src_1;
+  exports.collar = src_2;
+  exports.deepFreeze = src_3;
+  exports.deepPreventExtensions = src_4;
+  exports.deepSeal = src_5;
   exports.default = src;
-  exports.delay = src_5;
-  exports.empty = src_6;
-  exports.last = src_7;
-  exports.promiseAll = src_9;
-  exports.promisify = src_10;
-  exports.rerun = src_11;
-  exports.singular = src_12;
-  exports.sort = src_13;
-  exports.toEnum = src_14;
-  exports.waitFor = src_15;
+  exports.delay = src_6;
+  exports.empty = src_7;
+  exports.last = src_8;
+  exports.promiseAll = src_10;
+  exports.promisify = src_11;
+  exports.rerun = src_12;
+  exports.singular = src_13;
+  exports.sort = src_14;
+  exports.toEnum = src_15;
+  exports.waitFor = src_16;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
