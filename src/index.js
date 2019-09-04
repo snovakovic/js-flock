@@ -2,6 +2,7 @@
 
 module.exports = {
   /* eslint-disable global-require */
+  castBoolean: require('./castBoolean'),
   collar: require('./collar'),
   deepFreeze: require('./deepFreeze'),
   deepPreventExtensions: require('./deepPreventExtensions'),

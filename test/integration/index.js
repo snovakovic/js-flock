@@ -10,6 +10,12 @@ const { exec } = require('child_process');
 
 
 async function testModules(modules) {
+  // castBoolean
+  assert.isTrue(modules.castBoolean('true'));
+  assert.isFalse(modules.castBoolean('foo'));
+
+  console.log('castBoolean: SUCCESS');
+
   // collar
   modules.collar(Promise.resolve('test'), 5)
     .then((response) => {
