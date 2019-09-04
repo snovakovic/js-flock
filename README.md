@@ -40,6 +40,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 - [last](#last)
 - [empty](#empty)
 - [numberIterator](#numberiterator)
+- [castBoolean](#castboolean)
 - [toEnum](#toenum)
 - [singular](#singular)
 - [waitFor](#waitfor)
@@ -160,6 +161,22 @@ numberIterator2.next() // => 11
 
 If iterator reaches `Number.MAX_SAFE_INTEGER` the iterator exhausted error will be thrown on next iteration call.
 
+### castBoolean
+
+Cast any value to boolean value. castBoolean will return true for true or "true" values
+while any other value will be evaluated to false.
+
+##### since: v3.11.0
+
+````javascript
+const castBoolean = require('js-flock/castBoolean');
+
+castBoolean(true); // => true
+castBoolean('true'); // => true
+
+castBoolean(undefined) // => false
+castBoolean('foo') // => false
+````
 ### toEnum
 
 Convert object or list of strings to enum representation.
