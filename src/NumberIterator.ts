@@ -1,7 +1,9 @@
 // >>> PUBLIC <<<
 
-module.exports = class NumberIterator {
-  constructor({ startFrom } = {}) {
+export default class NumberIterator {
+  private _currentNumber:number;
+
+  constructor({ startFrom } = { startFrom: 0 }) {
     this._currentNumber = Number(startFrom) || 0;
   }
 
@@ -17,4 +19,4 @@ module.exports = class NumberIterator {
   current() {
     return this._currentNumber;
   }
-};
+}
