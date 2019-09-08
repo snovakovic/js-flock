@@ -7,10 +7,13 @@ const REJECTION_REASON = Object.freeze({
 
 // >>> PUBLIC <<<
 
-module.exports = function(promise, ttl = 5000) {
-  const restraint = new Promise((resolve, reject) => {
+export default function<T>(
+  promise:Promise<T>,
+  ttl = 5000
+) {
+  const restraint = new Promise((_, reject) => {
     setTimeout(reject, ttl, REJECTION_REASON);
-  });
+  }) as Promise<never>;
 
   return Promise.race([restraint, promise]);
 };
