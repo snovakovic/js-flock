@@ -1,5 +1,6 @@
-// >>> PUBLIC <<<
-
+/**
+ * Iterate numbers in sequence by calling next on NumberIterator instance
+ */
 export default class NumberIterator {
   private _currentNumber:number;
 

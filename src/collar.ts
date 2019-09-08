@@ -7,6 +7,9 @@ const REJECTION_REASON = Object.freeze({
 
 // >>> PUBLIC <<<
 
+/**
+ * Reject promise if not resolved under provided time
+ */
 export default function<T>(
   promise:Promise<T>,
   ttl = 5000

@@ -1,5 +1,3 @@
-// >>> PUBLIC <<<
-
 /**
  * Cast any value to boolean value
  */

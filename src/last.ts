@@ -1,5 +1,7 @@
-// >>> PUBLIC <<<
-
+/**
+ * Return last element of array. If predicate is provided return last element
+ * for which predicate returns truthy value
+ */
 function a<T>(
   arr:T[],
   predicate?:(item:T) => boolean,

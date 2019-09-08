@@ -1,8 +1,5 @@
-// >>> PUBLIC <<<
-
 /**
- * Remove all items from array
- * @param {Array[]} props - 1 or more arrays to empty out
+ * Remove all items from provided array/arrays
  */
 export default function(...props:any[][]):void {
   props.forEach((arr:any) => {
