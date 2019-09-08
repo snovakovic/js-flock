@@ -1,1 +1,0 @@
-!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):((e=e||self).castBoolean=e.castBoolean||{},e.castBoolean.js=t())}(this,function(){"use strict";return function(e){return!0===e||"true"===e}});
