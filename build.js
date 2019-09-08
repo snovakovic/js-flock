@@ -6,17 +6,15 @@ const Rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
 const resolve = require('rollup-plugin-node-resolve');
-const { eslint } = require('rollup-plugin-eslint');
 const { uglify } = require('rollup-plugin-uglify');
 
 const options = {
-  src: Path.resolve(__dirname, 'src/'),
+  src: Path.resolve(__dirname, 'ts-build-temp/'),
   dist: Path.resolve(__dirname, 'dist/'),
   mandatoryFiles: ['README.md', 'publish.js', '.npmignore', 'package.json']
 };
 
 const plugins = [
-  eslint({}),
   resolve({
     browser: true
   }),
@@ -69,15 +67,6 @@ const modules = Fs.readdirSync(options.src).filter((file) => file.includes('.js'
     input,
     plugins: [...plugins, uglify({})]
   }).then(async(bundle) => {
-    // NOTE: Previosuly full version was saved as `name.js` and minigied as `name.min.js`
-    // That have been updated to serve minified version by default with `name.js` and full version
-    // with `name.full.js`. (keeping .min to be backward compatible)
-    await bundle.write({
-      name: moduleName,
-      format,
-      file: `${options.dist}/es5/${fileName.replace('.js', '.min.js')}`
-    });
-
     return bundle.write({
       name: moduleName,
       format,
