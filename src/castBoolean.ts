@@ -3,6 +3,6 @@
 /**
  * Cast any value to boolean value
  */
-module.exports = function(val) {
+export default function(val:any):boolean {
   return val === true || val === 'true';
 };
