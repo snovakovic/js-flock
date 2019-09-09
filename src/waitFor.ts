@@ -8,7 +8,7 @@ interface IWaitForOptions {
 
 // >>> PUBLIC <<<
 
-module.exports = function<T>(
+export default function<T>(
   waitForChecker:(abort:() => void) => T,
   options:IWaitForOptions = {},
 ):Promise<T> {
