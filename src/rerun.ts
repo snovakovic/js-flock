@@ -1,5 +1,4 @@
 import assertTypeFactory from './internals/assertType';
-
 const assertType = assertTypeFactory('rerun');
 
 interface IStopHandler {
