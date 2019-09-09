@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "commonjs",
+    "target": "esnext",
+    "module": "esnext",
     "declaration": true,
-    "outDir": "./dist",
+    "outDir": "./ts-build-temp",
     "strict": true
   },
   "include": ["src"],

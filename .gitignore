@@ -1,5 +1,6 @@
 node_modules/
 coverage/
 dist/publish.js
+ts-build-temp/
 *.log
 .vscode
