@@ -11,7 +11,7 @@
  * isNativeObject(Object.prototype); \\ => true
  * isNativeObject(Number.prototype); \\ => true
  */
-module.exports = function(obj) {
+export default function(obj:any):boolean {
   return !!(obj &&
     (typeof obj === 'object' || typeof obj === 'function') &&
     Object.prototype.hasOwnProperty.call(obj, 'constructor') &&

@@ -1,6 +1,6 @@
 // >>> PUBLIC <<<
 
-module.exports = (moduleName) => (type, val) => {
+export default (moduleName:string) => (type:string, val:any) => {
   const tag = Object.prototype.toString.call(val);
   // Match both [object Function] and [object AsyncFunction]
   const throwError = type === 'Function'

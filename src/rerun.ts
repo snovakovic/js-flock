@@ -1,20 +1,30 @@
-const assertType = require('./internals/assertType')('rerun');
+import assertTypeFactory from './internals/assertType';
+
+const assertType = assertTypeFactory('rerun');
+
+interface IStopHandler {
+  (numberOfCalls:number):void
+}
+
+interface IAsLongAsHandler {
+  (numberOfCalls:number):boolean
+}
 
 // >>> PUBLIC <<<
 
-module.exports = function(fn) {
+export default function(fn:Function) {
   assertType('Function', fn);
 
-  let count = 0;
-  let stop;
-  let stopHandler;
-  let timeout;
-  let asLongAs;
+  let numberOfCalls = 0;
+  let stop:boolean;
+  let timeout:number;
+  let stopHandler:IStopHandler;
+  let asLongAs:IAsLongAsHandler;
 
   function run() {
-    const shouldRun = !stop && (!asLongAs || asLongAs(count));
+    const shouldRun = !stop && (!asLongAs || asLongAs(numberOfCalls));
     if (shouldRun) {
-      count += 1;
+      numberOfCalls += 1;
       const shouldContinue = fn() !== false;
 
       if (shouldContinue) {
@@ -25,12 +35,12 @@ module.exports = function(fn) {
     }
 
     if (stopHandler) {
-      stopHandler(count);
+      stopHandler(numberOfCalls);
     }
   }
 
   return {
-    every(timeoutInMs) {
+    every(timeoutInMs:number) {
       timeoutInMs = Number(timeoutInMs);
       assertType('Number', timeoutInMs);
 
@@ -43,7 +53,7 @@ module.exports = function(fn) {
       timeout = timeoutInMs;
       return this;
     },
-    asLongAs(condition) {
+    asLongAs(condition:IAsLongAsHandler) {
       assertType('Function', condition);
       asLongAs = condition;
       return this;
@@ -61,7 +71,7 @@ module.exports = function(fn) {
       stop = true;
       return this;
     },
-    onStop(onStop) {
+    onStop(onStop:IStopHandler) {
       assertType('Function', onStop);
       stopHandler = onStop;
       return this;
