@@ -1,6 +1,5 @@
-// >>> PUBLIC <<<
-
-module.exports = function(objOrArray) {
+function promiseAll<T extends { [key:string]: any }>(objOrArray:T):Promise<{ [key in keyof T]:any }>;
+function promiseAll<T> (objOrArray: (T | PromiseLike<T>)[]):Promise<T[]> {
   if (Array.isArray(objOrArray)) {
     return Promise.all(objOrArray);
   }
@@ -11,7 +10,7 @@ module.exports = function(objOrArray) {
   return Promise
     .all(promises)
     .then((resolvedPromises) => {
-      const objResponse = {};
+      const objResponse = {} as any;
 
       resolvedPromises
         .forEach((resolvedPromise, idx) => {
@@ -21,3 +20,5 @@ module.exports = function(objOrArray) {
       return objResponse;
     });
 };
+
+export default promiseAll;

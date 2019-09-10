@@ -2,7 +2,7 @@
  * Return last element of array. If predicate is provided return last element
  * for which predicate returns truthy value
  */
-function a<T>(
+export default function<T>(
   arr:T[],
   predicate?:(item:T) => boolean,
 ):T|undefined {
