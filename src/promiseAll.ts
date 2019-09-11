@@ -1,4 +1,6 @@
-function promiseAll<T extends { [key:string]: any }>(objOrArray:T):Promise<{ [key in keyof T]:any }>;
+import { IDictionary } from "./internals/types";
+
+function promiseAll<T extends IDictionary>(objOrArray:T):Promise<{ [key in keyof T]:any }>;
 function promiseAll<T> (objOrArray: (T | PromiseLike<T>)[]):Promise<T[]> {
   if (Array.isArray(objOrArray)) {
     return Promise.all(objOrArray);

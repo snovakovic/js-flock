@@ -1,8 +1,10 @@
+import { IDictionary } from "./internals/types";
+
 // >>> INTERNALS <<<
 
-const castObject = function(args) {
+const ensureObject = function(args:any[]|IDictionary) {
   if (Array.isArray(args)) {
-    const obj = {};
+    const obj = {} as any;
     args.forEach((key) => { obj[key] = Symbol(key); });
     return obj;
   }
@@ -12,21 +14,36 @@ const castObject = function(args) {
     : {};
 };
 
-const isClass = function(input) {
+const isClass = function(input:any) {
   return /^class /.test(Function.prototype.toString.call(input));
 };
 
-const hardBindFunction = function(obj, key) {
+const hardBindFunction = function(obj:IDictionary, key:string) {
   const prop = obj[key];
   if (typeof prop === 'function' && !isClass(prop)) {
     obj[key] = prop.bind(obj);
   }
 };
 
-// >>> PUBLIC <<<
+interface IEnumStandardHelpers {
+  keys():string[],
+  values():string[],
+  haveKey(key:any):boolean,
+  exists(value:any):boolean,
+}
 
-module.exports = function(arg) {
-  const enu = castObject(arg);
+type IEnumReturnType<T> = (
+  T extends string[]
+    ? { [key in T[number]]: string }
+    : T
+) & IEnumStandardHelpers;
+
+// >>> PUBLIC <<
+
+
+
+function toEnum<T extends IDictionary<any>|string[]>(arg:T):IEnumReturnType<T> {
+  const enu = ensureObject(arg);
   const keys = Object.keys(enu).filter((key) => typeof enu[key] !== 'function');
   const values = keys.map((key) => enu[key]);
 
@@ -41,8 +58,8 @@ module.exports = function(arg) {
   // Lazy load state
 
   const state = {
-    keySet: undefined,
-    valueSet: undefined
+    keySet: null as any as Set<any>,
+    valueSet: undefined as any as Set<any>,
   };
 
   // Append standard enum helpers
@@ -50,15 +67,17 @@ module.exports = function(arg) {
   enu.keys = () => keys;
   enu.values = () => values;
 
-  enu.haveKey = (key) => {
+  enu.haveKey = (key:string) => {
     state.keySet = state.keySet || new Set(keys);
     return state.keySet.has(key);
   };
 
-  enu.exists = (value) => {
+  enu.exists = (value:string) => {
     state.valueSet = state.valueSet || new Set(values);
     return state.valueSet.has(value);
   };
 
   return Object.freeze(enu);
 };
+
+export default toEnum;
