@@ -40,8 +40,6 @@ type IEnumReturnType<T> = (
 
 // >>> PUBLIC <<
 
-
-
 function toEnum<T extends IDictionary<any>|string[]>(arg:T):IEnumReturnType<T> {
   const enu = ensureObject(arg);
   const keys = Object.keys(enu).filter((key) => typeof enu[key] !== 'function');
