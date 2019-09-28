@@ -1,4 +1,4 @@
-const deep = require('./internals/deep');
+import { deep, IDeepActionOptions } from './internals/deep'
 
 // >>> PUBLIC <<<
 
@@ -11,4 +11,4 @@ const deep = require('./internals/deep');
  *
  * @returns {Object} Initial object with applied Object.freeze
  */
-module.exports = (obj, options) => deep('freeze', obj, options);
+export default <T>(obj:T, options:IDeepActionOptions<T>) => deep('freeze', obj, options);

@@ -1,4 +1,4 @@
-const deep = require('./internals/deep');
+import { deep, IDeepActionOptions } from './internals/deep'
 
 // >>> PUBLIC <<<
 
@@ -11,4 +11,4 @@ const deep = require('./internals/deep');
  *
  * @returns {Object} Initial object with applied Object.seal
  */
-module.exports = (obj, options) => deep('seal', obj, options);
+export default <T>(obj:T, options:IDeepActionOptions<T>) => deep('seal', obj, options);

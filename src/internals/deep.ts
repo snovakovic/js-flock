@@ -1,4 +1,11 @@
-const isNativeObject = require('./isNativeObject');
+import isNativeObject from './isNativeObject';
+
+// >>> INTERFACES <<<
+
+export interface IDeepActionOptions<T> {
+  proto?:boolean,
+  exclude?(key:string, obj:T):boolean,
+}
 
 // >>> PUBLIC <<<
 
@@ -13,27 +20,33 @@ const isNativeObject = require('./isNativeObject');
  * @param {Set} [processed=new Set()] - Used internally to prevent circular references
  * @returns {Object} Initial object with aplied action(freeze/seel/preventExtension) on it
  */
-module.exports = function deep(action, obj, options, processed = new Set()) {
+export function deep<T>(
+  action: 'freeze' | 'seal' | 'preventExtensions',
+  obj:T,
+  options:IDeepActionOptions<T>,
+  processed:Set<any> = new Set(),
+):T {
   // Prevent circular reference
   if (processed.has(obj)) return obj;
 
   options = options || {};
 
-  Object[action](obj);
+  (Object as any)[action](obj);
   processed.add(obj);
 
-  // Prevent TypeError: 'caller' and 'arguments' are restricted function properties and cannot be accessed in this context
-  if (obj === Function.prototype) return obj;
+  // Prevent TypeError: 'caller' and 'arguments' are restricted function
+  // properties and cannot be accessed in this context
+  if (obj as any === Function.prototype) return obj;
 
   let ownKeys = Object.getOwnPropertyNames(obj);
 
   // Not supported in all enviroments
   if (Object.getOwnPropertySymbols) {
-    ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(obj));
+    ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(obj) as any);
   }
 
   ownKeys.forEach((key) => {
-    const prop = obj[key];
+    const prop = (obj as any)[key];
     if (prop &&
       (typeof prop === 'object' || typeof prop === 'function') &&
       (typeof ArrayBuffer !== 'undefined' && !ArrayBuffer.isView(prop)) && // Prevent issue with freezing buffers
