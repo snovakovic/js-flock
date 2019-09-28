@@ -3,11 +3,11 @@ const isNativeObject = require('./internals/isNativeObject');
 
 // >>> INTERFACES <<<
 
-interface IPromisifyOptions {
+export interface IPromisifyOptions {
   multiArgs?:boolean,
 }
 
-interface IPromisifyAllOptions extends IPromisifyOptions {
+export interface IPromisifyAllOptions extends IPromisifyOptions {
   suffix?:string,
   proto?:boolean,
   exclude?:string[],
@@ -137,4 +137,4 @@ promisify.all = (obj:any, options:IPromisifyAllOptions) => {
 
 // >>> PUBLIC <<<
 
-module.exports = promisify;
+export default promisify;
