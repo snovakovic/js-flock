@@ -31,8 +31,9 @@ const sorter = function<T>(direction:number, a:T, b:T) {
 
 /**
  * stringSorter does not support nested property.
- * For nested properties or value transformation (e.g toLowerCase) we should use functionSorter
- * Based on benchmark testing using stringSorter is bit faster then using equivalent function sorter
+ * For nested properties or value transformation (e.g toLowerCase) we should
+ * use functionSorter. Based on benchmark testing using stringSorter is bit faster
+ * then using equivalent function sorter
  * @example sort(users).asc('firstName')
  */
 const stringSorter = function(

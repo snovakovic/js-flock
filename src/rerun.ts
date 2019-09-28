@@ -28,7 +28,6 @@ export default function(fn:Function) {
 
       if (shouldContinue) {
         setTimeout(run, timeout);
-        // Don't continue to stop handler as running is still in progress if we are her
         return;
       }
     }
