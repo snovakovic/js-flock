@@ -55,7 +55,6 @@ const multiPropStringSorter = function(sortBy, thenBy, depth, direction, compare
  * @example sort(users).asc(['firstName', 'lastName'])
  */
 const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
-
   const sortBy = sortByObj.asc || sortByObj.desc;
   const direction = sortByObj.asc ? 1 : -1;
   const comparer = sortByObj.comparer ? compareSorter(sortByObj.comparer) : sorter;
@@ -120,7 +119,7 @@ const sort = function(direction, ctx, sortBy, comparer) {
     _sorter = functionSorter.bind(undefined, direction, sortBy, comparer);
   } else {
     _sorter = getMultiPropertySorter(sortBy[0])
-    .bind(undefined, sortBy.shift(), sortBy, 0, direction, comparer);
+      .bind(undefined, sortBy.shift(), sortBy, 0, direction, comparer);
   }
 
   return ctx.sort(_sorter);
