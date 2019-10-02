@@ -215,6 +215,14 @@ describe('sort', () => {
     );
   });
 
+  it('Should sort object using single sort with a comparer', () => {
+    sort(multiPropArray).by([
+      { asc: p => p.unit, comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare }
+    ]);
+
+    assertOrder(['A1', 'A01', 'A10', 'B3', 'C2'], idx => multiPropArray[idx].unit);
+  });
+
   it('Should sort object using multiple sorts and a comparer', () => {
     sort(multiPropArray).by([
       { desc: p => p.name },
