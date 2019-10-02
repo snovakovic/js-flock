@@ -11,28 +11,27 @@ const sorter = function(direction, a, b) {
   return direction;
 };
 
+const compareSorter = function(comparer) {
+  return function(direction, a, b) {
+    return comparer(a, b) * direction;
+  };
+};
+
 /**
  * stringSorter does not support nested property.
  * For nested properties or value transformation (e.g toLowerCase) we should use functionSorter
  * Based on benchmark testing using stringSorter is bit faster then using equivalent function sorter
  * @example sort(users).asc('firstName')
  */
-const stringSorter = function(direction, sortBy, a, b) {
-  return sorter(direction, a[sortBy], b[sortBy]);
+const stringSorter = function(direction, sortBy, comparer, a, b) {
+  return comparer(direction, a[sortBy], b[sortBy]);
 };
 
 /**
  * @example sort(users).asc(p => p.address.city)
  */
-const functionSorter = function(direction, sortBy, a, b) {
-  return sorter(direction, sortBy(a), sortBy(b));
-};
-
-/**
- * @example sort(users).asc(new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});y)
- */
-const collatorSorter = function(direction, collator, a, b) {
-  return collator.compare(a, b) * direction;
+const functionSorter = function(direction, sortBy, comparer, a, b) {
+  return comparer(direction, sortBy(a), sortBy(b));
 };
 
 /**
@@ -100,7 +99,7 @@ const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, 
 /**
  * Pick sorter based on provided sortBy value
  */
-const sort = function(direction, ctx, sortBy) {
+const sort = function(direction, ctx, sortBy, comparer) {
   if (!Array.isArray(ctx)) return ctx;
 
   // Unwrap sortBy if array with only 1 value
@@ -111,16 +110,14 @@ const sort = function(direction, ctx, sortBy) {
   let _sorter;
 
   if (!sortBy) {
-    _sorter = sorter.bind(undefined, direction);
+    _sorter = comparer.bind(undefined, direction);
   } else if (typeof sortBy === 'string') {
-    _sorter = stringSorter.bind(undefined, direction, sortBy);
+    _sorter = stringSorter.bind(undefined, direction, sortBy, comparer);
   } else if (typeof sortBy === 'function') {
-    _sorter = functionSorter.bind(undefined, direction, sortBy);
-  } else if (typeof sortBy === 'object' && Intl && sortBy instanceof Intl.Collator) {
-    _sorter = collatorSorter.bind(undefined, direction, sortBy);
+    _sorter = functionSorter.bind(undefined, direction, sortBy, comparer);
   } else {
     _sorter = getMultiPropertySorter(sortBy[0])
-      .bind(undefined, sortBy.shift(), sortBy, 0, direction);
+    .bind(undefined, sortBy.shift(), sortBy, 0, direction);
   }
 
   return ctx.sort(_sorter);
@@ -130,8 +127,8 @@ const sort = function(direction, ctx, sortBy) {
 
 module.exports = function(ctx) {
   return {
-    asc: (sortBy) => sort(1, ctx, sortBy),
-    desc: (sortBy) => sort(-1, ctx, sortBy),
+    asc: (sortBy) => sort(1, ctx, sortBy, sorter),
+    desc: (sortBy) => sort(-1, ctx, sortBy, sorter),
     by: (sortBy) => {
       if (!Array.isArray(ctx)) return ctx;
 
@@ -148,7 +145,7 @@ module.exports = function(ctx) {
           throw Error(`sort: Invalid 'by' sorting configuration.
             Expecting object with 'asc' or 'desc' key`);
         }
-        return sort(direction, ctx, sortOnProp);
+        return sort(direction, ctx, sortOnProp, sortBy[0].comparer ? compareSorter(sortBy[0].comparer) : sorter);
       }
 
       const _sorter = multiPropObjectSorter.bind(undefined, sortBy.shift(), sortBy, 0, undefined);

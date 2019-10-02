@@ -20,15 +20,18 @@ describe('sort', () => {
     persons = [{
       name: 'last',
       dob: new Date(1987, 14, 11),
-      address: { code: 3 }
+      address: { code: 3 },
+      unit: 'A10'
     }, {
       name: 'FIRST',
       dob: new Date(1987, 14, 9),
-      address: {}
+      address: {},
+      unit: 'B10'
     }, {
       name: 'In the middle',
       dob: new Date(1987, 14, 10),
-      address: { code: 1 }
+      address: { code: 1 },
+      unit: 'A1'
     }];
 
     multiPropArray = [{
@@ -168,13 +171,13 @@ describe('sort', () => {
 
   it('Should throw invalid usage of by sorter exception', () => {
     expect(() => sort(multiPropArray).by('name'))
-      .to.throw(Error);
+    .to.throw(Error);
 
     expect(() => sort(multiPropArray).by([{ asci: 'name' }]))
-      .to.throw(Error);
+    .to.throw(Error);
 
     expect(() => sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }]))
-      .to.throw(Error);
+    .to.throw(Error);
   });
 
   it('Should sort ascending with by on 1 property', () => {
@@ -199,14 +202,25 @@ describe('sort', () => {
     );
   });
 
-  it('Should sort using a collator', () => {
+  it('Should sort flat array using a comparer', () => {
     sort(flatNaturalArray).by([
-      { asc: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }) }
+      { asc: o=>o, comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare }
     ]);
 
     assertOrder(
       ['A1', 'A10', 'B2', 'B10'],
       idx => flatNaturalArray[idx],
+    );
+  });
+
+  it('Should sort object using a comparer', () => {
+    sort(persons).by([
+      { asc: p => p.unit, comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare }
+    ]);
+
+    assertOrder(
+      ['A1', 'A10', 'B10'],
+      idx => persons[idx].unit,
     );
   });
 });
