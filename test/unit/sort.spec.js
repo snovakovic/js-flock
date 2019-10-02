@@ -20,40 +20,42 @@ describe('sort', () => {
     persons = [{
       name: 'last',
       dob: new Date(1987, 14, 11),
-      address: { code: 3 },
-      unit: 'A10'
+      address: { code: 3 }
     }, {
       name: 'FIRST',
       dob: new Date(1987, 14, 9),
-      address: {},
-      unit: 'B10'
+      address: {}
     }, {
       name: 'In the middle',
       dob: new Date(1987, 14, 10),
-      address: { code: 1 },
-      unit: 'A1'
+      address: { code: 1 }
     }];
 
     multiPropArray = [{
       name: 'aa',
       lastName: 'aa',
-      age: 10
+      age: 10,
+      unit: 'A10'
     }, {
       name: 'aa',
       lastName: undefined,
-      age: 8
+      age: 8,
+      unit: 'A1'
     }, {
       name: 'aa',
       lastName: null,
-      age: 9
+      age: 9,
+      unit: 'A01'
     }, {
       name: 'aa',
       lastName: 'bb',
-      age: 11
+      age: 11,
+      unit: 'C2'
     }, {
       name: 'bb',
       lastName: 'aa',
-      age: 6
+      age: 6,
+      unit: 'B3'
     }];
   });
 
@@ -213,14 +215,12 @@ describe('sort', () => {
     );
   });
 
-  it('Should sort object using a comparer', () => {
-    sort(persons).by([
+  it('Should sort object using multiple sorts and a comparer', () => {
+    sort(multiPropArray).by([
+      { desc: p => p.name },
       { asc: p => p.unit, comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare }
     ]);
 
-    assertOrder(
-      ['A1', 'A10', 'B10'],
-      idx => persons[idx].unit,
-    );
+    assertOrder([6, 8, 9, 10, 11], idx => multiPropArray[idx].age);
   });
 });
