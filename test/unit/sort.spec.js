@@ -3,6 +3,7 @@ const sort = require('../../src/sort');
 
 describe('sort', () => {
   let flatArray;
+  let flatNaturalArray;
   let persons;
   let multiPropArray;
 
@@ -14,6 +15,7 @@ describe('sort', () => {
 
   beforeEach(() => {
     flatArray = [1, 5, 3, 2, 4, 5];
+    flatNaturalArray = ['A10', 'A1', 'B10', 'B2'];
 
     persons = [{
       name: 'last',
@@ -194,6 +196,17 @@ describe('sort', () => {
     assertOrder(
       [11, 10, 9, 8, 6],
       idx => multiPropArray[idx].age,
+    );
+  });
+
+  it('Should sort using a collator', () => {
+    sort(flatNaturalArray).by([
+      { asc: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }) }
+    ]);
+
+    assertOrder(
+      ['A1', 'A10', 'B2', 'B10'],
+      idx => flatNaturalArray[idx],
     );
   });
 });
