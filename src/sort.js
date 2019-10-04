@@ -2,7 +2,7 @@
 
 // >>> SORTERS <<<
 
-const sorter = function(direction, a, b) {
+const defaultComparer = function(direction, a, b) {
   if (a === b) return 0;
   if (a < b) return -direction;
   if (a == null) return 1;
@@ -11,46 +11,54 @@ const sorter = function(direction, a, b) {
   return direction;
 };
 
+const customComparerProvider = function(comparer) {
+  return function(direction, a, b) {
+    return comparer(a, b) * direction;
+  };
+};
+
 /**
  * stringSorter does not support nested property.
  * For nested properties or value transformation (e.g toLowerCase) we should use functionSorter
  * Based on benchmark testing using stringSorter is bit faster then using equivalent function sorter
  * @example sort(users).asc('firstName')
  */
-const stringSorter = function(direction, sortBy, a, b) {
-  return sorter(direction, a[sortBy], b[sortBy]);
+const stringSorter = function(direction, sortBy, comparer, a, b) {
+  return comparer(direction, a[sortBy], b[sortBy]);
 };
 
 /**
  * @example sort(users).asc(p => p.address.city)
  */
-const functionSorter = function(direction, sortBy, a, b) {
-  return sorter(direction, sortBy(a), sortBy(b));
+const functionSorter = function(direction, sortBy, comparer, a, b) {
+  return comparer(direction, sortBy(a), sortBy(b));
 };
 
 /**
  * Used when we have sorting by multyple properties and when current sorter is function
  * @example sort(users).asc([p => p.address.city, p => p.firstName])
  */
-const multiPropFunctionSorter = function(sortBy, thenBy, depth, direction, a, b) {
-  return multiPropEqualityHandler(sortBy(a), sortBy(b), thenBy, depth, direction, a, b);
+const multiPropFunctionSorter = function(sortBy, thenBy, depth, direction, comparer, a, b) {
+  return multiPropEqualityHandler(sortBy(a), sortBy(b), thenBy, depth, direction, comparer, a, b);
 };
 
 /**
  * Used when we have sorting by multiple properties and when current sorter is string
  * @example sort(users).asc(['firstName', 'lastName'])
  */
-const multiPropStringSorter = function(sortBy, thenBy, depth, direction, a, b) {
-  return multiPropEqualityHandler(a[sortBy], b[sortBy], thenBy, depth, direction, a, b);
+const multiPropStringSorter = function(sortBy, thenBy, depth, direction, comparer, a, b) {
+  return multiPropEqualityHandler(a[sortBy], b[sortBy], thenBy, depth, direction, comparer, a, b);
 };
 
 /**
  * Used with 'by' sorter when we have sorting in multiple direction
  * @example sort(users).asc(['firstName', 'lastName'])
  */
-const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, a, b) {
+const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
   const sortBy = sortByObj.asc || sortByObj.desc;
   const direction = sortByObj.asc ? 1 : -1;
+  const comparer = sortByObj.comparer ? customComparerProvider(sortByObj.comparer) : defaultComparer;
+
 
   if (!sortBy) {
     throw Error(`sort: Invalid 'by' sorting configuration.
@@ -58,7 +66,7 @@ const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, a, 
   }
 
   const multiSorter = getMultiPropertySorter(sortBy);
-  return multiSorter(sortBy, thenBy, depth, direction, a, b);
+  return multiSorter(sortBy, thenBy, depth, direction, comparer, a, b);
 };
 
 // >>> HELPERS <<<
@@ -78,22 +86,22 @@ const getMultiPropertySorter = function(sortBy) {
   return multiPropObjectSorter;
 };
 
-const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, a, b) {
+const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, comparer, a, b) {
   if (valA === valB || (valA == null && valB == null)) {
     if (thenBy.length > depth) {
       const multiSorter = getMultiPropertySorter(thenBy[depth]);
-      return multiSorter(thenBy[depth], thenBy, depth + 1, direction, a, b);
+      return multiSorter(thenBy[depth], thenBy, depth + 1, direction, comparer, a, b);
     }
     return 0;
   }
 
-  return sorter(direction, valA, valB);
+  return comparer(direction, valA, valB);
 };
 
 /**
  * Pick sorter based on provided sortBy value
  */
-const sort = function(direction, ctx, sortBy) {
+const sort = function(direction, ctx, sortBy, comparer) {
   if (!Array.isArray(ctx)) return ctx;
 
   // Unwrap sortBy if array with only 1 value
@@ -104,14 +112,14 @@ const sort = function(direction, ctx, sortBy) {
   let _sorter;
 
   if (!sortBy) {
-    _sorter = sorter.bind(undefined, direction);
+    _sorter = comparer.bind(undefined, direction);
   } else if (typeof sortBy === 'string') {
-    _sorter = stringSorter.bind(undefined, direction, sortBy);
+    _sorter = stringSorter.bind(undefined, direction, sortBy, comparer);
   } else if (typeof sortBy === 'function') {
-    _sorter = functionSorter.bind(undefined, direction, sortBy);
+    _sorter = functionSorter.bind(undefined, direction, sortBy, comparer);
   } else {
     _sorter = getMultiPropertySorter(sortBy[0])
-      .bind(undefined, sortBy.shift(), sortBy, 0, direction);
+      .bind(undefined, sortBy.shift(), sortBy, 0, direction, comparer);
   }
 
   return ctx.sort(_sorter);
@@ -121,8 +129,8 @@ const sort = function(direction, ctx, sortBy) {
 
 module.exports = function(ctx) {
   return {
-    asc: (sortBy) => sort(1, ctx, sortBy),
-    desc: (sortBy) => sort(-1, ctx, sortBy),
+    asc: (sortBy) => sort(1, ctx, sortBy, defaultComparer),
+    desc: (sortBy) => sort(-1, ctx, sortBy, defaultComparer),
     by: (sortBy) => {
       if (!Array.isArray(ctx)) return ctx;
 
@@ -135,14 +143,15 @@ module.exports = function(ctx) {
       if (sortBy.length === 1) {
         const direction = sortBy[0].asc ? 1 : -1;
         const sortOnProp = sortBy[0].asc || sortBy[0].desc;
+        const comparer = sortBy[0].comparer ? customComparerProvider(sortBy[0].comparer) : defaultComparer;
         if (!sortOnProp) {
           throw Error(`sort: Invalid 'by' sorting configuration.
             Expecting object with 'asc' or 'desc' key`);
         }
-        return sort(direction, ctx, sortOnProp);
+        return sort(direction, ctx, sortOnProp, comparer);
       }
 
-      const _sorter = multiPropObjectSorter.bind(undefined, sortBy.shift(), sortBy, 0, undefined);
+      const _sorter = multiPropObjectSorter.bind(undefined, sortBy.shift(), sortBy, 0, undefined, undefined);
       return ctx.sort(_sorter);
     }
   };

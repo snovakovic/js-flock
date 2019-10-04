@@ -3,6 +3,7 @@ const sort = require('../../src/sort');
 
 describe('sort', () => {
   let flatArray;
+  let flatNaturalArray;
   let persons;
   let multiPropArray;
 
@@ -14,6 +15,7 @@ describe('sort', () => {
 
   beforeEach(() => {
     flatArray = [1, 5, 3, 2, 4, 5];
+    flatNaturalArray = ['A10', 'A1', 'B10', 'B2'];
 
     persons = [{
       name: 'last',
@@ -32,23 +34,28 @@ describe('sort', () => {
     multiPropArray = [{
       name: 'aa',
       lastName: 'aa',
-      age: 10
+      age: 10,
+      unit: 'A10'
     }, {
       name: 'aa',
       lastName: undefined,
-      age: 8
+      age: 8,
+      unit: 'A1'
     }, {
       name: 'aa',
       lastName: null,
-      age: 9
+      age: 9,
+      unit: 'A01'
     }, {
       name: 'aa',
       lastName: 'bb',
-      age: 11
+      age: 11,
+      unit: 'C2'
     }, {
       name: 'bb',
       lastName: 'aa',
-      age: 6
+      age: 6,
+      unit: 'B3'
     }];
   });
 
@@ -166,13 +173,13 @@ describe('sort', () => {
 
   it('Should throw invalid usage of by sorter exception', () => {
     expect(() => sort(multiPropArray).by('name'))
-      .to.throw(Error);
+    .to.throw(Error);
 
     expect(() => sort(multiPropArray).by([{ asci: 'name' }]))
-      .to.throw(Error);
+    .to.throw(Error);
 
     expect(() => sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }]))
-      .to.throw(Error);
+    .to.throw(Error);
   });
 
   it('Should sort ascending with by on 1 property', () => {
@@ -195,5 +202,33 @@ describe('sort', () => {
       [11, 10, 9, 8, 6],
       idx => multiPropArray[idx].age,
     );
+  });
+
+  it('Should sort flat array using a comparer', () => {
+    sort(flatNaturalArray).by([
+      { asc: o => o, comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare }
+    ]);
+
+    assertOrder(
+      ['A1', 'A10', 'B2', 'B10'],
+      idx => flatNaturalArray[idx],
+    );
+  });
+
+  it('Should sort object using single sort with a comparer', () => {
+    sort(multiPropArray).by([
+      { asc: p => p.unit, comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare }
+    ]);
+
+    assertOrder(['A1', 'A01', 'A10', 'B3', 'C2'], idx => multiPropArray[idx].unit);
+  });
+
+  it('Should sort object using multiple sorts and a comparer', () => {
+    sort(multiPropArray).by([
+      { desc: p => p.name },
+      { asc: p => p.unit, comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare }
+    ]);
+
+    assertOrder([6, 8, 9, 10, 11], idx => multiPropArray[idx].age);
   });
 });
