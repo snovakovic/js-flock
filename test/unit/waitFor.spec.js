@@ -1,4 +1,4 @@
-const { expect, assert } = require('chai');
+const { assert } = require('chai');
 const { delay } = require('../utils');
 const waitFor = require('../../src/waitFor');
 
@@ -97,8 +97,8 @@ describe('waitFor', () => {
   it('Should throw error if function is not provided', () => {
     const error = 'waitFor: expected [Function] but got';
 
-    expect(() => waitFor(33).to.throw(TypeError, `${error} [object Number]`));
-    expect(() => waitFor(null)).to.throw(TypeError, `${error} [object Null]`);
+    assert.throws(() => waitFor(33), TypeError, `${error} [object Number]`);
+    assert.throws(() => waitFor(null), TypeError, `${error} [object Null]`);
   });
 
   it('Should timed out with exception', (done) => {
@@ -106,7 +106,8 @@ describe('waitFor', () => {
 
     waitFor(() => condition, { timeout: 5, interval: 2 })
       .catch((err) => {
-        expect(err).to.be.an.instanceOf(Error).with.property('message', 'Timed out!');
+        assert.instanceOf(err, Error);
+        assert.equal(err.message, 'Timed out!');
         done();
       });
 

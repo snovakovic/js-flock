@@ -1,7 +1,7 @@
 const { assert } = require('chai');
 const sort = require('../../src/sort');
 
-describe.only('sort', () => {
+describe('sort', () => {
   let flatArray;
   let flatNaturalArray;
   let persons;

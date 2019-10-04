@@ -1,4 +1,4 @@
-const { assert, expect } = require('chai');
+const { assert } = require('chai');
 const { delay } = require('../utils');
 const rerun = require('../../src/rerun');
 
@@ -64,29 +64,28 @@ describe('rerun', () => {
   });
 
   it('Should throw error if start is called before calling every', () => {
-    expect(() => rerun(() => {}).start())
-      .to.throw(Error, 'rerun: every() is required before calling start()');
+    assert.throws(
+      () => rerun(() => {}).start(),
+      Error, 'rerun: every() is required before calling start()'
+    );
   });
 
   it('Should throw error on invalid inputs', () => {
     const invalidMessageForEvery = 'rerun: every() need to be called with positive number';
-    const getErrorMessage = (expected, actual) =>
-      `rerun: expected [${expected}] but got [object ${actual}]`;
+    function getErrorMessage(expected, actual) {
+      return `rerun: expected [${expected}] but got [object ${actual}]`;
+    }
 
     // Invalid onStop values
-    expect(() => rerun(() => {}).onStop(33))
-      .to.throw(Error, getErrorMessage('Function', 'Number'));
+    assert.throws(() => rerun(() => {}).onStop(33), Error, getErrorMessage('Function', 'Number'));
 
     // Invalid asLongAs value
-    expect(() => rerun(() => {}).asLongAs([]))
-      .to.throw(Error, getErrorMessage('Function', 'Array'));
+    assert.throws(() => rerun(() => {}).asLongAs([]), Error, getErrorMessage('Function', 'Array'));
 
     // Invalid every values
-    expect(() => rerun(() => {}).every('a33'))
-      .to.throw(Error, invalidMessageForEvery);
+    assert.throws(() => rerun(() => {}).every('a33'), Error, invalidMessageForEvery);
 
     // String number will be casted to number so this is valid call
-    expect(() => rerun(() => {}).every('33'))
-      .not.to.throw(Error, invalidMessageForEvery);
+    assert.doesNotThrow(() => rerun(() => {}).every('33'), Error);
   });
 });

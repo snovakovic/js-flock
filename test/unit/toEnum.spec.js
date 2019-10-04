@@ -1,4 +1,4 @@
-const { expect, assert } = require('chai');
+const { assert } = require('chai');
 const toEnum = require('../../src/toEnum');
 
 describe('toEnum', () => {
@@ -27,9 +27,9 @@ describe('toEnum', () => {
     const testEnum = toEnum(arr);
 
     assert.isTrue(Object.isFrozen(testEnum));
-    expect(testEnum.CAR).to.be.a('symbol');
-    expect(testEnum.TRUCK).to.be.a('symbol');
-    expect(testEnum).to.include.all.keys(['values', 'keys', 'haveKey', 'exists']);
+    assert.typeOf(testEnum.CAR, 'symbol');
+    assert.typeOf(testEnum.TRUCK, 'symbol');
+    assert.containsAllKeys(testEnum, ['values', 'keys', 'haveKey', 'exists']);
   });
 
   it('Should freeze values and keys', () => {
@@ -63,7 +63,7 @@ describe('toEnum', () => {
 
   it('Should throw exception for duplicate values', () => {
     obj.boat = 'CAR';
-    expect(() => toEnum(obj)).to.throw(TypeError, 'toEnum: Duplicate values detected');
+    assert.throws(() => toEnum(obj), TypeError, 'toEnum: Duplicate values detected');
   });
 
   it('Invalid input should return empty enum', () => {

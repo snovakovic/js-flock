@@ -1,11 +1,27 @@
-const { expect } = require('chai');
+const { assert } = require('chai');
 const jsFlock = require('../../src/index');
 
 describe('index', () => {
   it('should load all modules', () => {
-    const modules = ['collar', 'deepFreeze', 'deepPreventExtensions', 'deepSeal',
-      'last', 'promisify', 'singular', 'sort', 'toEnum'];
+    const modules = [
+      'castBoolean',
+      'collar',
+      'deepFreeze',
+      'deepPreventExtensions',
+      'deepSeal',
+      'delay',
+      'empty',
+      'last',
+      'NumberIterator',
+      'promiseAll',
+      'promisify',
+      'rerun',
+      'singular',
+      'sort',
+      'toEnum',
+      'waitFor'
+    ];
 
-    expect(jsFlock).to.include.all.keys(modules);
+    assert.hasAllKeys(jsFlock, modules);
   });
 });
