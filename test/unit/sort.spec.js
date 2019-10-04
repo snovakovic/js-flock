@@ -199,7 +199,7 @@ describe('sort', () => {
     );
   });
 
-  it('Should sort flat array using a comparer', () => {
+  it('Should sort flat array is asc order using a comparer', () => {
     sort(flatNaturalArray).by([{
       asc: true,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
@@ -211,13 +211,34 @@ describe('sort', () => {
     );
   });
 
-  it('Should sort object using single sort with a comparer', () => {
+  it('Should sort flat array is desc order using a comparer', () => {
+    sort(flatNaturalArray).by([{
+      desc: true,
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
+    }]);
+
+    assertOrder(
+      ['B10', 'B2', 'A10', 'A1'],
+      idx => flatNaturalArray[idx],
+    );
+  });
+
+  it('Should sort object in asc order using custom comparer', () => {
     sort(multiPropArray).by([{
       asc: p => p.unit,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
     }]);
 
     assertOrder(['A1', 'A01', 'A10', 'B3', 'C2'], idx => multiPropArray[idx].unit);
+  });
+
+  it('Should sort object in desc order using custom comparer', () => {
+    sort(multiPropArray).by([{
+      desc: p => p.unit,
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
+    }]);
+
+    assertOrder(['C2', 'B3', 'A10', 'A1', 'A01'], idx => multiPropArray[idx].unit);
   });
 
   it('Should sort object using multiple sorts and a comparer', () => {
