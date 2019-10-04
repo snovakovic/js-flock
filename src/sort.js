@@ -57,8 +57,9 @@ const multiPropStringSorter = function(sortBy, thenBy, depth, direction, compare
 const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
   const sortBy = sortByObj.asc || sortByObj.desc;
   const direction = sortByObj.asc ? 1 : -1;
-  const comparer = sortByObj.comparer ? customComparerProvider(sortByObj.comparer) : defaultComparer;
-
+  const comparer = sortByObj.comparer
+    ? customComparerProvider(sortByObj.comparer)
+    : defaultComparer;
 
   if (!sortBy) {
     throw Error(`sort: Invalid 'by' sorting configuration.
@@ -143,7 +144,10 @@ module.exports = function(ctx) {
       if (sortBy.length === 1) {
         const direction = sortBy[0].asc ? 1 : -1;
         const sortOnProp = sortBy[0].asc || sortBy[0].desc;
-        const comparer = sortBy[0].comparer ? customComparerProvider(sortBy[0].comparer) : defaultComparer;
+        const comparer = sortBy[0].comparer
+          ? customComparerProvider(sortBy[0].comparer)
+          : defaultComparer;
+
         if (!sortOnProp) {
           throw Error(`sort: Invalid 'by' sorting configuration.
             Expecting object with 'asc' or 'desc' key`);
@@ -151,7 +155,9 @@ module.exports = function(ctx) {
         return sort(direction, ctx, sortOnProp, comparer);
       }
 
-      const _sorter = multiPropObjectSorter.bind(undefined, sortBy.shift(), sortBy, 0, undefined, undefined);
+      const _sorter = multiPropObjectSorter
+        .bind(undefined, sortBy.shift(), sortBy, 0, undefined, undefined);
+
       return ctx.sort(_sorter);
     }
   };
