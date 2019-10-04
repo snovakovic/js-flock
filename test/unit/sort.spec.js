@@ -104,7 +104,7 @@ describe('sort', () => {
     assertOrder(['FIRST', 'In the middle', 'last'], idx => persons[idx].name);
   });
 
-  it('Should should unwrap single array value', () => {
+  it('Should unwrap single array value', () => {
     sort(persons).asc(['name']);
     assertOrder(['FIRST', 'In the middle', 'last'], idx => persons[idx].name);
   });
