@@ -2,7 +2,7 @@
 
 // >>> SORTERS <<<
 
-const sorter = function(direction, a, b) {
+const defaultComparer = function(direction, a, b) {
   if (a === b) return 0;
   if (a < b) return -direction;
   if (a == null) return 1;
@@ -11,7 +11,7 @@ const sorter = function(direction, a, b) {
   return direction;
 };
 
-const compareSorter = function(comparer) {
+const customComparerProvider = function(comparer) {
   return function(direction, a, b) {
     return comparer(a, b) * direction;
   };
@@ -57,7 +57,7 @@ const multiPropStringSorter = function(sortBy, thenBy, depth, direction, compare
 const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
   const sortBy = sortByObj.asc || sortByObj.desc;
   const direction = sortByObj.asc ? 1 : -1;
-  const comparer = sortByObj.comparer ? compareSorter(sortByObj.comparer) : sorter;
+  const comparer = sortByObj.comparer ? customComparerProvider(sortByObj.comparer) : defaultComparer;
 
 
   if (!sortBy) {
@@ -129,8 +129,8 @@ const sort = function(direction, ctx, sortBy, comparer) {
 
 module.exports = function(ctx) {
   return {
-    asc: (sortBy) => sort(1, ctx, sortBy, sorter),
-    desc: (sortBy) => sort(-1, ctx, sortBy, sorter),
+    asc: (sortBy) => sort(1, ctx, sortBy, defaultComparer),
+    desc: (sortBy) => sort(-1, ctx, sortBy, defaultComparer),
     by: (sortBy) => {
       if (!Array.isArray(ctx)) return ctx;
 
@@ -143,7 +143,7 @@ module.exports = function(ctx) {
       if (sortBy.length === 1) {
         const direction = sortBy[0].asc ? 1 : -1;
         const sortOnProp = sortBy[0].asc || sortBy[0].desc;
-        const comparer = sortBy[0].comparer ? compareSorter(sortBy[0].comparer) : sorter;
+        const comparer = sortBy[0].comparer ? customComparerProvider(sortBy[0].comparer) : defaultComparer;
         if (!sortOnProp) {
           throw Error(`sort: Invalid 'by' sorting configuration.
             Expecting object with 'asc' or 'desc' key`);
