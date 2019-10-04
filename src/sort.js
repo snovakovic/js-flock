@@ -112,7 +112,7 @@ const sort = function(direction, ctx, sortBy, comparer) {
 
   let _sorter;
 
-  if (!sortBy) {
+  if (!sortBy || sortBy === true) {
     _sorter = comparer.bind(undefined, direction);
   } else if (typeof sortBy === 'string') {
     _sorter = stringSorter.bind(undefined, direction, sortBy, comparer);

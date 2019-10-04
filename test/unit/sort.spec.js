@@ -201,7 +201,7 @@ describe('sort', () => {
 
   it('Should sort flat array using a comparer', () => {
     sort(flatNaturalArray).by([{
-      asc: o => o,
+      asc: true,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
     }]);
 
