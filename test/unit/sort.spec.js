@@ -151,6 +151,14 @@ describe('sort', () => {
     assertOrder(['aa', 'aa', 'bb', undefined, null], idx => multiPropArray[idx].lastName);
   });
 
+  it('Should allow using of object sytax with for sort by', () => {
+    let sorted = sort(flatArray).by({ asc: true });
+    assert.deepEqual(sorted, [1, 2, 3, 4, 5, 5]);
+
+    sorted = sort(flatArray).by({ desc: true });
+    assert.deepEqual(sorted, [5, 5, 4, 3, 2, 1]);
+  });
+
   it('Should sort by asc name and desc age', () => {
     sort(multiPropArray).by([
       { asc: 'name' },

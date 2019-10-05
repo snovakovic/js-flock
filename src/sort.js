@@ -135,24 +135,26 @@ module.exports = function(ctx) {
     by: (sortBy) => {
       if (!Array.isArray(ctx)) return ctx;
 
+      let sortByInSingleDirection;
       if (!Array.isArray(sortBy)) {
-        throw Error(`sort: Invalid usage of 'by' sorter. Array syntax is required.
-          Did you mean to use 'asc' or 'desc' sorter instead?`);
+        sortByInSingleDirection = sortBy;
+      } else if (sortBy.length === 1) {
+        [sortByInSingleDirection] = sortBy;
       }
 
-      // Unwrap sort by to faster path
-      if (sortBy.length === 1) {
-        const direction = sortBy[0].asc ? 1 : -1;
-        const sortOnProp = sortBy[0].asc || sortBy[0].desc;
-        const comparer = sortBy[0].comparer
-          ? customComparerProvider(sortBy[0].comparer)
+      // Unwrap sort by to faster path for dedicated single direction sorters
+      if (sortByInSingleDirection) {
+        const direction = sortByInSingleDirection.asc ? 1 : -1;
+        const singleDirectionSortBy = sortByInSingleDirection.asc || sortByInSingleDirection.desc;
+        const comparer = sortByInSingleDirection.comparer
+          ? customComparerProvider(sortByInSingleDirection.comparer)
           : defaultComparer;
 
-        if (!sortOnProp) {
+        if (!singleDirectionSortBy) {
           throw Error(`sort: Invalid 'by' sorting configuration.
             Expecting object with 'asc' or 'desc' key`);
         }
-        return sort(direction, ctx, sortOnProp, comparer);
+        return sort(direction, ctx, singleDirectionSortBy, comparer);
       }
 
       const _sorter = multiPropObjectSorter
