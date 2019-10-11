@@ -207,7 +207,7 @@ describe('sort', () => {
     );
   });
 
-  it('Should sort flat array is asc order using a comparer', () => {
+  it('Should sort flat array in asc order using a comparer', () => {
     sort(flatNaturalArray).by([{
       asc: true,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
@@ -219,7 +219,7 @@ describe('sort', () => {
     );
   });
 
-  it('Should sort flat array is desc order using a comparer', () => {
+  it('Should sort flat array in desc order using a comparer', () => {
     sort(flatNaturalArray).by([{
       desc: true,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
