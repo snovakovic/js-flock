@@ -37,7 +37,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 ## Methods:
 * [last](#last)
 * [empty](#empty)
-* [sort](#sort)
+* [sort](#sort-deprecated)
 * [numberIterator](#numberiterator)
 * [castBoolean](#castboolean)
 * [toEnum](#toenum)
