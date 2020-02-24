@@ -35,70 +35,21 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 ```
 
 ## Methods:
-
-- [sort](#sort)
-- [last](#last)
-- [empty](#empty)
-- [numberIterator](#numberiterator)
-- [castBoolean](#castboolean)
-- [toEnum](#toenum)
-- [singular](#singular)
-- [waitFor](#waitfor)
-- [rerun](#rerun)
-- [delay](#delay)
-- [promiseAll](#promiseall)
-- [promisify](#promisify)
-- [promisify.all](#promisifyall)
-- [collar](#collar)
-- [deepFreeze](#deepfreeze) / [deepSeal](#deepseal) / [deepPreventExtensions](#deeppreventextensions)
-
-
-### sort
-
-Fast and powerful array sorting that **outperforms lodash sort by ~2x** (in some cases it's more than **5x**).
-For additional sort documentation and information about performance take a look at the dedicated [fast-sort page](https://www.npmjs.com/package/fast-sort).
-
-### highlights
-
-* Sorting an array of objects by one or more properties
-* Sorting flat arrays
-* Sorting in multiple directions
-* Easy to read syntax for asc and desc sorting
-* Faster than other sort alternatives
-* Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
-
-```javascript
-  const sort = require('js-flock/sort');
-
-  sort([1, 4, 2]).asc(); // => [1, 2, 4]
-  sort([1, 4, 2]).desc(); // => [4, 2, 1]
-
-  // Sort persons [Object] ascending by firstName
-  sort(persons).asc(p => p.firstName);
-
-  // Same as above (but bit more performant)
-  // NOTE: sorting by string is available from version [3.4.0]
-  sort(persons).asc('firstName');
-
-  // Sort persons by multiple properties
-  sort(persons).desc([
-    'firstName', // Sort by first name
-    'lastName', // Persons that have same firstName will be sorted by lastName
-    p => p.address.city // NOTE: For nested properties we have to use function as 'address.city' is not valid property
-  ]);
-
-  // Sort in multiple directions
-  // NOTE: Available from version [3.5.0]
-  sort(persons).by([
-    { asc: 'name' }
-    { desc: 'age' }
-    { asc: p => p.address.city }
-  ]);
-
-  // Sorting values that are not sortable will return same value back
-  sort(null).asc(); // => null
-  sort(33).desc(); // => 33
-```
+* [last](#last)
+* [empty](#empty)
+* [sort](#sort)
+* [numberIterator](#numberiterator)
+* [castBoolean](#castboolean)
+* [toEnum](#toenum)
+* [singular](#singular)
+* [waitFor](#waitfor)
+* [rerun](#rerun)
+* [delay](#delay)
+* [promiseAll](#promiseall)
+* [promisify](#promisify)
+* [promisify.all](#promisifyall)
+* [collar](#collar)
+* [deepFreeze](#deepfreeze) / [deepSeal](#deepseal) / [deepPreventExtensions](#deeppreventextensions)
 
 ### last
 
@@ -529,3 +480,35 @@ For example of usage reference [deepFreeze](#deepfreeze)
 
 Recursively apply [Object.preventExtensions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/preventExtensions).
 For example of usage reference [deepFreeze](#deepfreeze)
+
+
+### sort (deprecated)
+
+Sort has been deprecated and it will no longer receive any updates.
+Source code have been moved to dedicated package https://www.npmjs.com/package/fast-sort
+and major version v2 have been published. Source code in the `js-flock` correspond to latest v1 version of `fast-sort`
+There have been many improvements in v2 version without any breaking changes in syntax so it's advisable you upgrade
+to v2 `fast-sort` package.
+
+```javascript
+  const sort = require('js-flock/sort');
+
+  sort([1, 4, 2]).asc(); // => [1, 2, 4]
+  sort([1, 4, 2]).desc(); // => [4, 2, 1]
+
+  sort(persons).asc(p => p.firstName);
+
+  // Sort persons by multiple properties
+  sort(persons).desc([
+    p => p.firstName
+    p => p.address.city
+  ]);
+
+  // Sort in multiple directions
+  // NOTE: Available from version [3.5.0]
+  sort(persons).by([
+    { asc: 'name' }
+    { desc: 'age' }
+    { asc: p => p.address.city }
+  ]);
+```
