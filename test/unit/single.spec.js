@@ -1,7 +1,7 @@
 const { assert } = require('chai');
 const single = require('../../src/single');
 
-describe.only('single', () => {
+describe('single', () => {
   let users;
 
   beforeEach(() => {
@@ -26,12 +26,25 @@ describe.only('single', () => {
     const errorMessage = 'More than one element satisfies the condition';
     assert.throws(() => single([1, 2]), TypeError, errorMessage);
     assert.throws(() => single(users), TypeError, errorMessage);
-    assert.throws(() => single(users, user => user.email === 'john@doe.com'), TypeError, errorMessage);
+    assert.throws(
+      () => single(users, user => user.email === 'john@doe.com'),
+      TypeError,
+      errorMessage,
+    );
   });
 
   it('Should throw error if none of the values matches condition', () => {
     const errorMessage = 'No element satisfies the condition';
     assert.throws(() => single([]), TypeError, errorMessage);
-    assert.throws(() => single(users, user => user.email === 'no@user.com'), TypeError, errorMessage);
+    assert.throws(
+      () => single(users, user => user.email === 'no@user.com'),
+      TypeError,
+      errorMessage,
+    );
+  });
+
+  it('Should throw error if bad params are passed', () => {
+    assert.throws(() => single(33), TypeError, 'expected [Array] but got [object Number]');
+    assert.throws(() => single([1, 2], []), TypeError, 'expected [Function] but got [object Array]');
   });
 });
