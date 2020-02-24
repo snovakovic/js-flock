@@ -39,12 +39,16 @@ describe('single', () => {
     assert.throws(
       () => single(users, user => user.email === 'no@user.com'),
       TypeError,
-      errorMessage,
+      errorMessage
     );
   });
 
   it('Should throw error if bad params are passed', () => {
     assert.throws(() => single(33), TypeError, 'expected [Array] but got [object Number]');
-    assert.throws(() => single([1, 2], []), TypeError, 'expected [Function] but got [object Array]');
+    assert.throws(
+      () => single([1, 2], []),
+      TypeError,
+      'expected [Function] but got [object Array]'
+    );
   });
 });
