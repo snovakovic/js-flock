@@ -37,6 +37,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 ## Methods:
 * [last](#last)
 * [empty](#empty)
+* [single](#single)
 * [sort](#sort-deprecated)
 * [numberIterator](#numberiterator)
 * [castBoolean](#castboolean)
@@ -87,6 +88,32 @@ console.log(emptyArr === arr) // => true
 
 // We can empty multiple arrays. Non array values will be ignored
 empty(arr1, undefined, arr2, 3);
+```
+
+### single
+
+Returns the only element of a sequence that satisfies a specified condition, and throws an exception if more than one such element exists.
+
+##### since: v3.13.0
+
+```javascript
+const single = require('js-flock/single');
+
+// Without providing any condition
+single([1]); // => 1
+single([1, 2]); // => TypeError('More than one element satisfies the condition')
+single([]); // => TypeError('No element satisfies the condition')
+
+// With condition
+const users = [
+  { email: 'john@doe.com', fullName: 'John Doe 1' },
+  { email: 'john@doe.com', fullName: 'John Doe 2' }, // NOTE same email as John Doe 1
+  { email: 'mark@johnson.com', fullName: 'Mark Johnson' },
+];
+
+single(users, user => user.email === 'mark@johnson.com'); // { email: 'mark@johnson.com', fullName: 'Mark Johnson' }
+single(users, user => user.email === 'john@doe.com'); // TypeError('More than one element satisfies the condition')
+single(users, user => user.email === 'no@user.com'); // TypeError('No element satisfies the condition')
 ```
 
 ### NumberIterator
