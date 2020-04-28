@@ -176,6 +176,37 @@
     return props;
   };
 
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+  // >>> PUBLIC <<<
+  var Ensurer_1 =
+  /*#__PURE__*/
+  function () {
+    function Ensurer() {
+      _classCallCheck(this, Ensurer);
+
+      this._calledMaxOnceCount = 0;
+    }
+
+    _createClass(Ensurer, [{
+      key: "calledMaxOnce",
+      value: function calledMaxOnce() {
+        var errorMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Not allowed to be called more than once';
+        this._calledMaxOnceCount += 1;
+
+        if (this._calledMaxOnceCount > 1) {
+          throw Error(errorMessage);
+        }
+      }
+    }]);
+
+    return Ensurer;
+  }();
+
   // >>> PUBLIC <<<
   var last = function last(arr, condition) {
     var length = Array.isArray(arr) ? arr.length : 0;
@@ -189,11 +220,11 @@
     return undefined;
   };
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  function _classCallCheck$1(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function _defineProperties$1(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _createClass$1(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties$1(Constructor.prototype, protoProps); if (staticProps) _defineProperties$1(Constructor, staticProps); return Constructor; }
 
   // >>> PUBLIC <<<
   var NumberIterator_1 =
@@ -203,12 +234,12 @@
       var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           startFrom = _ref.startFrom;
 
-      _classCallCheck(this, NumberIterator);
+      _classCallCheck$1(this, NumberIterator);
 
       this._currentNumber = Number(startFrom) || 0;
     }
 
-    _createClass(NumberIterator, [{
+    _createClass$1(NumberIterator, [{
       key: "next",
       value: function next() {
         if (this._currentNumber >= Number.MAX_SAFE_INTEGER) {
@@ -780,6 +811,7 @@
     deepSeal: deepSeal,
     delay: delay,
     empty: empty,
+    Ensurer: Ensurer_1,
     last: last,
     NumberIterator: NumberIterator_1,
     promiseAll: promiseAll,
@@ -797,17 +829,19 @@
   var src_5 = src.deepSeal;
   var src_6 = src.delay;
   var src_7 = src.empty;
-  var src_8 = src.last;
-  var src_9 = src.NumberIterator;
-  var src_10 = src.promiseAll;
-  var src_11 = src.promisify;
-  var src_12 = src.rerun;
-  var src_13 = src.singular;
-  var src_14 = src.sort;
-  var src_15 = src.toEnum;
-  var src_16 = src.waitFor;
+  var src_8 = src.Ensurer;
+  var src_9 = src.last;
+  var src_10 = src.NumberIterator;
+  var src_11 = src.promiseAll;
+  var src_12 = src.promisify;
+  var src_13 = src.rerun;
+  var src_14 = src.singular;
+  var src_15 = src.sort;
+  var src_16 = src.toEnum;
+  var src_17 = src.waitFor;
 
-  exports.NumberIterator = src_9;
+  exports.Ensurer = src_8;
+  exports.NumberIterator = src_10;
   exports.castBoolean = src_1;
   exports.collar = src_2;
   exports.deepFreeze = src_3;
@@ -816,14 +850,14 @@
   exports.default = src;
   exports.delay = src_6;
   exports.empty = src_7;
-  exports.last = src_8;
-  exports.promiseAll = src_10;
-  exports.promisify = src_11;
-  exports.rerun = src_12;
-  exports.singular = src_13;
-  exports.sort = src_14;
-  exports.toEnum = src_15;
-  exports.waitFor = src_16;
+  exports.last = src_9;
+  exports.promiseAll = src_11;
+  exports.promisify = src_12;
+  exports.rerun = src_13;
+  exports.singular = src_14;
+  exports.sort = src_15;
+  exports.toEnum = src_16;
+  exports.waitFor = src_17;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

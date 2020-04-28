@@ -9,6 +9,7 @@ module.exports = {
   deepSeal: require('./deepSeal'),
   delay: require('./delay'),
   empty: require('./empty'),
+  Ensurer: require('./Ensurer'),
   last: require('./last'),
   NumberIterator: require('./NumberIterator'),
   promiseAll: require('./promiseAll'),
