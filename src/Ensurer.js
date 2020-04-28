@@ -5,7 +5,7 @@ module.exports = class Ensurer {
     this._calledMaxOnceCount = 0;
   }
 
-  calledMaxOnce(errorMessage = 'Not allowed to be called more then once') {
+  calledMaxOnce(errorMessage = 'Not allowed to be called more than once') {
     this._calledMaxOnceCount += 1;
     if (this._calledMaxOnceCount > 1) {
       throw Error(errorMessage);

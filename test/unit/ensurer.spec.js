@@ -5,7 +5,7 @@ describe('Ensurer', () => {
   it('Will throw default error if called more then once', () => {
     const ensure = new Ensurer();
     ensure.calledMaxOnce();
-    const expectedErrorMessage = 'Not allowed to be called more then once';
+    const expectedErrorMessage = 'Not allowed to be called more than once';
     assert.throws(() => ensure.calledMaxOnce(), Error, expectedErrorMessage);
   });
 
