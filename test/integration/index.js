@@ -44,9 +44,21 @@ async function testModules(modules) {
   await modules.delay();
   assert.equal(numberOfCalls, 1);
 
+  // empty
+  const arr = [1, 2, 4];
+  modules.empty(arr);
+  assert.equal(arr.length, 0);
+  console.log('empty: SUCCESS');
+
   // last
   assert.equal(modules.last([1, 4, 3]), 3);
   console.log('last: SUCCESS');
+
+  // promiseAll
+  const promiseAllResponse = await modules.promiseAll({
+    a: Promise.resolve(1),
+    b: Promise.resolve(2)
+  });
 
   // promisify
   const promisified = modules.promisify((cb) => { cb(undefined, 10); });
@@ -55,21 +67,33 @@ async function testModules(modules) {
     console.log('promisify: SUCCESS');
   });
 
-  // promiseAll
-  const promiseAllResponse = await modules.promiseAll({
-    a: Promise.resolve(1),
-    b: Promise.resolve(2)
-  });
-
   assert.deepEqual(promiseAllResponse, {
     a: 1,
     b: 2
   });
 
+  // rerun
+  let counter = 0;
+  modules
+    .rerun(() => counter += 1)
+    .every(1)
+    .asLongAs(() => counter < 2)
+    .start();
+
+  setTimeout(() => assert.equal(2, 2), 25);
+
+  setTimeout(() => {
+    assert.equal(counter, 2);
+    console.log('rerun: SUCCESS');
+  }, 25);
+
+  // single
+  assert.equal(modules.single([1]), 1);
+
   // singular
   let singularCounter = 0;
-  const sin = modules.singular(() => { singularCounter += 1; });
-  sin(); sin();
+  const singular = modules.singular(() => { singularCounter += 1; });
+  singular(); singular();
   assert.equal(singularCounter, 1);
   console.log('singular: SUCCESS');
 
@@ -90,28 +114,6 @@ async function testModules(modules) {
       assert.equal(res, true);
       console.log('waitFor: SUCCESS');
     });
-
-  // empty
-  const arr = [1, 2, 4];
-  modules.empty(arr);
-  assert.equal(arr.length, 0);
-  console.log('empty: SUCCESS');
-
-
-  // rerun
-  let counter = 0;
-  modules
-    .rerun(() => counter += 1)
-    .every(1)
-    .asLongAs(() => counter < 2)
-    .start();
-
-  setTimeout(() => assert.equal(2, 2), 25);
-
-  setTimeout(() => {
-    assert.equal(counter, 2);
-    console.log('rerun: SUCCESS');
-  }, 25);
 
   // Number iterator
   const numberIterator = new modules.NumberIterator();
