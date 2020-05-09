@@ -500,6 +500,28 @@
     };
   };
 
+  var assertType$3 = assertType('rerun'); // >>> PUBLIC <<<
+
+  var single = function single(array, predicate) {
+    assertType$3('Array', array);
+    var filteredArray = array;
+
+    if (predicate) {
+      assertType$3('Function', predicate);
+      filteredArray = filteredArray.filter(predicate);
+    }
+
+    if (filteredArray.length > 1) {
+      throw TypeError('More than one element satisfies the condition');
+    }
+
+    if (filteredArray.length === 0) {
+      throw TypeError('No element satisfies the condition');
+    }
+
+    return filteredArray[0];
+  };
+
   // >>> PUBLIC <<<
   var singular = function singular(fn) {
     var inProgress = false;
@@ -779,10 +801,10 @@
     return Object.freeze(enu);
   };
 
-  var assertType$3 = assertType('waitFor'); // >>> PUBLIC <<<
+  var assertType$4 = assertType('waitFor'); // >>> PUBLIC <<<
 
   var waitFor = function waitFor(fn, options) {
-    assertType$3('Function', fn);
+    assertType$4('Function', fn);
     var interval = Number(options && options.interval) || 50;
     var endTime = Date.now() + (Number(options && options.timeout) || 5000);
     return new Promise(function (resolve, reject) {
@@ -817,6 +839,7 @@
     promiseAll: promiseAll,
     promisify: promisify_1,
     rerun: rerun,
+    single: single,
     singular: singular,
     sort: sort_1,
     toEnum: toEnum,
@@ -835,10 +858,11 @@
   var src_11 = src.promiseAll;
   var src_12 = src.promisify;
   var src_13 = src.rerun;
-  var src_14 = src.singular;
-  var src_15 = src.sort;
-  var src_16 = src.toEnum;
-  var src_17 = src.waitFor;
+  var src_14 = src.single;
+  var src_15 = src.singular;
+  var src_16 = src.sort;
+  var src_17 = src.toEnum;
+  var src_18 = src.waitFor;
 
   exports.Ensurer = src_8;
   exports.NumberIterator = src_10;
@@ -854,10 +878,11 @@
   exports.promiseAll = src_11;
   exports.promisify = src_12;
   exports.rerun = src_13;
-  exports.singular = src_14;
-  exports.sort = src_15;
-  exports.toEnum = src_16;
-  exports.waitFor = src_17;
+  exports.single = src_14;
+  exports.singular = src_15;
+  exports.sort = src_16;
+  exports.toEnum = src_17;
+  exports.waitFor = src_18;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

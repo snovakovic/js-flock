@@ -15,6 +15,7 @@ module.exports = {
   promiseAll: require('./promiseAll'),
   promisify: require('./promisify'),
   rerun: require('./rerun'),
+  single: require('./single'),
   singular: require('./singular'),
   sort: require('./sort'),
   toEnum: require('./toEnum'),
