@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, (global.empty = global.empty || {}, global.empty.js = factory()));
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   // >>> PUBLIC <<<
 
@@ -30,4 +30,4 @@
 
   return empty;
 
-}));
+})));

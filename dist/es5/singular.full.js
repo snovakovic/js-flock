@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, (global.singular = global.singular || {}, global.singular.js = factory()));
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   // >>> PUBLIC <<<
   var singular = function singular(fn) {
@@ -28,4 +28,4 @@
 
   return singular;
 
-}));
+})));

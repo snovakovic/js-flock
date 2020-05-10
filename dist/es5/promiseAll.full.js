@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, (global.promiseAll = global.promiseAll || {}, global.promiseAll.js = factory()));
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   // >>> PUBLIC <<<
   var promiseAll = function promiseAll(objOrArray) {
@@ -25,4 +25,4 @@
 
   return promiseAll;
 
-}));
+})));

@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = global || self, factory(global['js-flock'] = {}));
-}(this, function (exports) { 'use strict';
+}(this, (function (exports) { 'use strict';
 
   // >>> PUBLIC <<<
 
@@ -27,7 +27,7 @@
     return Promise.race([restraint, promise]);
   };
 
-  function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+  function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
   // >>> PUBLIC <<<
 
@@ -46,7 +46,7 @@
     return !!(obj && (_typeof(obj) === 'object' || typeof obj === 'function') && Object.prototype.hasOwnProperty.call(obj, 'constructor') && typeof obj.constructor === 'function' && Function.prototype.toString.call(obj.constructor).includes('[native code]'));
   };
 
-  function _typeof$1(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof$1 = function _typeof(obj) { return typeof obj; }; } else { _typeof$1 = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof$1(obj); }
+  function _typeof$1(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof$1 = function _typeof(obj) { return typeof obj; }; } else { _typeof$1 = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof$1(obj); }
 
   /**
    * Recursively apply provided operation on object and all of the object properties that are either object or function.
@@ -183,9 +183,7 @@
   function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   // >>> PUBLIC <<<
-  var Ensurer_1 =
-  /*#__PURE__*/
-  function () {
+  var Ensurer_1 = /*#__PURE__*/function () {
     function Ensurer() {
       _classCallCheck(this, Ensurer);
 
@@ -227,9 +225,7 @@
   function _createClass$1(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties$1(Constructor.prototype, protoProps); if (staticProps) _defineProperties$1(Constructor, staticProps); return Constructor; }
 
   // >>> PUBLIC <<<
-  var NumberIterator_1 =
-  /*#__PURE__*/
-  function () {
+  var NumberIterator_1 = /*#__PURE__*/function () {
     function NumberIterator() {
       var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           startFrom = _ref.startFrom;
@@ -544,191 +540,169 @@
     };
   };
 
-  function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-  function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-  function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-  function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-  function _typeof$2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof$2 = function _typeof(obj) { return typeof obj; }; } else { _typeof$2 = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof$2(obj); }
-
-  /* eslint no-use-before-define: 0 */
+  // >>> INTERFACES <<<
+  // >>> HELPERS <<<
+  var castComparer = function (comparer) { return function (a, b, order) { return comparer(a, b, order) * order; }; };
+  var throwInvalidConfigErrorIfTrue = function (condition, context) {
+      if (condition)
+          throw Error("Invalid sort config: " + context);
+  };
+  var unpackObjectSorter = function (sortByObj) {
+      var _a = sortByObj || {}, asc = _a.asc, desc = _a.desc;
+      var order = asc ? 1 : -1;
+      var sortBy = (asc || desc);
+      // Validate object config
+      throwInvalidConfigErrorIfTrue(!sortBy, 'Expected `asc` or `desc` property');
+      throwInvalidConfigErrorIfTrue(asc && desc, 'Ambiguous object with `asc` and `desc` config properties');
+      var comparer = sortByObj.comparer && castComparer(sortByObj.comparer);
+      return { order: order, sortBy: sortBy, comparer: comparer };
+  };
   // >>> SORTERS <<<
-  var defaultComparer = function defaultComparer(direction, a, b) {
-    if (a === b) return 0;
-    if (a < b) return -direction;
-    if (a == null) return 1;
-    if (b == null) return -1;
-    return direction;
-  };
-
-  var customComparerProvider = function customComparerProvider(comparer) {
-    return function (direction, a, b) {
-      return comparer(a, b) * direction;
-    };
-  };
-  /**
-   * stringSorter does not support nested property.
-   * For nested properties or value transformation (e.g toLowerCase) we should use functionSorter
-   * Based on benchmark testing using stringSorter is bit faster then using equivalent function sorter
-   * @example sort(users).asc('firstName')
-   */
-
-
-  var stringSorter = function stringSorter(direction, sortBy, comparer, a, b) {
-    return comparer(direction, a[sortBy], b[sortBy]);
-  };
-  /**
-   * @example sort(users).asc(p => p.address.city)
-   */
-
-
-  var functionSorter = function functionSorter(direction, sortBy, comparer, a, b) {
-    return comparer(direction, sortBy(a), sortBy(b));
-  };
-  /**
-   * Used when we have sorting by multyple properties and when current sorter is function
-   * @example sort(users).asc([p => p.address.city, p => p.firstName])
-   */
-
-
-  var multiPropFunctionSorter = function multiPropFunctionSorter(sortBy, thenBy, depth, direction, comparer, a, b) {
-    return multiPropEqualityHandler(sortBy(a), sortBy(b), thenBy, depth, direction, comparer, a, b);
-  };
-  /**
-   * Used when we have sorting by multiple properties and when current sorter is string
-   * @example sort(users).asc(['firstName', 'lastName'])
-   */
-
-
-  var multiPropStringSorter = function multiPropStringSorter(sortBy, thenBy, depth, direction, comparer, a, b) {
-    return multiPropEqualityHandler(a[sortBy], b[sortBy], thenBy, depth, direction, comparer, a, b);
-  };
-  /**
-   * Used with 'by' sorter when we have sorting in multiple direction
-   * @example sort(users).asc(['firstName', 'lastName'])
-   */
-
-
-  var multiPropObjectSorter = function multiPropObjectSorter(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
-    var sortBy = sortByObj.asc || sortByObj.desc;
-    var direction = sortByObj.asc ? 1 : -1;
-    var comparer = sortByObj.comparer ? customComparerProvider(sortByObj.comparer) : defaultComparer;
-
-    if (!sortBy) {
-      throw Error("sort: Invalid 'by' sorting configuration.\n      Expecting object with 'asc' or 'desc' key");
-    }
-
-    var multiSorter = getMultiPropertySorter(sortBy);
-    return multiSorter(sortBy, thenBy, depth, direction, comparer, a, b);
-  }; // >>> HELPERS <<<
-
-  /**
-   * Return multiProperty sort hanrdler based on sortBy value
-   */
-
-
-  var getMultiPropertySorter = function getMultiPropertySorter(sortBy) {
-    var type = _typeof$2(sortBy);
-
-    if (type === 'string') {
-      return multiPropStringSorter;
-    }
-
-    if (type === 'function') {
-      return multiPropFunctionSorter;
-    }
-
-    return multiPropObjectSorter;
-  };
-
-  var multiPropEqualityHandler = function multiPropEqualityHandler(valA, valB, thenBy, depth, direction, comparer, a, b) {
-    if (valA === valB || valA == null && valB == null) {
-      if (thenBy.length > depth) {
-        var multiSorter = getMultiPropertySorter(thenBy[depth]);
-        return multiSorter(thenBy[depth], thenBy, depth + 1, direction, comparer, a, b);
-      }
-
-      return 0;
-    }
-
-    return comparer(direction, valA, valB);
-  };
-  /**
-   * Pick sorter based on provided sortBy value
-   */
-
-
-  var sort = function sort(direction, ctx, sortBy, comparer) {
-    if (!Array.isArray(ctx)) return ctx; // Unwrap sortBy if array with only 1 value
-
-    if (Array.isArray(sortBy) && sortBy.length < 2) {
-      var _sortBy = sortBy;
-
-      var _sortBy2 = _slicedToArray(_sortBy, 1);
-
-      sortBy = _sortBy2[0];
-    }
-
-    var _sorter;
-
-    if (!sortBy || sortBy === true) {
-      _sorter = comparer.bind(undefined, direction);
-    } else if (typeof sortBy === 'string') {
-      _sorter = stringSorter.bind(undefined, direction, sortBy, comparer);
-    } else if (typeof sortBy === 'function') {
-      _sorter = functionSorter.bind(undefined, direction, sortBy, comparer);
-    } else {
-      _sorter = getMultiPropertySorter(sortBy[0]).bind(undefined, sortBy.shift(), sortBy, 0, direction, comparer);
-    }
-
-    return ctx.sort(_sorter);
-  }; // >>> PUBLIC <<<
-
-
-  var sort_1 = function sort_1(ctx) {
-    return {
-      asc: function asc(sortBy) {
-        return sort(1, ctx, sortBy, defaultComparer);
-      },
-      desc: function desc(sortBy) {
-        return sort(-1, ctx, sortBy, defaultComparer);
-      },
-      by: function by(sortBy) {
-        if (!Array.isArray(ctx)) return ctx;
-        var sortByInSingleDirection;
-
-        if (!Array.isArray(sortBy)) {
-          sortByInSingleDirection = sortBy;
-        } else if (sortBy.length === 1) {
-          var _sortBy3 = _slicedToArray(sortBy, 1);
-
-          sortByInSingleDirection = _sortBy3[0];
-        } // Unwrap sort by to faster path for dedicated single direction sorters
-
-
-        if (sortByInSingleDirection) {
-          var direction = sortByInSingleDirection.asc ? 1 : -1;
-          var singleDirectionSortBy = sortByInSingleDirection.asc || sortByInSingleDirection.desc;
-          var comparer = sortByInSingleDirection.comparer ? customComparerProvider(sortByInSingleDirection.comparer) : defaultComparer;
-
-          if (!singleDirectionSortBy) {
-            throw Error("sort: Invalid 'by' sorting configuration.\n            Expecting object with 'asc' or 'desc' key");
+  var multiPropertySorterProvider = function (defaultComparer) {
+      return function multiPropertySorter(sortBy, sortByArr, depth, order, comparer, a, b) {
+          var valA;
+          var valB;
+          if (typeof sortBy === 'string') {
+              valA = a[sortBy];
+              valB = b[sortBy];
           }
-
-          return sort(direction, ctx, singleDirectionSortBy, comparer);
-        }
-
-        var _sorter = multiPropObjectSorter.bind(undefined, sortBy.shift(), sortBy, 0, undefined, undefined);
-
-        return ctx.sort(_sorter);
-      }
-    };
+          else if (typeof sortBy === 'function') {
+              valA = sortBy(a);
+              valB = sortBy(b);
+          }
+          else {
+              var objectSorterConfig = unpackObjectSorter(sortBy);
+              return multiPropertySorter(objectSorterConfig.sortBy, sortByArr, depth, objectSorterConfig.order, objectSorterConfig.comparer || defaultComparer, a, b);
+          }
+          var equality = comparer(valA, valB, order);
+          if ((equality === 0 || (valA == null && valB == null)) &&
+              sortByArr.length > depth) {
+              return multiPropertySorter(sortByArr[depth], sortByArr, depth + 1, order, comparer, a, b);
+          }
+          return equality;
+      };
   };
+  function getSortStrategy(sortBy, comparer, order) {
+      // Flat array sorter
+      if (sortBy === undefined || sortBy === true) {
+          return function (a, b) { return comparer(a, b, order); };
+      }
+      // Sort list of objects by single object key
+      if (typeof sortBy === 'string') {
+          throwInvalidConfigErrorIfTrue(sortBy.includes('.'), 'String syntax not allowed for nested properties.');
+          return function (a, b) { return comparer(a[sortBy], b[sortBy], order); };
+      }
+      // Sort list of objects by single function sorter
+      if (typeof sortBy === 'function') {
+          return function (a, b) { return comparer(sortBy(a), sortBy(b), order); };
+      }
+      // Sort by multiple properties
+      if (Array.isArray(sortBy)) {
+          var multiPropSorter_1 = multiPropertySorterProvider(comparer);
+          return function (a, b) { return multiPropSorter_1(sortBy[0], sortBy, 1, order, comparer, a, b); };
+      }
+      // Unpack object config to get actual sorter strategy
+      var objectSorterConfig = unpackObjectSorter(sortBy);
+      return getSortStrategy(objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer, objectSorterConfig.order);
+  }
+  var sort = function (order, ctx, sortBy, comparer) {
+      var _a;
+      if (!Array.isArray(ctx)) {
+          return ctx;
+      }
+      // Unwrap sortBy if array with only 1 value to get faster sort strategy
+      if (Array.isArray(sortBy) && sortBy.length < 2) {
+          _a = sortBy, sortBy = _a[0];
+      }
+      return ctx.sort(getSortStrategy(sortBy, comparer, order));
+  };
+  // >>> Public <<<
+  function createSortInstance(opts) {
+      var comparer = castComparer(opts.comparer);
+      return function (ctx) {
+          return {
+              /**
+               * Sort array in ascending order. Mutates provided array by sorting it.
+               * @example
+               * sort([3, 1, 4]).asc();
+               * sort(users).asc(u => u.firstName);
+               * sort(users).asc([
+               *   U => u.firstName
+               *   u => u.lastName,
+               * ]);
+               */
+              asc: function (sortBy) {
+                  return sort(1, ctx, sortBy, comparer);
+              },
+              /**
+               * Sort array in descending order. Mutates provided array by sorting it.
+               * @example
+               * sort([3, 1, 4]).desc();
+               * sort(users).desc(u => u.firstName);
+               * sort(users).desc([
+               *   U => u.firstName
+               *   u => u.lastName,
+               * ]);
+               */
+              desc: function (sortBy) {
+                  return sort(-1, ctx, sortBy, comparer);
+              },
+              /**
+               * Sort array in ascending or descending order. It allows sorting on multiple props
+               * in different order for each of them. Mutates provided array by sorting it.
+               * @example
+               * sort(users).by([
+               *  { asc: u => u.score }
+               *  { desc: u => u.age }
+               * ]);
+               */
+              by: function (sortBy) {
+                  return sort(1, ctx, sortBy, comparer);
+              },
+          };
+      };
+  }
+  var defaultSort = createSortInstance({
+      comparer: function (a, b, order) {
+          if (a == null)
+              return order;
+          if (b == null)
+              return -order;
+          if (a < b)
+              return -1;
+          if (a === b)
+              return 0;
+          return 1;
+      },
+  });
+  // Attach createNewInstance to sort function
+  defaultSort['createNewInstance'] = createSortInstance;
 
-  function _typeof$3(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof$3 = function _typeof(obj) { return typeof obj; }; } else { _typeof$3 = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof$3(obj); }
+  var sort_es = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': defaultSort
+  });
+
+  function getCjsExportFromNamespace (n) {
+  	return n && n['default'] || n;
+  }
+
+  var sort$1 = getCjsExportFromNamespace(sort_es);
+
+  /*
+   * Sorce code and more ingo in https://github.com/snovakovic/fast-sort
+   * NOTE: fast-sort originated in js-flock but was moved to dedicated repo at some point
+  */
+
+  var sort_1 = sort$1;
+
+  function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+  function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _typeof$2(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof$2 = function _typeof(obj) { return typeof obj; }; } else { _typeof$2 = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof$2(obj); }
 
   // >>> INTERNALS <<<
   var castObject = function castObject(args) {
@@ -740,7 +714,7 @@
       return obj;
     }
 
-    return _typeof$3(args) === 'object' ? Object.assign({}, args) : {};
+    return _typeof$2(args) === 'object' ? _objectSpread({}, args) : {};
   };
 
   var isClass = function isClass(input) {
@@ -886,4 +860,4 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));

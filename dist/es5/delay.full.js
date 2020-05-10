@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, (global.delay = global.delay || {}, global.delay.js = factory()));
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   // >>> PUBLIC <<<
   var delay = function delay() {
@@ -21,4 +21,4 @@
 
   return delay;
 
-}));
+})));

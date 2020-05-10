@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, (global.Ensurer = global.Ensurer || {}, global.Ensurer.js = factory()));
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11,9 +11,7 @@
   function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   // >>> PUBLIC <<<
-  var Ensurer_1 =
-  /*#__PURE__*/
-  function () {
+  var Ensurer_1 = /*#__PURE__*/function () {
     function Ensurer() {
       _classCallCheck(this, Ensurer);
 
@@ -37,4 +35,4 @@
 
   return Ensurer_1;
 
-}));
+})));

@@ -38,7 +38,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 * [last](#last)
 * [empty](#empty)
 * [single](#single)
-* [sort](#sort-deprecated)
+* [sort](#sort)
 * [numberIterator](#numberiterator)
 * [castBoolean](#castboolean)
 * [toEnum](#toenum)
@@ -509,13 +509,10 @@ Recursively apply [Object.preventExtensions](https://developer.mozilla.org/en-US
 For example of usage reference [deepFreeze](#deepfreeze)
 
 
-### sort (deprecated)
+### sort
 
-Sort has been deprecated and it will no longer receive any updates.
-Source code have been moved to dedicated package https://www.npmjs.com/package/fast-sort
-and major version v2 have been published. Source code in the `js-flock` correspond to latest v1 version of `fast-sort`
-There have been many improvements in v2 version without any breaking changes in syntax so it's advisable you upgrade
-to v2 `fast-sort` package.
+Source code of sort has been moved to dedicated package https://www.npmjs.com/package/fast-sort and is now just imported here.
+For more info on sort please check dedicated package from above.
 
 ```javascript
   const sort = require('js-flock/sort');
@@ -532,7 +529,6 @@ to v2 `fast-sort` package.
   ]);
 
   // Sort in multiple directions
-  // NOTE: Available from version [3.5.0]
   sort(persons).by([
     { asc: 'name' }
     { desc: 'age' }
