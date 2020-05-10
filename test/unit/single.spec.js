@@ -8,7 +8,7 @@ describe('single', () => {
     users = [
       { email: 'john@doe.com', fullName: 'John Doe 1' },
       { email: 'john@doe.com', fullName: 'John Doe 2' }, // NOTE same email as John Doe 1
-      { email: 'mark@johnson.com', fullName: 'Mark Johnson' }
+      { email: 'mark@johnson.com', fullName: 'Mark Johnson' },
     ];
   });
 
@@ -39,7 +39,7 @@ describe('single', () => {
     assert.throws(
       () => single(users, user => user.email === 'no@user.com'),
       TypeError,
-      errorMessage
+      errorMessage,
     );
   });
 
@@ -48,7 +48,7 @@ describe('single', () => {
     assert.throws(
       () => single([1, 2], []),
       TypeError,
-      'expected [Function] but got [object Array]'
+      'expected [Function] but got [object Array]',
     );
   });
 });

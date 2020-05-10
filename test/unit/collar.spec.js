@@ -10,7 +10,7 @@ describe('collar', () => {
   it('Should resolve multiple promises', async() => {
     const promises = Promise.all([
       new Promise((resolve) => setTimeout(resolve, 1, '1')),
-      new Promise((resolve) => setTimeout(resolve, 3, '2'))
+      new Promise((resolve) => setTimeout(resolve, 3, '2')),
     ]);
 
     const [first, second] = await collar(promises, 15);

@@ -65,6 +65,6 @@ module.exports = function(fn) {
       assertType('Function', onStop);
       stopHandler = onStop;
       return this;
-    }
+    },
   };
 };

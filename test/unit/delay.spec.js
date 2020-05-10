@@ -18,7 +18,7 @@ describe('delay', () => {
     assert.throws(
       () => delay('long'),
       TypeError,
-      'delay: expected [Number] but got [object String]'
+      'delay: expected [Number] but got [object String]',
     );
   });
 

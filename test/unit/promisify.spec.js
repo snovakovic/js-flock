@@ -84,7 +84,7 @@ describe('promisify', () => {
         .catch(shouldNotBeCalled),
       funAsync2()
         .then((args) => { expect(args).to.not.be.an('array'); })
-        .catch(shouldNotBeCalled)
+        .catch(shouldNotBeCalled),
     ]);
   });
 
@@ -112,7 +112,7 @@ describe('promisify.all', () => {
       name: 'test-module',
       getName(cb) { cb(undefined, this.name); },
       success(inp, cb) { cb(undefined, `${inp}-success`); },
-      error(cb) { cb('error'); }
+      error(cb) { cb('error'); },
     };
 
     const ob1 = Object.create(mdl);
@@ -203,7 +203,7 @@ describe('promisify.all', () => {
   it('Should not override existing methods', (done) => {
     const test = {
       test: (cb) => { cb(undefined, 'test'); },
-      testAsync: (cb) => { cb(undefined, 'testAsync'); }
+      testAsync: (cb) => { cb(undefined, 'testAsync'); },
     };
 
     promisify.all(test);
@@ -229,8 +229,8 @@ describe('promisify.all', () => {
 
   it('Should not modify options object', () => {
     const baseOpt = { suffix: 1, exclude: 2, include: 3, proto: 4, multiArgs: 5 };
-    const options = Object.assign({}, baseOpt);
-    promisify.all(mdl, Object.assign({}, options));
+    const options = { ...baseOpt };
+    promisify.all(mdl, { ...options });
     expect(options).to.be.eql(baseOpt);
   });
 

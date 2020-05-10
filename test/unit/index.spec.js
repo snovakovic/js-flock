@@ -21,7 +21,7 @@ describe('index', () => {
       'sort',
       'single',
       'toEnum',
-      'waitFor'
+      'waitFor',
     ];
 
     assert.hasAllKeys(jsFlock, modules);

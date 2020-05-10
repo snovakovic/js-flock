@@ -161,6 +161,6 @@ module.exports = function(ctx) {
         .bind(undefined, sortBy.shift(), sortBy, 0, undefined, undefined);
 
       return ctx.sort(_sorter);
-    }
+    },
   };
 };

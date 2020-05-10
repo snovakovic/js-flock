@@ -11,7 +11,7 @@ describe('last', () => {
       { id: 1, name: 'first' },
       { id: 2, name: 'middle' },
       { id: 3, name: 'middle' },
-      { id: 4, name: 'last' }
+      { id: 4, name: 'last' },
     ];
   });
 
