@@ -8,7 +8,7 @@ const castObject = function(args) {
   }
 
   return typeof args === 'object'
-    ? Object.assign({}, args)
+    ? ({ ...args })
     : {};
 };
 
@@ -42,7 +42,7 @@ module.exports = function(arg) {
 
   const state = {
     keySet: undefined,
-    valueSet: undefined
+    valueSet: undefined,
   };
 
   // Append standard enum helpers

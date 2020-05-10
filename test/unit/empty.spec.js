@@ -15,11 +15,11 @@ describe('empty', () => {
         id: 2,
         name: 'middle',
         address: {
-          city: 'Split'
-        }
+          city: 'Split',
+        },
       },
       { id: 3, name: 'middle' },
-      { id: 4, name: 'last' }
+      { id: 4, name: 'last' },
     ];
 
     // response should be equal to the provided emptied array

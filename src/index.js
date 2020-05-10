@@ -19,5 +19,5 @@ module.exports = {
   singular: require('./singular'),
   sort: require('./sort'),
   toEnum: require('./toEnum'),
-  waitFor: require('./waitFor')
+  waitFor: require('./waitFor'),
 };

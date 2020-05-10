@@ -20,42 +20,42 @@ describe('sort', () => {
     persons = [{
       name: 'last',
       dob: new Date(1987, 14, 11),
-      address: { code: 3 }
+      address: { code: 3 },
     }, {
       name: 'FIRST',
       dob: new Date(1987, 14, 9),
-      address: {}
+      address: {},
     }, {
       name: 'In the middle',
       dob: new Date(1987, 14, 10),
-      address: { code: 1 }
+      address: { code: 1 },
     }];
 
     multiPropArray = [{
       name: 'aa',
       lastName: 'aa',
       age: 10,
-      unit: 'A10'
+      unit: 'A10',
     }, {
       name: 'aa',
       lastName: undefined,
       age: 8,
-      unit: 'A1'
+      unit: 'A1',
     }, {
       name: 'aa',
       lastName: null,
       age: 9,
-      unit: 'A01'
+      unit: 'A01',
     }, {
       name: 'aa',
       lastName: 'bb',
       age: 11,
-      unit: 'C2'
+      unit: 'C2',
     }, {
       name: 'bb',
       lastName: 'aa',
       age: 6,
-      unit: 'B3'
+      unit: 'B3',
     }];
   });
 
@@ -113,7 +113,7 @@ describe('sort', () => {
     sort(multiPropArray).asc([
       p => p.name,
       p => p.lastName,
-      p => p.age
+      p => p.age,
     ]);
 
     assertOrder([10, 11, 8, 9, 6], idx => multiPropArray[idx].age);
@@ -132,10 +132,10 @@ describe('sort', () => {
   it('Should sort with all equal values', () => {
     const same = [{
       name: 'a',
-      age: 1
+      age: 1,
     }, {
       name: 'a',
-      age: 1
+      age: 1,
     }];
 
     sort(same).asc(['name', 'age']);
@@ -145,7 +145,7 @@ describe('sort', () => {
   it('Should sort by desc name and asc lastName', () => {
     sort(multiPropArray).by([
       { desc: 'name' },
-      { asc: 'lastName' }
+      { asc: 'lastName' },
     ]);
 
     assertOrder(['aa', 'aa', 'bb', undefined, null], idx => multiPropArray[idx].lastName);
@@ -162,7 +162,7 @@ describe('sort', () => {
   it('Should sort by asc name and desc age', () => {
     sort(multiPropArray).by([
       { asc: 'name' },
-      { desc: 'age' }
+      { desc: 'age' },
     ]);
 
     assertOrder([11, 10, 9, 8, 6], idx => multiPropArray[idx].age);
@@ -173,32 +173,31 @@ describe('sort', () => {
     sort(multiPropArray).by([
       { asc: p => p.lastName },
       { desc: p => p.name },
-      { asc: p => p.age }
+      { asc: p => p.age },
     ]);
 
     assertOrder([6, 10, 11, 8, 9], idx => multiPropArray[idx].age);
   });
 
   it('Should throw invalid usage of by sorter exception', () => {
-    assert.throws(() => sort(multiPropArray).by('name'), Error);
     assert.throws(() => sort(multiPropArray).by([{ asci: 'name' }]), Error);
     assert.throws(() => sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }]), Error);
   });
 
   it('Should sort ascending with by on 1 property', () => {
     sort(multiPropArray).by([
-      { asc: p => p.age }
+      { asc: p => p.age },
     ]);
 
     assertOrder(
       [6, 8, 9, 10, 11],
-      idx => multiPropArray[idx].age
+      idx => multiPropArray[idx].age,
     );
   });
 
   it('Should sort descending with by on 1 property', () => {
     sort(multiPropArray).by([
-      { desc: p => p.age }
+      { desc: p => p.age },
     ]);
 
     assertOrder(
@@ -210,7 +209,7 @@ describe('sort', () => {
   it('Should sort flat array in asc order using a comparer', () => {
     sort(flatNaturalArray).by([{
       asc: true,
-      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
     assertOrder(
@@ -222,7 +221,7 @@ describe('sort', () => {
   it('Should sort flat array in desc order using a comparer', () => {
     sort(flatNaturalArray).by([{
       desc: true,
-      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
     assertOrder(
@@ -234,7 +233,7 @@ describe('sort', () => {
   it('Should sort object in asc order using custom comparer', () => {
     sort(multiPropArray).by([{
       asc: p => p.unit,
-      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
     assertOrder(['A1', 'A01', 'A10', 'B3', 'C2'], idx => multiPropArray[idx].unit);
@@ -243,7 +242,7 @@ describe('sort', () => {
   it('Should sort object in desc order using custom comparer', () => {
     sort(multiPropArray).by([{
       desc: p => p.unit,
-      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
     assertOrder(['C2', 'B3', 'A10', 'A1', 'A01'], idx => multiPropArray[idx].unit);
@@ -251,10 +250,10 @@ describe('sort', () => {
 
   it('Should sort object using multiple sorts and a comparer', () => {
     sort(multiPropArray).by([{
-      desc: p => p.name
+      desc: p => p.name,
     }, {
       asc: p => p.unit,
-      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
     assertOrder([6, 8, 9, 10, 11], idx => multiPropArray[idx].age);

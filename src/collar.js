@@ -2,7 +2,7 @@
 
 const REJECTION_REASON = Object.freeze({
   isStrangled: true,
-  message: 'Promise have timed out'
+  message: 'Promise have timed out',
 });
 
 // >>> PUBLIC <<<

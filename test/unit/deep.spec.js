@@ -12,7 +12,7 @@ describe('deep', () => {
   beforeEach(() => {
     obj = {};
     obj.first = {
-      second: { third: { num: 11, fun() {} } }
+      second: { third: { num: 11, fun() {} } },
     };
 
     circ1 = { first: { test: 1 } };
@@ -109,7 +109,7 @@ describe('deep', () => {
     it('Should deep freeze non enumerable properties', () => {
       Object.defineProperty(obj, 'nonEnumerable', {
         enumerable: false,
-        value: {}
+        value: {},
       });
 
       deepFreeze(obj);
@@ -122,8 +122,8 @@ describe('deep', () => {
         dob: new Date(),
         address: {
           country: 'Croatia',
-          city: 'this one'
-        }
+          city: 'this one',
+        },
       };
 
       Object.freeze(person);
@@ -148,7 +148,7 @@ describe('deep', () => {
     it('Should freeze object with Symbol property', () => {
       const sim = Symbol('test');
       obj[sim] = {
-        key: { test: 1 }
+        key: { test: 1 },
       };
 
       deepFreeze(obj);
@@ -196,7 +196,7 @@ describe('deep', () => {
       deepFreeze(obj, {
         exclude(key, context) {
           return key === 'third' && context !== obj;
-        }
+        },
       });
 
       assert.equal(Object.isFrozen(obj.third), true);

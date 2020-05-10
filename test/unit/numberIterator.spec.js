@@ -16,7 +16,7 @@ describe('NumberIterator', () => {
 
   it('will start iteration from 10', () => {
     const numberIterator = new NumberIterator({
-      startFrom: 10
+      startFrom: 10,
     });
 
     assert.equal(numberIterator.current(), 10);
@@ -26,7 +26,7 @@ describe('NumberIterator', () => {
 
   it('will throw iterator exhausted error', () => {
     const numberIterator = new NumberIterator({
-      startFrom: Number.MAX_SAFE_INTEGER - 1
+      startFrom: Number.MAX_SAFE_INTEGER - 1,
     });
 
     assert.equal(numberIterator.next(), Number.MAX_SAFE_INTEGER);

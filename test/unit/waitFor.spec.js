@@ -72,7 +72,7 @@ describe('waitFor', () => {
       waitFor(cond, 'something').then(resolver),
       waitFor(cond, []).then(resolver),
       waitFor(cond, { timeout: '33', interval: '44' }).then(resolver),
-      waitFor(cond, { timeout: 'aa', interval: 'bb' }).then(resolver)
+      waitFor(cond, { timeout: 'aa', interval: 'bb' }).then(resolver),
     ])
       .then(() => done());
 

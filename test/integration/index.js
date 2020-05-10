@@ -57,7 +57,7 @@ async function testModules(modules) {
   // promiseAll
   const promiseAllResponse = await modules.promiseAll({
     a: Promise.resolve(1),
-    b: Promise.resolve(2)
+    b: Promise.resolve(2),
   });
 
   // promisify
@@ -69,7 +69,7 @@ async function testModules(modules) {
 
   assert.deepEqual(promiseAllResponse, {
     a: 1,
-    b: 2
+    b: 2,
   });
 
   // rerun

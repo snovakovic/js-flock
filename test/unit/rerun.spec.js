@@ -66,7 +66,7 @@ describe('rerun', () => {
   it('Should throw error if start is called before calling every', () => {
     assert.throws(
       () => rerun(() => {}).start(),
-      Error, 'rerun: every() is required before calling start()'
+      Error, 'rerun: every() is required before calling start()',
     );
   });
 
