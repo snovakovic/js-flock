@@ -12,12 +12,14 @@ describe('index', () => {
       'delay',
       'empty',
       'last',
+      'Ensurer',
       'NumberIterator',
       'promiseAll',
       'promisify',
       'rerun',
       'singular',
       'sort',
+      'single',
       'toEnum',
       'waitFor'
     ];
