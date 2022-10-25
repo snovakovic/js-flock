@@ -2,13 +2,13 @@
 
 const { assert } = require('chai');
 const delay = require('../../src/delay');
-const runJobsInParallel = require('../../src/runJobsInParallel');
+const runTasksInParallel = require('../../src/runTasksInParallel');
 
-describe('Run Jobs in Parallel', () => {
-  it('Should finish in next tick if no jobs to run', async() => {
+describe('Run Tasks in Parallel', () => {
+  it('Should finish in next tick if no tasks to run', async() => {
     let allDone = false;
-    const jobs = [];
-    const runPromise = runJobsInParallel(jobs, {
+    const tasks = [];
+    const runPromise = runTasksInParallel(tasks, {
       maxParallelism: 3,
     }).then(() => allDone = true);
 
@@ -17,9 +17,9 @@ describe('Run Jobs in Parallel', () => {
     assert.isTrue(allDone);
   });
 
-  it('Should treat undefined as no jobs', async() => {
+  it('Should treat undefined as no tasks', async() => {
     let allDone = false;
-    const runPromise = runJobsInParallel(undefined, {
+    const runPromise = runTasksInParallel(undefined, {
       maxParallelism: 3,
     }).then(() => allDone = true);
 
@@ -28,33 +28,33 @@ describe('Run Jobs in Parallel', () => {
     assert.isTrue(allDone);
   });
 
-  it('Should consume 2 jobs at the time in parallel', async() => {
+  it('Should consume 2 tasks at the time in parallel', async() => {
     let allDone = false;
-    const jobs = [
-      new FakeJob(),
-      new FakeJob(),
-      new FakeJob(),
-      new FakeJob(),
-      new FakeJob(),
+    const tasks = [
+      new FakeTask(),
+      new FakeTask(),
+      new FakeTask(),
+      new FakeTask(),
+      new FakeTask(),
     ];
 
-    runJobsInParallel(jobs.map(f => f.job), {
+    runTasksInParallel(tasks.map(f => f.task), {
       maxParallelism: 2,
     }).then(() => allDone = true);
 
     assert.isFalse(allDone);
 
-    function assertJobStatuses(expectedStatuses) {
-      const jobStatuses = jobs.map(j => ({
+    function assertTaskStatuses(expectedStatuses) {
+      const taskStatuses = tasks.map(j => ({
         executionCount: j.executionCount,
         done: j.isDone,
       }));
 
-      assert.deepEqual(jobStatuses, expectedStatuses);
+      assert.deepEqual(taskStatuses, expectedStatuses);
     }
 
-    // 2 jobs should be executed
-    assertJobStatuses([{
+    // 2 tasks should be executed
+    assertTaskStatuses([{
       executionCount: 1,
       done: false,
     }, {
@@ -73,12 +73,12 @@ describe('Run Jobs in Parallel', () => {
 
     assert.isFalse(allDone);
 
-    // it should execute next job after first job finishes
+    // it should execute next task after first task finishes
 
-    jobs[1].resolve();
-    await delay(); // Wait for next job to be consumed
+    tasks[1].resolve();
+    await delay(); // Wait for next task to be consumed
 
-    assertJobStatuses([{
+    assertTaskStatuses([{
       executionCount: 1,
       done: false,
     }, {
@@ -95,13 +95,13 @@ describe('Run Jobs in Parallel', () => {
       done: false,
     }]);
 
-    jobs[0].resolve();
-    jobs[1].resolve(); // should be ignored as this one already resolved
-    jobs[2].resolve();
+    tasks[0].resolve();
+    tasks[1].resolve(); // should be ignored as this one already resolved
+    tasks[2].resolve();
 
-    await delay(); // Wait for next job to be consumed
+    await delay(); // Wait for next task to be consumed
 
-    assertJobStatuses([{
+    assertTaskStatuses([{
       executionCount: 1,
       done: true, // <= NOTE
     }, {
@@ -118,11 +118,11 @@ describe('Run Jobs in Parallel', () => {
       done: false,
     }]);
 
-    // Only 1 jobs left pending to be done. No more jobs left to consume
-    jobs[3].resolve();
+    // Only 1 tasks left pending to be done. No more tasks left to consume
+    tasks[3].resolve();
     await delay();
 
-    assertJobStatuses([{
+    assertTaskStatuses([{
       executionCount: 1,
       done: true,
     }, {
@@ -141,10 +141,10 @@ describe('Run Jobs in Parallel', () => {
 
     assert.isFalse(allDone);
 
-    jobs[4].resolve();
+    tasks[4].resolve();
     await delay();
 
-    assertJobStatuses([{
+    assertTaskStatuses([{
       executionCount: 1,
       done: true,
     }, {
@@ -164,71 +164,71 @@ describe('Run Jobs in Parallel', () => {
     assert.isTrue(allDone);
   });
 
-  it('Should finish executing jobs even if some of them fails', async() => {
+  it('Should finish executing tasks even if some of them fails', async() => {
     let allDoneResponse;
-    const jobs = [
-      new FakeJob(),
-      new FakeJob(),
-      new FakeJob(),
-      new FakeJob(),
+    const tasks = [
+      new FakeTask(),
+      new FakeTask(),
+      new FakeTask(),
+      new FakeTask(),
     ];
 
     const reportedErrors = [];
 
-    runJobsInParallel(jobs.map(f => f.job), {
+    runTasksInParallel(tasks.map(f => f.task), {
       maxParallelism: 2,
       onError: (err) => reportedErrors.push(err),
     }).then((response) => allDoneResponse = response);
 
-    jobs[0].reject('Error 1');
-    jobs[1].resolve();
-    await delay(); // Wait for next job to be consumed
+    tasks[0].reject('Error 1');
+    tasks[1].resolve();
+    await delay(); // Wait for next task to be consumed
 
     assert.isUndefined(allDoneResponse);
 
-    jobs[2].resolve();
-    jobs[3].reject('Error 2');
-    await delay(); // Wait for next job to be consumed
+    tasks[2].resolve();
+    tasks[3].reject('Error 2');
+    await delay(); // Wait for next task to be consumed
 
     assert.deepEqual(allDoneResponse, {
-      success: 2,
-      errors: 2,
+      succeeded: 2,
+      failed: 2,
     });
 
     assert.deepEqual(reportedErrors, ['Error 1', 'Error 2']);
   });
 
-  it('Should consume all jobs in single run', async() => {
+  it('Should consume all tasks in single run', async() => {
     let allDoneResponse;
-    const jobs = [
-      new FakeJob(),
-      new FakeJob(),
-      new FakeJob(),
-      new FakeJob(),
-      new FakeJob(),
+    const tasks = [
+      new FakeTask(),
+      new FakeTask(),
+      new FakeTask(),
+      new FakeTask(),
+      new FakeTask(),
     ];
 
-    runJobsInParallel(jobs.map(f => f.job), {
+    runTasksInParallel(tasks.map(f => f.task), {
       maxParallelism: 20,
     }).then((response) => allDoneResponse = response);
 
     assert.isUndefined(allDoneResponse);
 
-    jobs[0].resolve();
-    jobs[1].resolve();
-    jobs[2].resolve();
-    jobs[3].resolve();
-    jobs[4].resolve();
-    await delay(); // Wait for next job to be consumed
+    tasks[0].resolve();
+    tasks[1].resolve();
+    tasks[2].resolve();
+    tasks[3].resolve();
+    tasks[4].resolve();
+    await delay(); // Wait for next task to be consumed
 
     assert.deepEqual(allDoneResponse, {
-      success: 5,
-      errors: 0,
+      succeeded: 5,
+      failed: 0,
     });
   });
 });
 
-function FakeJob() {
+function FakeTask() {
   let executionCount = 0;
   let done = false;
   let resolve;
@@ -245,7 +245,7 @@ function FakeJob() {
       done = true;
       reject(reason);
     },
-    job: () => {
+    task: () => {
       executionCount++;
 
       return new Promise((_resolve, _reject) => {
