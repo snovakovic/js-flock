@@ -50,8 +50,7 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 * [promisify](#promisify)
 * [promisify.all](#promisifyall)
 * [collar](#collar)
-* [deepFreeze](#deepfreeze) / [deepSeal](#deepseal) / [deepPreventExtensions]
-(#deeppreventextensions)
+* [deepFreeze](#deepfreeze) / [deepSeal](#deepseal) / [deepPreventExtensions](#deeppreventextensions)
 * [runTasksInParallel](#runTasksInParallel)
 
 
