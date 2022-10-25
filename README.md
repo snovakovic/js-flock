@@ -51,6 +51,8 @@ Transpiled code is wrapped in [UMD](https://davidbcalhoun.com/2014/what-is-amd-c
 * [promisify.all](#promisifyall)
 * [collar](#collar)
 * [deepFreeze](#deepfreeze) / [deepSeal](#deepseal) / [deepPreventExtensions](#deeppreventextensions)
+* [runTasksInParallel](#runTasksInParallel)
+
 
 ### last
 
@@ -534,4 +536,32 @@ For more info on sort please check dedicated package from above.
     { desc: 'age' }
     { asc: p => p.address.city }
   ]);
+```
+
+### runTasksInParallel
+
+Allow running specified number of task in parallel. It suitable for cases like e.g calling external API where we don't want to issue all request to external API at once (e.g thousands of them) but we also don't want to do it 1 by 1 as that will be slow. Using this utility we can limit max number of parallel calls that will be issued at once. As soon as 1 task finishes with execution next task in the queue will be picked up and executed until completion of all task.
+
+##### since: v3.15.0
+
+```javascript
+  const runTasksInParallel = require('js-flock/runTasksInParallel');
+
+  const users = [......]; // Assume thousand of users
+
+  async function createUserInExternalSystem(user) {
+    return externalApi.create(user);
+  }
+
+  const createUsersInExternalSystemTasks = users.map(createUserInExternalSystem);
+
+  const response = await runTasksInParallel(createUsersInExternalSystemTasks, {
+    // Issue max 20 API calls to create user in external system at the time (defaults to 10)
+    maxParallelism: 20,
+    // optional: Report error thrown from the job so we can e.g log it
+    onError: (err) => logger.error(err, 'Error thrown from job'),
+  });
+
+  // Response will report on number of succeeded and failed jobs
+  // response => { succeeded: 3000, failed: 0 }
 ```
